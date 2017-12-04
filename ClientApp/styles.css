@@ -1,1 +1,34 @@
-/* You can add global styles to this file, and also import other style files */
+.main-header{
+    grid-area: main-header;
+}
+
+.main-nav{
+    grid-area: main-nav;
+}
+
+.main-content{
+    grid-area: main-content;
+}
+
+.wrapper{
+    display: grid;
+    grid-auto-rows: auto auto;
+    grid-template-columns: 1fr 5fr;
+    grid-template-areas:
+        "main-header main-header"
+        "main-nav    main-content";
+}
+
+@media( max-width: 768px){
+    .wrapper{
+        display: grid;
+        grid-template-areas:
+            "main-header"
+            "main-content"
+    }
+}
+
+.item{
+    border: 1px solid black;
+    background-color: blue;
+}
