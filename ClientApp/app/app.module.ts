@@ -1,5 +1,4 @@
 import "styles.css";
-import "../styles/theme.css";
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
