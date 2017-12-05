@@ -10,6 +10,7 @@ export interface CalendarDay {
     isPast: boolean;
     isFuture: boolean;
     isWeekend: boolean;
+    isOutsideMonth: boolean;
     cssClass?: string;
 
     jobs?: CalendarJob[];

@@ -66,13 +66,19 @@ body {
     grid-template-columns: repeat(7, 1fr);
 }
 .calendar-header{
-    grid-row: 1;
-    grid-column: 1 / 7;
+    grid-column: 1 / 8;
+    text-align: center;
+    font-size: 125%;
 }
 
 .week-header{
-    grid-row: 2;
-    background-color: blue;
+    font-weight: bold;
+    text-align: center;
+}
+
+.month-content{
+    min-width: 100px;
+    min-height: 100px;
 }
 
 .wrapper{

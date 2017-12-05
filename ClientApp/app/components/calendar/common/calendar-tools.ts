@@ -20,6 +20,7 @@ import * as startOfDay from 'date-fns/start_of_day';
 import * as startOfMinute from 'date-fns/start_of_minute';
 import * as startOfMonth from 'date-fns/start_of_month';
 import * as startOfWeek from 'date-fns/start_of_week';
+import * as subDays from 'date-fns/sub_days';
 
 import { CalendarDay, MonthView } from '../common/models';
 
@@ -45,7 +46,8 @@ export function getCalendarDay({
         isPast: date < today,
         isToday: isSameDay(date, today),
         isFuture: date > today,
-        isWeekend: getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY
+        isWeekend: getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY,
+        isOutsideMonth: !(isSameMonth(date, today))
     };
 }
 
@@ -80,8 +82,14 @@ export function getMonthView({
 }): MonthView {
 
     let header: CalendarDay[] = getWeekHeaderDays({viewDate, excluded});
-    const start: Date = startOfMonth(viewDate);
-    const end: Date = endOfMonth(viewDate);
+    let start: Date = startOfMonth(viewDate);
+    if(start.getDay() !== DAYS_OF_WEEK.SUNDAY)
+        start = subDays(start, start.getDay());
+
+    let end: Date = endOfMonth(viewDate);
+    if(end.getDay() !== DAYS_OF_WEEK.SATURDAY)
+        end = addDays(end, (DAYS_OF_WEEK.SATURDAY - end.getDay()));
+
     const daysInMonth = differenceInDays(end, start);
 
     const days: CalendarDay[] = [];
