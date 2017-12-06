@@ -8,20 +8,22 @@ import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
+import { MonthViewComponent } from './components/calendar/month/month-view.component';
+import { MonthCellComponent } from './components/calendar/month/month-cell.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    CalendarComponent
+    MonthViewComponent,
+    MonthCellComponent
   ],
   imports: [
     BrowserModule,
     AlertModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full'},
-      { path: 'calendar', component: CalendarComponent },
+      { path: 'calendar', component: MonthViewComponent },
       { path: "**", redirectTo: 'home' }
     ])
   ],

@@ -47,7 +47,7 @@ export function getCalendarDay({
         isToday: isSameDay(date, today),
         isFuture: date > today,
         isWeekend: getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY,
-        isOutsideMonth: !(isSameMonth(date, today))
+        inMonth: isSameMonth(date, today)
     };
 }
 
