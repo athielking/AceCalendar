@@ -41,14 +41,14 @@ export function getCalendarDay({
 }: { date: Date }): CalendarDay {
     const today: Date = startOfDay(new Date());
 
-    return {
+    return new CalendarDay(
         date,
-        isPast: date < today,
-        isToday: isSameDay(date, today),
-        isFuture: date > today,
-        isWeekend: getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY,
-        inMonth: isSameMonth(date, today)
-    };
+        isSameDay(date, today),
+        date < today,
+        date > today,
+        getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY,
+        isSameMonth(date, today)
+    );
 }
 
 export function getWeekHeaderDays({
@@ -103,8 +103,5 @@ export function getMonthView({
             }
     }
 
-    return {
-        header: header,
-        daysOfMonth: days
-    };
+    return new MonthView(header, days);
 }

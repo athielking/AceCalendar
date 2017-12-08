@@ -121,6 +121,12 @@ month-cell:nth-child(7n+1) .month-cell
     background-color: #ededed
 }
 
+.month-cell-job{
+    background-color: blue;
+    padding: 3px;
+    border-radius: 3px;
+}
+
 .cell-day-number {
     color: #333333;
     padding: 5px 5px 0px 0px;

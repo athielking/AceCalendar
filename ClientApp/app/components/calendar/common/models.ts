@@ -1,35 +1,37 @@
-
-export interface MonthView{
-    header: CalendarDay[];
-    daysOfMonth: CalendarDay[];
+export class MonthView{
+    constructor(public header: CalendarDay[],
+                public daysOfMonth: CalendarDay[]){
+    }
 }
 
-export interface CalendarDay {
-    date: Date;
-    isToday: boolean;
-    isPast: boolean;
-    isFuture: boolean;
-    isWeekend: boolean;
-    inMonth: boolean;
-    cssClass?: string;
-
-    jobs?: CalendarJob[];
+export class CalendarDay {
+    constructor(public date:Date,
+                public isToday: boolean,
+                public isPast: boolean,
+                public isFuture: boolean,
+                public isWeekend: boolean,
+                public inMonth: boolean,
+                public cssClass?: string,
+                public jobs?: CalendarJob[]){
+    }
 }
 
-export interface CalendarJob {
-    id: string;
-    date: Date;
-    title: string;
-    color: string;
-    cssClass?: string;
-    resizable?: boolean;
-    draggable?: boolean;
-
-    workers?: Worker[];
+export class CalendarJob {
+    constructor(public id:number,
+                public jobNumber: string,
+                public date: Date,
+                public title: string,
+                public color?: string,
+                public cssClass?: string,
+                public resizable?: boolean,
+                public draggable?: boolean,
+                public workers?: Worker[]){
+    }
 }
 
-export interface Worker {
-    id: string;
-    name: string;
-    type: string;
+export class Worker {
+    constructor(public id: number,
+                public name: string,
+                public type: string){
+    }
 }

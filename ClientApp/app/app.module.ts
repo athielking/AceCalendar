@@ -3,13 +3,15 @@ import "styles.css";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { HttpModule } from '@angular/http';
 import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
+
+import { CalendarService } from './providers/calendar-service.provider';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { MonthCellComponent } from './components/calendar/month/month-cell.compo
     MonthCellComponent
   ],
   imports: [
+    HttpModule,
     BrowserModule,
     AlertModule.forRoot(),
     RouterModule.forRoot([
@@ -27,7 +30,9 @@ import { MonthCellComponent } from './components/calendar/month/month-cell.compo
       { path: "**", redirectTo: 'home' }
     ])
   ],
-  providers: [],
+  providers: [
+    CalendarService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
