@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core'
 import { getMonthView } from '../../calendar/common/calendar-tools'
 import { CalendarDay, CalendarJob } from '../../calendar/common/models'
-import { CalendarService } from '../../../providers/calendar-service.provider';
+import { JobStore } from '../../../stores/job.store';
 
 @Component({
     selector: 'month-cell',
@@ -19,29 +19,23 @@ import { CalendarService } from '../../../providers/calendar-service.provider';
                 </span>
             </div>
             <div class="month-cell-content">
-                <span *ngFor="let job of jobs" class="month-cell-job">{{job.jobNumber}} {{job.title}}</span>
+                <span *ngFor="let job of jobStore.jobs | async" class="month-cell-job">{{job.jobNumber}} {{job.title}}</span>
             </div>
         </div>
     `,
+    providers: [JobStore]
   })
   export class MonthCellComponent 
     implements OnInit {
         @Input() monthDay : CalendarDay;
 
-        jobs : CalendarJob[];
-
         constructor(
-            private calendarService: CalendarService,
+            private jobStore: JobStore,
             private cdr: ChangeDetectorRef
         ) {
         }
 
         ngOnInit(){
-            this.calendarService.getJobs().then( _ => {
-                this.jobs = this.calendarService.jobs
-                    .filter(job => job.date === this.monthDay.date);
-                
-                this.cdr.markForCheck();
-            });
+            this.jobStore.initialize(this.monthDay.date);
         }
     }

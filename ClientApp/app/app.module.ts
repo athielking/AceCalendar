@@ -11,7 +11,7 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
 
-import { CalendarService } from './providers/calendar-service.provider';
+import { JobService } from './services/job.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import { CalendarService } from './providers/calendar-service.provider';
     ])
   ],
   providers: [
-    CalendarService
+    JobService
   ],
   bootstrap: [AppComponent]
 })
