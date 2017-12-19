@@ -12,7 +12,7 @@ import { JobStore } from '../../../stores/job.store';
             [class.cal-in-month]="monthDay.inMonth"
             [class.cal-out-month]="!monthDay.inMonth">
             <div class="month-cell-top">
-                <span class="cell-badge" *ngIf="monthDay.jobs && monthDay.jobs.length() > 0">{{monthDay.jobs.length()}}</span>
+                <span class="cell-badge" *ngIf="(jobStore.jobs | async)?.size > 0">{{ (jobStore.jobs | async)?.size }}</span>
                 <span class="cell-day-number"
                     [class.cal-weekend]="monthDay.isWeekend">
                     {{monthDay.date | date:'d'}}
