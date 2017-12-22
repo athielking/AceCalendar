@@ -1,0 +1,12 @@
+<div class="month-wrapper">
+    <div class="month-header">
+        {{viewDate | date: 'MMMM'}}
+    </div>
+
+    <div class="week-day-header" *ngFor="let header of monthView.header">
+        {{header.date | date:'EEEE'}}
+    </div>
+
+    <ac-month-cell *ngFor="let day of monthView.daysOfMonth" [monthDay]="day">
+    </ac-month-cell>
+</div>
