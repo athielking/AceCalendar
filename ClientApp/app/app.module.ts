@@ -23,6 +23,7 @@ import { MonthViewComponent } from './components/calendar/month/month-view.compo
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
 
 import { JobService } from './services/job.service';
+import { AssetService } from './services/asset.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { JobService } from './services/job.service';
     ])
   ],
   providers: [
-    JobService
+    JobService,
+    AssetService
   ],
   bootstrap: [AppComponent]
 })
