@@ -7,11 +7,11 @@
         {"id":5, "jobNumber": "000005", "date":"2017-12-18", "title": "Software Job"}
     ],
     "workers":[
-        {"id":1, "name": "Andy Thielking"},
-        {"id":2, "name": "David Culham"},
-        {"id":3, "name": "Jeff Doubleday"},
-        {"id":4, "name": "Eric Hoard"},
-        {"id":5, "name": "Spaghetti Man"}
+        {"id":1, "name": "Andy", "lastName": "Thielking"},
+        {"id":2, "name": "David", "lastName": "Culham"},
+        {"id":3, "name": "Jeff", "lastName": "Doubleday"},
+        {"id":4, "name": "Eric", "lastName": "Hoard"},
+        {"id":5, "name": "Spaghetti", "lastName": "Man"}
     ],
     "jobWorkers":[
         {"idJob":1, "idWorker":1},
