@@ -24,6 +24,10 @@ export class WorkerComponent implements OnInit {
   
     workers: Worker[];
    
+    showAddWorkerForm(): void {
+        alert('button click');
+    }
+
     ngOnInit(){
         //Get page
         this.assetService.getWorkers().subscribe(result => {
