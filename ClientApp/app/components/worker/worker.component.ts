@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ITdDataTableColumn } from '@covalent/core';
+import { MatDialog } from '@angular/material';
 
 import { AssetService } from '../../services/asset.service';
 
 import { Worker } from '../calendar/common/models';
+import { AddWorkerComponent } from './addWorker.component';
 
 @Component({
     selector: 'worker',
@@ -12,7 +14,8 @@ import { Worker } from '../calendar/common/models';
 export class WorkerComponent implements OnInit {
     
     constructor(
-        private assetService: AssetService
+        private assetService: AssetService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -25,7 +28,13 @@ export class WorkerComponent implements OnInit {
     workers: Worker[];
    
     showAddWorkerForm(): void {
-        alert('button click');
+        let dialogRef = this.dialog.open(AddWorkerComponent, {
+            disableClose: true
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            //Refresh Grid
+          });
     }
 
     ngOnInit(){

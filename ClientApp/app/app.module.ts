@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
   MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule, MatGridListModule,
@@ -19,6 +20,7 @@ import { AlertModule } from 'ngx-bootstrap';
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { WorkerComponent } from './components/worker/worker.component';
+import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -32,11 +34,16 @@ import { AssetService } from './services/asset.service';
     NavMenuComponent,
     CalendarComponent,
     WorkerComponent,
+    AddWorkerComponent,
     MonthViewComponent,
     MonthCellComponent
   ],
+  entryComponents: [
+    AddWorkerComponent
+  ],
   imports: [
     HttpModule,
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     /** Material Modules */

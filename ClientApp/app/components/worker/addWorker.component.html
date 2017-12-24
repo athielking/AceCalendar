@@ -1,0 +1,34 @@
+<h1 class="mat-dialog-title">Add Worker</h1>
+
+<div class="mat-dialog-content form-container">
+    <mat-form-field>
+        <input matInput placeholder="First Name" [(ngModel)]="worker.name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Last Name" [(ngModel)]="worker.lastName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Phone Number" [(ngModel)]="worker.phone">
+    </mat-form-field>
+</div>
+
+<div class="mat-dialog-actions">
+    <span flex></span>
+    
+    <button class="mat-button" (click)="onCancelClick()">
+        <span class="mat-button-wrapper">Cancel</span>
+        <div class="mat-button-ripple mat-ripple" matripple=""></div>
+        <div class="mat-button-focus-overlay"></div>
+    </button> 
+    
+    <button class="mat-button" (click)="onOkClick()">
+        <span class="mat-button-wrapper">Ok</span>
+        <div class="mat-button-ripple mat-ripple" matripple=""></div>
+        <div class="mat-button-focus-overlay"></div>
+    </button>
+
+</div>
+
+      
