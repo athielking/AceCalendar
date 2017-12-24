@@ -18,7 +18,7 @@ import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
-import { PeopleComponent } from './components/people/people.component';
+import { WorkerComponent } from './components/worker/worker.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -31,7 +31,7 @@ import { AssetService } from './services/asset.service';
     AppComponent,
     NavMenuComponent,
     CalendarComponent,
-    PeopleComponent,
+    WorkerComponent,
     MonthViewComponent,
     MonthCellComponent
   ],
@@ -52,7 +52,7 @@ import { AssetService } from './services/asset.service';
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
-      { path: 'people', component: PeopleComponent },      
+      { path: 'worker', component: WorkerComponent },      
       { path: "**", redirectTo: 'home' }
     ])
   ],

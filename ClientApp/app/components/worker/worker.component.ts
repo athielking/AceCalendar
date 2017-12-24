@@ -6,10 +6,10 @@ import { AssetService } from '../../services/asset.service';
 import { Worker } from '../calendar/common/models';
 
 @Component({
-    selector: 'people',
-    templateUrl: './people.component.html'
+    selector: 'worker',
+    templateUrl: './worker.component.html'
 })
-export class PeopleComponent implements OnInit {
+export class WorkerComponent implements OnInit {
     
     constructor(
         private assetService: AssetService
