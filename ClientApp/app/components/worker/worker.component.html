@@ -1,11 +1,12 @@
 <mat-toolbar class="mat-toolbar mat-toolbar-single-row">
-    <span flex></span>
-    <button mat-mini-fab color="primary" matTooltip="Add new worker" matTooltipPosition="before" (click)="showAddWorkerForm()">
-        <mat-icon>add</mat-icon>
-    </button>
+    <span>Workers</span>
 </mat-toolbar>
 
 <td-data-table
   [data]="workers"
   [columns]="configColumns">
 </td-data-table>
+
+<a mat-fab color="accent" matTooltip="Add new worker" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad" (click)="showAddWorkerForm()">
+    <mat-icon>add</mat-icon>
+</a>
