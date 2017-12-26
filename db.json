@@ -7,11 +7,11 @@
         {"id":5, "jobNumber": "000005", "date":"2017-12-18", "title": "Software Job"}
     ],
     "workers":[
-        {"id":1, "name": "Andy", "lastName": "Thielking"},
-        {"id":2, "name": "David", "lastName": "Culham"},
-        {"id":3, "name": "Jeff", "lastName": "Doubleday"},
-        {"id":4, "name": "Eric", "lastName": "Hoard"},
-        {"id":5, "name": "Spaghetti", "lastName": "Man"}
+        {"id":1, "name": "Andy", "lastName": "Thielking", "email": "athielking@501software.com"},
+        {"id":2, "name": "David", "lastName": "Culham", "email": "dculham@501software.com"},
+        {"id":3, "name": "Jeff", "lastName": "Doubleday", "email": "jdoubleday@501software.com"},
+        {"id":4, "name": "Eric", "lastName": "Hoard", "email": "ehoard@501software.com"},
+        {"id":5, "name": "Spaghetti", "lastName": "Man", "email": "sman@501software.com"}
     ],
     "jobWorkers":[
         {"idJob":1, "idWorker":1},

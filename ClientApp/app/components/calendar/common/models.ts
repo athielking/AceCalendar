@@ -40,7 +40,8 @@ export class Worker implements Asset {
                 public name: string,
                 public lastName: string,
                 public phone: string,
-                public type: string){
+                public type: string,
+                public email: string){
     }
 }
 
@@ -49,6 +50,6 @@ export class Equipment implements Asset{
                 public name: string,
                 public type: string,
                 public rented: boolean){
-                    
+
                 }
 }
