@@ -17,10 +17,10 @@ export class CalendarDay {
 }
 
 export class CalendarJob {
-    constructor(public id:number,
-                public jobNumber: string,
-                public date: Date,
-                public title: string,
+    constructor(public id: string,
+                public number: number,
+                public name: string,
+                public type: string,
                 public color?: string,
                 public cssClass?: string,
                 public resizable?: boolean,

@@ -32,9 +32,7 @@ import { AssetStore } from '../../../stores/asset.store';
         }
 
         workerTooltip(){
-            return this.availableWorkers$.map(list => {
-                return list.toArray().map( worker => worker.name).join("</br>")
-            });
+            return "Tooltip";
         }
 
         jobs_clicked(){

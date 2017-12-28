@@ -9,7 +9,10 @@ import * as isSameDay from 'date-fns/is_same_day';
 @Injectable()
 export class AssetService{
 
+    private serviceUri: string;
+
     constructor(private http: Http){
+        this.serviceUri = `${environment.webServiceUrl}/api/worker`
     }
 
     getAssets(): Observable<Asset[]>{
@@ -21,10 +24,19 @@ export class AssetService{
     }
 
     getWorkers(): Observable<Worker[]>{
-        let api = `${environment.webServiceUrl}/workers`
-        
+        return this.http.get(this.serviceUri)
+            .map(response => (<Worker[]>response.json().data));
+    }
+
+    getAvailableWorkers(date: Date) : Observable<Worker[]>{
+        let api = this.serviceUri + `/getAvailableWorkers?date=${date.toISOString()}`
+
         return this.http.get(api)
-            .map(response => (<Worker[]>response.json()));
+            .map(response => {
+                return response.json().data.map(item => {
+                    return new Worker(item.id, item.firstName, item.lastName, item.phone, "", item.email);
+                })
+            });
     }
 
     getEquipment(): Observable<Equipment[]>{

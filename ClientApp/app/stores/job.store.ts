@@ -22,7 +22,8 @@ export class JobStore{
         this.jobService.getJobsForDay(this.date)
             .subscribe(
                 result => {
-                    this._jobs.next(List(result));
+                    if( result.length > 0 )
+                        this._jobs.next(List(result));
                 },
                 err => console.log("Error retrieving Jobs")
             );

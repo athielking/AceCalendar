@@ -17,18 +17,23 @@ export class AssetStore{
     public date : Date;
 
     constructor(private assetService: AssetService){
-        this.assetService.getEquipment()
-            .subscribe(result => {
-                this._equipment.next(List(result));
-            });
+        // this.assetService.getEquipment()
+        //     .subscribe(result => {
+        //         this._equipment.next(List(result));
+        //     });
 
         this.assetService.getWorkers()
             .subscribe(result => {
-                this._workers.next(List(result));
+                if( result.length > 0 )
+                    this._workers.next(List(result));
             })
     }
 
     getAvailableWorkers(date: Date){
-        return this.workers.map( list => List(list.toArray().splice(0,Math.floor(Math.random()*list.size)+1)));
+        return this.assetService.getAvailableWorkers(date).map(result => {
+            if( result.length > 0 )
+                return List(result);
+            return List([]);
+        })
     }
 }

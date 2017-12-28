@@ -20,8 +20,7 @@
         <div >
             <button mat-button 
                 *ngIf="(availableWorkers$ | async)?.size > 0"
-                style="text-align:left"
-                matTooltip="{{ (this.workerTooltip() | async) }}">
+                style="text-align:left">
                 <mat-icon class="material-icons md-18" matListIcon>people</mat-icon> {{(availableWorkers$ | async)?.size}} Available
             </button>
         </div>
