@@ -17,16 +17,6 @@ export class AssetStore{
     public date : Date;
 
     constructor(private assetService: AssetService){
-        // this.assetService.getEquipment()
-        //     .subscribe(result => {
-        //         this._equipment.next(List(result));
-        //     });
-
-        this.assetService.getWorkers()
-            .subscribe(result => {
-                if( result.length > 0 )
-                    this._workers.next(List(result));
-            })
     }
 
     getAvailableWorkers(date: Date){

@@ -37,6 +37,44 @@ export class JobService{
             });
     }
 
+    getJobsForWeek(date: Date): Observable<Map<Date,CalendarJob[]>> {
+
+        let api = `${environment.webServiceUrl}/api/job/getJobsForWeek?date=${date.toISOString()}`
+    
+        return this.http.get(api)
+            .map(response => {
+                let jobs: CalendarJob[] = [];
+                return response.json().data.map(item => {
+                    item.key, item.value.map(value => {
+                        return new CalendarJob(
+                            value.id, 
+                            value.number,
+                            value.name,
+                            item.type
+                        );
+                    })
+                })
+            });
+    }
+
+    getJobsForMonth(date: Date): Observable<CalendarJob[]> {
+
+        let api = `${environment.webServiceUrl}/api/job/getJobsForMonth?date=${date.toISOString()}`
+    
+        return this.http.get(api)
+            .map(response => {
+                let jobs: CalendarJob[] = [];
+                return response.json().data.map(item => {
+                    return new CalendarJob(
+                        item.id, 
+                        item.number,
+                        item.name,
+                        item.type
+                    );
+                })
+            });
+    }
+
     addJob(job: CalendarJob) {
         let api = `${environment.webServiceUrl}/api/job`;
 
