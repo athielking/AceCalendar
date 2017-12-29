@@ -17,4 +17,5 @@ import {
 })
 export class AppComponent {
   title = 'app';
+  authorized = true;
 }

@@ -1,41 +1,47 @@
-<td-layout>
-    <td-layout-nav>
-        <div td-toolbar-content layout="row" layout-align="start center" flex>
-            <button mat-icon-button class="td-menu-button" (click)="sidenav.toggle()" mdTooltip="Main menu">
-                <mat-icon>menu</mat-icon>
-            </button>
-            <mat-icon class="mat-icon-logo"></mat-icon>
-            <span>Asset Calendar</span>
-            <span flex></span>
-            <button mat-icon-button>
-                <mat-icon>account_circle</mat-icon>
-            </button>
-        </div>
-        <mat-sidenav-container fullscreen>
-            <mat-sidenav #sidenav mode="side" opened="true" style="width:257px;border-right:1px solid #ccc">
-                <div flex class="mat-content bgc-grey-50">
-                    <mat-nav-list>
-                        <a mat-list-item>
-                            <mat-icon matListIcon>home</mat-icon>Home</a>
-                        <a mat-list-item routerLink="/calendar">
-                            <mat-icon matListIcon>today</mat-icon>Calendar</a>
-                        <a mat-list-item routerLink="/worker">
-                            <mat-icon matListIcon>people</mat-icon>Workers</a>
-                        <a mat-list-item>
-                            <mat-icon matListIcon>business</mat-icon>Jobs</a>
-                    </mat-nav-list>
+<div *ngIf="authorized;then application else login"></div>
+
+<ng-template #login><login></login></ng-template>
+
+<ng-template #application>
+    <td-layout>
+        <td-layout-nav>
+            <div td-toolbar-content layout="row" layout-align="start center" flex>
+                <button mat-icon-button class="td-menu-button" (click)="sidenav.toggle()" mdTooltip="Main menu">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <mat-icon class="mat-icon-logo"></mat-icon>
+                <span>Asset Calendar</span>
+                <span flex></span>
+                <button mat-icon-button>
+                    <mat-icon>account_circle</mat-icon>
+                </button>
+            </div>       
+            <mat-sidenav-container fullscreen>
+                <mat-sidenav #sidenav mode="side" opened="true" style="width:257px;border-right:1px solid #ccc">
+                    <div flex class="mat-content bgc-grey-50">
+                        <mat-nav-list>
+                            <a mat-list-item>
+                                <mat-icon matListIcon>home</mat-icon>Home</a>
+                            <a mat-list-item routerLink="/calendar">
+                                <mat-icon matListIcon>today</mat-icon>Calendar</a>
+                            <a mat-list-item routerLink="/worker">
+                                <mat-icon matListIcon>people</mat-icon>Workers</a>
+                            <a mat-list-item>
+                                <mat-icon matListIcon>business</mat-icon>Jobs</a>
+                        </mat-nav-list>
+                    </div>
+                </mat-sidenav>
+                <div tdMediaToggle="gt-xs" [mediaClasses]="['push-md']">
+                    <mat-card>
+                        <router-outlet></router-outlet>       
+                    </mat-card>
                 </div>
-            </mat-sidenav>
-            <div tdMediaToggle="gt-xs" [mediaClasses]="['push-md']">
-                <mat-card>
-                    <router-outlet></router-outlet>
-                </mat-card>
+            </mat-sidenav-container>
+        </td-layout-nav>
+        <td-layout-footer>
+            <div layout="row" layout-align="start center">
+                <span class="mat-caption">Copyright &copy; 2017 501 Software. All rights reserved</span>
             </div>
-        </mat-sidenav-container>
-    </td-layout-nav>
-    <td-layout-footer>
-        <div layout="row" layout-align="start center">
-            <span class="mat-caption">Copyright &copy; 2017 501 Software. All rights reserved</span>
-        </div>
-    </td-layout-footer>
-</td-layout>
+        </td-layout-footer>
+    </td-layout>
+</ng-template>

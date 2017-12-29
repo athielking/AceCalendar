@@ -24,9 +24,11 @@ import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
+import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
 import { AssetService } from './services/asset.service';
+import { AuthService } from "./services/auth.service";
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { AssetService } from './services/asset.service';
     WorkerComponent,
     AddWorkerComponent,
     MonthViewComponent,
-    MonthCellComponent
+    MonthCellComponent,
+    LoginComponent
   ],
   entryComponents: [
     AddWorkerComponent
@@ -65,7 +68,8 @@ import { AssetService } from './services/asset.service';
   ],
   providers: [
     JobService,
-    AssetService
+    AssetService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })
