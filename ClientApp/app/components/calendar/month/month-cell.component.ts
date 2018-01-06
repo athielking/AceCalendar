@@ -1,49 +1,24 @@
-import { Component, Input, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core'
-import { MatTooltip } from '@angular/material'
+import { Component, Input, Output, OnInit } from '@angular/core'
 import { Observable } from 'rxjs/Rx';
-import { List } from 'immutable';
 
-import { getMonthView } from '../../calendar/common/calendar-tools'
-import { CalendarDay, CalendarJob, Worker } from '../../calendar/common/models'
-import { JobStore } from '../../../stores/job.store';
-import { AssetStore } from '../../../stores/asset.store';
+import { DayView, CalendarDay, CalendarJob, Worker } from '../../calendar/common/models'
 
 @Component({
     selector: 'ac-month-cell',
-    templateUrl: './month-cell.component.html',
-    providers: [JobStore, AssetStore]
+    templateUrl: './month-cell.component.html'
   })
-  export class MonthCellComponent 
-    implements OnInit {
-        @Input() monthDay : CalendarDay;
+  export class MonthCellComponent implements OnInit {
+        @Input() dayView$ : Observable<DayView>;
 
-        availableWorkers$ : Observable<List<Worker>>
-
-        constructor(
-            private jobStore: JobStore,
-            private assetStore: AssetStore,
-            private cdr: ChangeDetectorRef
-        ) {
-        }
+        calendarDay: CalendarDay;
+        jobs: CalendarJob[] = [];
+        workers: Worker[] = [];
 
         ngOnInit(){
-            this.jobStore.initialize(this.monthDay.date);
-            this.availableWorkers$ = this.assetStore.getAvailableWorkers(this.monthDay.date);
-        }
-
-        workerTooltip(){
-            return "Tooltip";
-        }
-
-        jobs_clicked(){
-
-        }
-
-        assets_clicked(){
-
-        }
-
-        available_clicked(){
-
+            this.dayView$.subscribe( result => {
+                this.calendarDay = result.calendarDay;
+                this.jobs = result.jobs;
+                this.workers = result.availableWorkers;
+            })
         }
     }

@@ -14,7 +14,7 @@ export class AddWorkerComponent {
     ) { 
     }
 
-    worker: Worker = new Worker( -1, '', '', '', '', '' );
+    worker: Worker = new Worker( '', '' , '', '', '' );
 
     onCancelClick(): void {
         this.dialogRef.close();

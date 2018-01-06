@@ -1,7 +1,18 @@
+import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+
 export class MonthView{
     constructor(public header: CalendarDay[],
                 public daysOfMonth: CalendarDay[]){
     }
+}
+
+export class DayView{
+
+    constructor(public calendarDay: CalendarDay, 
+                public jobs: CalendarJob[],
+                public availableWorkers: Worker[])
+                {
+                }
 }
 
 export class CalendarDay {
@@ -29,23 +40,16 @@ export class CalendarJob {
     }
 }
 
-export interface Asset {
-    id: number,
-    name: string, 
-    type: string
-}
-
-export class Worker implements Asset {
-    constructor(public id: number,
-                public name: string,
+export class Worker {
+    constructor(public id: string,
+                public firstName: string,
                 public lastName: string,
-                public phone: string,
-                public type: string,
-                public email: string){
+                public email: string,
+                public phone: string){
     }
 }
 
-export class Equipment implements Asset{
+export class Equipment {
     constructor(public id: number,
                 public name: string,
                 public type: string,

@@ -1,28 +1,24 @@
 <div class="month-cell" 
-    [class.cal-today]="monthDay.isToday" 
-    [class.cal-weekend]="monthDay.isWeekend" 
-    [class.cal-in-month]="monthDay.inMonth"
-    [class.cal-out-month]="!monthDay.inMonth">
+    [class.cal-today]="calendarDay?.isToday" 
+    [class.cal-weekend]="calendarDay?.isWeekend" 
+    [class.cal-in-month]="calendarDay?.inMonth"
+    [class.cal-out-month]="!calendarDay?.inMonth">
 
     <div class="month-cell-top">
         <!-- <span class="cell-badge" [hidden]="(jobStore.jobs | async)?.size == 0">{{ (jobStore.jobs | async)?.size }}</span> -->
-        <span class="cell-day-number" [class.cal-weekend]="monthDay.isWeekend">
-            {{monthDay.date | date:'d'}}
+        <span class="cell-day-number" [class.cal-weekend]="calendarDay.isWeekend">
+            {{ calendarDay?.date | date:'d' }}
         </span>
     </div>
 
-    <div class="month-cell-content">
+    <div class="month-cell-content" *ngIf="calendarDay?.inMonth">
         <button mat-button 
-            *ngIf="(jobStore.jobs | async)?.size > 0"  
             style="text-align:left">
-            <mat-icon class="material-icons md-18" matListIcon>business</mat-icon> {{(jobStore.jobs | async)?.size}} Jobs
+            <mat-icon class="material-icons md-18" matListIcon>business</mat-icon> {{ jobs.length }} Jobs
         </button>
-        <div >
-            <button mat-button 
-                *ngIf="(availableWorkers$ | async)?.size > 0"
-                style="text-align:left">
-                <mat-icon class="material-icons md-18" matListIcon>people</mat-icon> {{(availableWorkers$ | async)?.size}} Available
-            </button>
-        </div>
+        <button mat-button 
+            style="text-align:left">
+            <mat-icon class="material-icons md-18" matListIcon>people</mat-icon> {{ workers.length }} Available
+        </button>
     </div>
 </div>

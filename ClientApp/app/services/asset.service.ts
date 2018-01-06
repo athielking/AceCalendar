@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Http, Headers, URLSearchParams } from '@angular/http';
-import { Asset, Worker, Equipment } from '../components/calendar/common/models';
+import { Worker, Equipment } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
 import { List } from 'immutable';
 import * as isSameDay from 'date-fns/is_same_day';
@@ -15,14 +15,6 @@ export class AssetService{
         this.serviceUri = `${environment.webServiceUrl}/api/worker`
     }
 
-    getAssets(): Observable<Asset[]>{
-
-        let api = `${environment.webServiceUrl}/assets`
-        
-        return this.http.get(api)
-            .map(response => (<Asset[]>response.json()));
-    }
-
     getWorkers(): Observable<Worker[]>{
         return this.http.get(this.serviceUri)
             .map(response => (<Worker[]>response.json().data));
@@ -34,7 +26,7 @@ export class AssetService{
         return this.http.get(api)
             .map(response => {
                 return response.json().data.map(item => {
-                    return new Worker(item.id, item.firstName, item.lastName, item.phone, "", item.email);
+                    return new Worker(item.id, item.firstName, item.lastName, item.phone, item.email);
                 })
             });
     }

@@ -36,9 +36,7 @@ export enum DAYS_OF_WEEK {
 
 const DAYS_IN_WEEK: number = 7;
 
-export function getCalendarDay({
-    date,
-}: { date: Date }): CalendarDay {
+export function getCalendarDay(date : Date ): CalendarDay {
     const today: Date = startOfDay(new Date());
 
     return new CalendarDay(
@@ -66,7 +64,7 @@ export function getWeekHeaderDays({
         const date: Date = addDays(start, i);
 
         if (!excluded.some(e => date.getDay() === e)) {
-            days.push(getCalendarDay({ date }));
+            days.push(getCalendarDay( date ));
         }
     }
 
@@ -99,7 +97,7 @@ export function getMonthView({
         const date: Date = addDays(start, i);
         
             if (!excluded.some(e => date.getDay() === e)) {
-                days.push(getCalendarDay({ date }));
+                days.push(getCalendarDay( date ));
             }
     }
 

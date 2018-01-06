@@ -54,7 +54,7 @@ export class WorkerComponent implements OnInit {
     }
     filterUsers(displayName: string = ''): void {
         this.filteredWorkers = this.workers.filter((user: Worker) => {
-          return user.name.toLowerCase().indexOf(displayName.toLowerCase()) > -1;
+          return user.firstName.toLowerCase().indexOf(displayName.toLowerCase()) > -1;
         });
       }
   }

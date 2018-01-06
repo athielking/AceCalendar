@@ -27,8 +27,11 @@ import { MonthCellComponent } from './components/calendar/month/month-cell.compo
 import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
+import { CalendarService } from './services/calendar.service';
 import { AssetService } from './services/asset.service';
 import { AuthService } from "./services/auth.service";
+
+import { CalendarStore } from './stores/calendar.store';
 
 @NgModule({
   declarations: [
@@ -69,7 +72,9 @@ import { AuthService } from "./services/auth.service";
   providers: [
     JobService,
     AssetService,
-    AuthService
+    AuthService,
+    CalendarService,
+    CalendarStore
   ],
   bootstrap: [AppComponent]
 })
