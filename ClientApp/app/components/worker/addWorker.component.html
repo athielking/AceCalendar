@@ -2,11 +2,15 @@
 
 <div class="mat-dialog-content form-container">
     <mat-form-field>
-        <input matInput placeholder="First Name" [(ngModel)]="worker.name">
+        <input matInput placeholder="First Name" [(ngModel)]="worker.firstName">
     </mat-form-field>
 
     <mat-form-field>
         <input matInput placeholder="Last Name" [(ngModel)]="worker.lastName">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Email" [(ngModel)]="worker.email">
     </mat-form-field>
 
     <mat-form-field>

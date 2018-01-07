@@ -13,7 +13,7 @@
         <ng-template let-user let-last="last" ngFor [ngForOf]="filteredWorkers">
             <mat-list-item>
             <mat-icon matListAvatar>person</mat-icon>
-            <h3 matLine> {{user.name}} {{user.lastName}}</h3>
+            <h3 matLine> {{user.firstName}} {{user.lastName}}</h3>
             <p matLine> {{user.email}} </p>
             <span flex></span>
             <!-- <span hide-xs hide-sm hide-md flex-gt-xs="60" flex-xs="40" layout-gt-xs="row">

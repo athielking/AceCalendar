@@ -3,7 +3,7 @@ import { TdLoadingService, ITdDataTableColumn } from '@covalent/core';
 import { Observable } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
 
-import { AssetService } from '../../services/asset.service';
+import { WorkerService } from '../../services/worker.service';
 import { Worker } from '../calendar/common/models';
 import { AddWorkerComponent } from './addWorker.component';
 
@@ -14,14 +14,14 @@ import { AddWorkerComponent } from './addWorker.component';
 export class WorkerComponent implements OnInit {
     
     constructor(
-        private assetService: AssetService,
+        private assetService: WorkerService,
         private loadingService: TdLoadingService,
         private dialog: MatDialog
     ) {
     }
 
     configColumns: ITdDataTableColumn[] = [
-      { name: 'name',  label: 'First Name' },
+      { name: 'firstName',  label: 'First Name' },
       { name: 'lastName', label: 'Last Name' },
       { name: 'phone', label: 'Phone Number' }
     ];
@@ -35,7 +35,7 @@ export class WorkerComponent implements OnInit {
           });
       
           dialogRef.afterClosed().subscribe(result => {
-            //Refresh Grid
+            this.load();
           });
     }
 

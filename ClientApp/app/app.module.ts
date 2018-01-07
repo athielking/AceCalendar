@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
@@ -28,10 +29,11 @@ import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
 import { CalendarService } from './services/calendar.service';
-import { AssetService } from './services/asset.service';
+import { WorkerService } from './services/worker.service';
 import { AuthService } from "./services/auth.service";
 
 import { CalendarStore } from './stores/calendar.store';
+import { WorkerStore } from './stores/worker.store';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import { CalendarStore } from './stores/calendar.store';
   ],
   imports: [
     HttpModule,
+    HttpClientModule,
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -70,11 +73,14 @@ import { CalendarStore } from './stores/calendar.store';
     ])
   ],
   providers: [
+    //Services
     JobService,
-    AssetService,
+    WorkerService,
     AuthService,
     CalendarService,
-    CalendarStore
+    //Stores
+    CalendarStore,
+    WorkerStore
   ],
   bootstrap: [AppComponent]
 })

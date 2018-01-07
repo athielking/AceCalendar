@@ -7,7 +7,7 @@
         {{dayHeader.date | date:'EEEE'}}
     </div>
 
-    <ac-month-cell *ngFor="let dayView$ of (calendarStore.calendarData | async).values()" [dayView$]="dayView$">
+    <ac-month-cell *ngFor="let dayView$ of monthView" [dayView$]="dayView$">
     </ac-month-cell>
     
 </div>

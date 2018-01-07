@@ -2,6 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 
 import { Worker } from '../calendar/common/models';
+import { WorkerStore } from '../../stores/worker.store';
 
 @Component({
     selector: 'addWorker',
@@ -9,9 +10,8 @@ import { Worker } from '../calendar/common/models';
 })
 export class AddWorkerComponent {
 
-    constructor(
-        private dialogRef: MatDialogRef<AddWorkerComponent>
-    ) { 
+    constructor(private workerStore: WorkerStore,
+                private dialogRef: MatDialogRef<AddWorkerComponent>){ 
     }
 
     worker: Worker = new Worker( '', '' , '', '', '' );
@@ -21,7 +21,10 @@ export class AddWorkerComponent {
     }
 
     onOkClick(): void {
-        //Add Worker
-        this.dialogRef.close();
+        this.workerStore.addWorker(this.worker).subscribe( obj => {
+            console.log("worker added");
+            this.dialogRef.close();
+        })
+        
     }
 }

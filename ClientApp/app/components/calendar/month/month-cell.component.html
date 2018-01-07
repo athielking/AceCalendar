@@ -6,7 +6,7 @@
 
     <div class="month-cell-top">
         <!-- <span class="cell-badge" [hidden]="(jobStore.jobs | async)?.size == 0">{{ (jobStore.jobs | async)?.size }}</span> -->
-        <span class="cell-day-number" [class.cal-weekend]="calendarDay.isWeekend">
+        <span class="cell-day-number" [class.cal-weekend]="calendarDay?.isWeekend">
             {{ calendarDay?.date | date:'d' }}
         </span>
     </div>
