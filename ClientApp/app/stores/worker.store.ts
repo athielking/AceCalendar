@@ -29,6 +29,16 @@ export class WorkerStore{
         return obs;
     }
 
+    deleteWorker(userId: string){
+        var obs = this.workerService.deleteWorker(userId);
+
+        obs.subscribe( response => {
+            this.getWorkers();
+        })
+        
+        return obs;
+    }
+
     getWorkers(){
         this.workerService.getWorkers().subscribe( result => {
             this._workers.next(List(result));

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TdLoadingService, ITdDataTableColumn } from '@covalent/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
+import { List } from 'immutable';
 
-import { WorkerService } from '../../services/worker.service';
+import { WorkerStore } from '../../stores/worker.store';
 import { Worker } from '../calendar/common/models';
 import { AddWorkerComponent } from './addWorker.component';
 
@@ -14,7 +15,7 @@ import { AddWorkerComponent } from './addWorker.component';
 export class WorkerComponent implements OnInit {
     
     constructor(
-        private assetService: WorkerService,
+        private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
         private dialog: MatDialog
     ) {
@@ -27,7 +28,7 @@ export class WorkerComponent implements OnInit {
     ];
   
     workers: Worker[];
-    filteredWorkers: Worker[];
+    filteredWorkers: BehaviorSubject<List<Worker>> = new BehaviorSubject<List<Worker>>(List([]));
 
     showAddWorkerForm(): void {
         let dialogRef = this.dialog.open(AddWorkerComponent, {
@@ -35,27 +36,32 @@ export class WorkerComponent implements OnInit {
           });
       
           dialogRef.afterClosed().subscribe(result => {
-            this.load();
+            //this.load();
           });
     }
 
     ngOnInit(){
-        this.load();
+
+        this.workerStore.workers.subscribe( result => {
+            this.workers = result.toArray();
+            this.filterUsers('');
+        });
+
+        this.workerStore.getWorkers();
     }
 
-    async load() : Promise<void>{
-        try {
-            this.loadingService.register('users.list');
-            this.workers = await this.assetService.getWorkers().toPromise();
-          } finally {
-            this.filteredWorkers = Object.assign([], this.workers);
-            this.loadingService.resolve('users.list');
-          }
-    }
     filterUsers(displayName: string = ''): void {
-        this.filteredWorkers = this.workers.filter((user: Worker) => {
-          return user.firstName.toLowerCase().indexOf(displayName.toLowerCase()) > -1;
-        });
+        this.filteredWorkers.next( 
+            List(this.workers.filter( (user: Worker) => {
+                return (user.firstName.toLowerCase() + user.lastName.toLowerCase()).indexOf(displayName.toLowerCase()) > -1;
+        })));
       }
+
+    delete(userId: string){
+        this.workerStore.deleteWorker(userId)
+            .subscribe(result => {
+                console.log(`User Deleted: ${userId}`)
+            });
+    }
   }
 

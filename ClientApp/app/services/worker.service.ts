@@ -24,7 +24,11 @@ export class WorkerService{
                 'Content-Type': 'application/json'
             });
 
-        return this.httpClient.post(this.serviceUri, worker, {headers: headers} ).shareReplay();
+        return this.httpClient.post( this.serviceUri, worker, {headers: headers} ).shareReplay();
+    }
+
+    deleteWorker( userId: string ){
+        return this.httpClient.delete( this.serviceUri + `/${userId}` ).shareReplay();
     }
 
     getWorkers(): Observable<Worker[]>{
