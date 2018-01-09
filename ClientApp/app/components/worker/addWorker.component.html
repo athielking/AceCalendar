@@ -2,15 +2,27 @@
 
 <div class="mat-dialog-content form-container">
     <mat-form-field>
-        <input matInput placeholder="First Name" [(ngModel)]="worker.firstName">
+        <input matInput placeholder="First Name" [formControl]="firstNameInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.firstName">
+        <mat-error *ngIf="firstNameInput.hasError('required')">
+            First Name is <strong>required</strong>
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-        <input matInput placeholder="Last Name" [(ngModel)]="worker.lastName">
+        <input matInput placeholder="Last Name" [formControl]="lastNameInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.lastName">
+        <mat-error *ngIf="lastNameInput.hasError('required')">
+            Last Name is <strong>required</strong>
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-        <input matInput placeholder="Email" [(ngModel)]="worker.email">
+        <input matInput placeholder="Email" [formControl]="emailInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.email">
+        <mat-error *ngIf="emailInput.hasError('email') && !emailInput.hasError('required')">
+            Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailInput.hasError('required')">
+            Email is <strong>required</strong>
+        </mat-error>
     </mat-form-field>
 
     <mat-form-field>

@@ -20,13 +20,9 @@ export class WorkerComponent implements OnInit {
         private dialog: MatDialog
     ) {
     }
-
-    configColumns: ITdDataTableColumn[] = [
-      { name: 'firstName',  label: 'First Name' },
-      { name: 'lastName', label: 'Last Name' },
-      { name: 'phone', label: 'Phone Number' }
-    ];
   
+    workersLoading : boolean = true;
+
     workers: Worker[];
     filteredWorkers: BehaviorSubject<List<Worker>> = new BehaviorSubject<List<Worker>>(List([]));
 
@@ -47,6 +43,10 @@ export class WorkerComponent implements OnInit {
             this.filterUsers('');
         });
 
+        this.filteredWorkers.subscribe( result => {
+            this.workersLoading = false;
+        })
+        
         this.workerStore.getWorkers();
     }
 

@@ -13,6 +13,7 @@ import { CalendarStore } from '../../../stores/calendar.store'
   export class MonthViewComponent implements OnInit {
     @Input() viewDate : Date;
 
+    dataLoading: boolean = true;
     header: CalendarDay[];
     monthView : Observable<DayView>[];
     monthMap: Map<Date, Observable<DayView>>;
@@ -24,13 +25,12 @@ import { CalendarStore } from '../../../stores/calendar.store'
     ngOnInit(){
       
       this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
-      this.loadingService.register('dataLoading');
 
       this.calendarStore.calendarData.subscribe(result => {
         this.monthMap = result;
         this.monthView = Array.from( result.values() );
 
-        this.loadingService.resolve('dataLoading');
+        this.dataLoading = false;
       })
 
       this.calendarStore.getDataForMonth(this.viewDate);
