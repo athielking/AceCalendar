@@ -22,6 +22,7 @@ import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
+import { JobComponent } from './components/job/job.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -34,6 +35,7 @@ import { AuthService } from "./services/auth.service";
 
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
+import { JobStore } from './stores/job.store';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { WorkerStore } from './stores/worker.store';
     CalendarComponent,
     WorkerComponent,
     AddWorkerComponent,
+    JobComponent,
     MonthViewComponent,
     MonthCellComponent,
     LoginComponent
@@ -68,7 +71,8 @@ import { WorkerStore } from './stores/worker.store';
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
-      { path: 'worker', component: WorkerComponent },      
+      { path: 'worker', component: WorkerComponent },     
+      { path: 'job', component: JobComponent }, 
       { path: "**", redirectTo: 'home' }
     ])
   ],
@@ -80,7 +84,8 @@ import { WorkerStore } from './stores/worker.store';
     CalendarService,
     //Stores
     CalendarStore,
-    WorkerStore
+    WorkerStore,
+    JobStore
   ],
   bootstrap: [AppComponent]
 })

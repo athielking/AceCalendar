@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Http, Headers, URLSearchParams } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CalendarJob } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
 import * as isSameDay from 'date-fns/is_same_day';
@@ -8,15 +9,18 @@ import * as isSameDay from 'date-fns/is_same_day';
 @Injectable()
 export class JobService{
 
-    constructor(private http: Http){
+    constructor(private http: Http,
+                private httpClient: HttpClient){
     }
 
     getJobs(): Observable<CalendarJob[]>{
 
-        let api = `${environment.webServiceUrl}/job`
+        let api = `${environment.webServiceUrl}/api/job`
         
-        return this.http.get(api)
-            .map(response => (<CalendarJob[]>response.json()));
+        return this.httpClient.get(api)
+            .map(json =>{
+                return (<CalendarJob[]>json['data'])
+            });
     }
     
     getJobsForDay(date: Date): Observable<CalendarJob[]> {

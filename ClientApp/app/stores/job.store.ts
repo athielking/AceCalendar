@@ -11,22 +11,13 @@ export class JobStore{
     private _jobs : BehaviorSubject<List<CalendarJob>> = new BehaviorSubject(List([]));
 
     public readonly jobs : Observable<List<CalendarJob>> = this._jobs.asObservable();
-    public date : Date;
 
     constructor(private jobService: JobService){
     }
-
-    initialize(date: Date){
-        this.date = date;
-
-        this.jobService.getJobsForDay(this.date)
-            .subscribe(
-                result => {
-                    if( result.length > 0 )
-                        this._jobs.next(List(result));
-                },
-                err => console.log("Error retrieving Jobs")
-            );
+    
+    getJobs(){
+        this.jobService.getJobs()
+            .subscribe( result => this._jobs.next(List(result)));
     }
 
     addJob(job: CalendarJob){
