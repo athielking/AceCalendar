@@ -6,6 +6,7 @@ import { List } from 'immutable';
 
 import { JobStore } from '../../stores/job.store';
 import { CalendarJob } from '../calendar/common/models';
+import { AddJobComponent } from './addJob.component';
 //import { AddWorkerComponent } from './addWorker.component';
 
 @Component({
@@ -42,4 +43,21 @@ export class JobComponent implements OnInit{
                 return (job.number.toString() + job.name.toLowerCase()).indexOf(searchString.toLowerCase()) > -1;
         })));
       }
+    
+    showAddJobForm(): void {
+        let dialogRef = this.dialog.open(AddJobComponent, {
+            disableClose: true
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            //this.load();
+          });
+    }
+
+    delete(jobId: string){
+        this.jobStore.deleteWorker(jobId)
+            .subscribe(result => {
+                console.log(`Job Deleted: ${jobId}`)
+            });
+    }
 }

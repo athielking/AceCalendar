@@ -4,7 +4,7 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { JobService } from '../services/job.service';
-import { CalendarDay, CalendarJob } from '../components/calendar/common/models';
+import { CalendarDay, CalendarJob, AddJobModel } from '../components/calendar/common/models';
 
 @Injectable()
 export class JobStore{
@@ -14,19 +14,32 @@ export class JobStore{
 
     constructor(private jobService: JobService){
     }
-    
+
     getJobs(){
         this.jobService.getJobs()
             .subscribe( result => this._jobs.next(List(result)));
     }
 
-    addJob(job: CalendarJob){
+    addJob(job: AddJobModel){
 
-        this.jobService.addJob(job)
-            .subscribe(
-                result => 
-                    this._jobs.next(this._jobs.getValue().push(job))
-            );
+        let obs = this.jobService.addJob(job);
+
+        obs.subscribe(
+            result => {
+                this.getJobs();
+            });
+
+        return obs;
+    }
+
+    deleteWorker(jobId: string){
+        var obs = this.jobService.deleteJob(jobId);
+
+        obs.subscribe( response => {
+            this.getJobs();
+        })
+        
+        return obs;
     }
 
 }

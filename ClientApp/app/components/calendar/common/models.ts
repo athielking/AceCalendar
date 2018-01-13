@@ -49,11 +49,18 @@ export class Worker {
     }
 }
 
-export class Equipment {
-    constructor(public id: number,
+export class AddJobModel {
+
+    public endDate?: Date = null;
+    public durationDays?: Number = null;
+    public durationMonths?: Number = null;
+
+    public workerIds: string[] = [];
+    
+    constructor(public number: Number,
                 public name: string,
                 public type: string,
-                public rented: boolean){
-
+                public startDate: Date)
+                {
                 }
 }

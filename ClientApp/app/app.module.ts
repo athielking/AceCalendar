@@ -22,7 +22,9 @@ import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
+import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
 import { JobComponent } from './components/job/job.component';
+import { AddJobComponent } from './components/job/addJob.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -44,13 +46,16 @@ import { JobStore } from './stores/job.store';
     CalendarComponent,
     WorkerComponent,
     AddWorkerComponent,
+    AvailableWorkerPickerComponent,
     JobComponent,
+    AddJobComponent,
     MonthViewComponent,
     MonthCellComponent,
     LoginComponent
   ],
   entryComponents: [
-    AddWorkerComponent
+    AddWorkerComponent,
+    AddJobComponent
   ],
   imports: [
     HttpModule,

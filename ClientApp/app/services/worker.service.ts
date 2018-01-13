@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
-import { Worker, Equipment } from '../components/calendar/common/models';
+import { Worker } from '../components/calendar/common/models';
 
 @Injectable()
 export class WorkerService{
@@ -33,6 +33,16 @@ export class WorkerService{
 
     getWorkers(): Observable<Worker[]>{
         return this.httpClient.get(this.serviceUri)
+            .map(json => (<Worker[]>json['data']));
+    }
+
+    getAvailable(date: Date, end?: Date): Observable<Worker[]>{
+
+        let api = this.serviceUri+`/getAvailableWorkers?start=${date.toISOString()}`;
+        if(end)
+            api = api + `&end=${end.toISOString()}`;
+
+        return this.httpClient.get(api)
             .map(json => (<Worker[]>json['data']));
     }
 }

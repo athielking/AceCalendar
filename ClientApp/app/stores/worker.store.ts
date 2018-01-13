@@ -4,7 +4,7 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { WorkerService } from '../services/worker.service';
-import { Worker, Equipment } from '../components/calendar/common/models';
+import { Worker } from '../components/calendar/common/models';
 
 @Injectable()
 export class WorkerStore{
@@ -37,6 +37,12 @@ export class WorkerStore{
 
     getWorkers(){
         this.workerService.getWorkers().subscribe( result => {
+            this._workers.next(List(result));
+        })
+    }
+
+    getAvailable(date: Date, end?: Date){
+        this.workerService.getAvailable(date, end).subscribe( result => {
             this._workers.next(List(result));
         })
     }
