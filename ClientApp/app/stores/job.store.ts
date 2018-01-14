@@ -4,38 +4,42 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { JobService } from '../services/job.service';
-import { CalendarDay, CalendarJob } from '../components/calendar/common/models';
+import { CalendarDay, CalendarJob, AddJobModel } from '../components/calendar/common/models';
 
 @Injectable()
 export class JobStore{
     private _jobs : BehaviorSubject<List<CalendarJob>> = new BehaviorSubject(List([]));
 
     public readonly jobs : Observable<List<CalendarJob>> = this._jobs.asObservable();
-    public date : Date;
 
     constructor(private jobService: JobService){
     }
 
-    initialize(date: Date){
-        this.date = date;
-
-        this.jobService.getJobsForDay(this.date)
-            .subscribe(
-                result => {
-                    if( result.length > 0 )
-                        this._jobs.next(List(result));
-                },
-                err => console.log("Error retrieving Jobs")
-            );
+    getJobs(){
+        this.jobService.getJobs()
+            .subscribe( result => this._jobs.next(List(result)));
     }
 
-    addJob(job: CalendarJob){
+    addJob(job: AddJobModel){
 
-        this.jobService.addJob(job)
-            .subscribe(
-                result => 
-                    this._jobs.next(this._jobs.getValue().push(job))
-            );
+        let obs = this.jobService.addJob(job);
+
+        obs.subscribe(
+            result => {
+                this.getJobs();
+            });
+
+        return obs;
+    }
+
+    deleteWorker(jobId: string){
+        var obs = this.jobService.deleteJob(jobId);
+
+        obs.subscribe( response => {
+            this.getJobs();
+        })
+        
+        return obs;
     }
 
 }

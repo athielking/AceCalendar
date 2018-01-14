@@ -1,0 +1,19 @@
+<div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+    <span class="mat-title push-left-sm">
+        Available Workers
+    </span>
+</div>
+<mat-divider></mat-divider>
+<ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ;>
+    <td-data-table
+        #dataTable
+        [data]="data"
+        [columns]="columns"
+        [(ngModel)]="selectedRows"
+        [selectable]="true"
+        [multiple]="true">
+    </td-data-table>
+    <div class="md-padding" *ngIf="!dataTable.hasData" layout="row" layout-align="center center">
+        <h3>No workers available for {{ date | date }}</h3><h3 *ngIf="endDate">&nbsp;to {{ endDate | date }}</h3>
+    </div>
+</ng-template>

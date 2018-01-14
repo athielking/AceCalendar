@@ -5,18 +5,18 @@
 <mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
     <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true" (searchDebounce)="filterUsers($event)"></td-search-box>
     <mat-divider></mat-divider>
-    <ng-template tdLoading="users.list">
+    <ng-template tdLoading [tdLoadingUntil]="!workersLoading" tdLoadingStrategy="overlay"; tdLoadingType="circle"; tdLoadingColor="accent">
         <mat-list class="will-load">
-            <div class="md-padding" *ngIf="filteredWorkers?.length === 0" layout="row" layout-align="center center">
-                <h3>No users to display.</h3>
-            </div>
-            <ng-template let-user let-last="last" ngFor [ngForOf]="filteredWorkers">
-                <mat-list-item>
-                    <mat-icon matListAvatar>person</mat-icon>
-                    <h3 matLine> {{user.name}} {{user.lastName}}</h3>
-                    <p matLine> {{user.email}} </p>
-                    <span flex></span>
-                    <!-- <span hide-xs hide-sm hide-md flex-gt-xs="60" flex-xs="40" layout-gt-xs="row">
+        <div class="md-padding" *ngIf="(filteredWorkers | async)?.length === 0" layout="row" layout-align="center center">
+            <h3>No users to display.</h3>
+        </div>
+        <ng-template let-user let-last="last" ngFor [ngForOf]="(filteredWorkers | async)">
+            <mat-list-item>
+            <mat-icon matListAvatar>person</mat-icon>
+            <h3 matLine> {{user.firstName}} {{user.lastName}}</h3>
+            <p matLine> {{user.email}} </p>
+            <span flex></span>
+            <!-- <span hide-xs hide-sm hide-md flex-gt-xs="60" flex-xs="40" layout-gt-xs="row">
                 <div class="md-caption tc-grey-500" flex-gt-xs="50"> {{ user.created | date }} </div>
                 <div class="md-caption tc-grey-500" flex-gt-xs="50"> {{ user.lastAccess | timeAgo }} </div>
             </span> -->

@@ -1,13 +1,14 @@
-<div class="month-wrapper" *tdLoading="'dataLoading'; mode:'indeterminate'; type'circle'; strategy:'overlay'; color:'accent'">
-    <div class="month-header">
-        {{viewDate | date: 'MMMM'}}
-    </div>
+<ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
+    <div class="month-wrapper">
+        <div class="month-header">
+            {{viewDate | date: 'MMMM'}}
+        </div>
 
-    <div class="week-day-header" *ngFor="let dayHeader of header">
-        {{dayHeader.date | date:'EEEE'}}
-    </div>
+        <div class="week-day-header" *ngFor="let dayHeader of header">
+            {{dayHeader.date | date:'EEEE'}}
+        </div>
 
-    <ac-month-cell *ngFor="let dayView$ of (calendarStore.calendarData | async).values()" [dayView$]="dayView$">
-    </ac-month-cell>
-    
-</div>
+        <ac-month-cell *ngFor="let dayView$ of monthView" [dayView$]="dayView$">
+        </ac-month-cell>
+    </div>
+</ng-template>

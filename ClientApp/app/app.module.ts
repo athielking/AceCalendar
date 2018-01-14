@@ -5,7 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
   MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule, MatGridListModule,
@@ -21,6 +22,9 @@ import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
+import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
+import { JobComponent } from './components/job/job.component';
+import { AddJobComponent } from './components/job/addJob.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -28,10 +32,12 @@ import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
 import { CalendarService } from './services/calendar.service';
-import { AssetService } from './services/asset.service';
+import { WorkerService } from './services/worker.service';
 import { AuthService } from "./services/auth.service";
 
 import { CalendarStore } from './stores/calendar.store';
+import { WorkerStore } from './stores/worker.store';
+import { JobStore } from './stores/job.store';
 
 @NgModule({
   declarations: [
@@ -40,16 +46,21 @@ import { CalendarStore } from './stores/calendar.store';
     CalendarComponent,
     WorkerComponent,
     AddWorkerComponent,
+    AvailableWorkerPickerComponent,
+    JobComponent,
+    AddJobComponent,
     MonthViewComponent,
     MonthCellComponent,
     LoginComponent
   ],
   entryComponents: [
-    AddWorkerComponent
+    AddWorkerComponent,
+    AddJobComponent
   ],
   imports: [
     HttpModule,
-    FormsModule,
+    HttpClientModule,
+    FormsModule, ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     /** Material Modules */
@@ -65,16 +76,21 @@ import { CalendarStore } from './stores/calendar.store';
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
-      { path: 'worker', component: WorkerComponent },      
+      { path: 'worker', component: WorkerComponent },     
+      { path: 'job', component: JobComponent }, 
       { path: "**", redirectTo: 'home' }
     ])
   ],
   providers: [
+    //Services
     JobService,
-    AssetService,
+    WorkerService,
     AuthService,
     CalendarService,
-    CalendarStore
+    //Stores
+    CalendarStore,
+    WorkerStore,
+    JobStore
   ],
   bootstrap: [AppComponent]
 })

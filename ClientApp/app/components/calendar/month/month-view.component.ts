@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
+import { Observable } from 'rxjs/Rx';
 
 import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
-import { MonthView, CalendarDay } from '../../calendar/common/models'
+import { MonthView, CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 
 @Component({
@@ -12,8 +13,10 @@ import { CalendarStore } from '../../../stores/calendar.store'
   export class MonthViewComponent implements OnInit {
     @Input() viewDate : Date;
 
-    dataLoading: boolean = false;
+    dataLoading: boolean = true;
     header: CalendarDay[];
+    monthView : Observable<DayView>[];
+    monthMap: Map<Date, Observable<DayView>>;
 
     constructor(private calendarStore: CalendarStore,
                 private loadingService: TdLoadingService){
@@ -22,10 +25,12 @@ import { CalendarStore } from '../../../stores/calendar.store'
     ngOnInit(){
       
       this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
-      this.loadingService.register('dataLoading');
 
       this.calendarStore.calendarData.subscribe(result => {
-        this.loadingService.resolve('dataLoading');
+        this.monthMap = result;
+        this.monthView = Array.from( result.values() );
+
+        this.dataLoading = false;
       })
 
       this.calendarStore.getDataForMonth(this.viewDate);

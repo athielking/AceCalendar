@@ -1,0 +1,42 @@
+<mat-toolbar class="mat-toolbar mat-toolbar-single-row">
+    <span flex>Manage Jobs</span>
+</mat-toolbar>
+
+<mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
+    <td-search-box class="push-left push-right" placeholder="Search" [alwaysVisible]="true" (searchDebounce)="filterJobs($event)"></td-search-box>
+    <mat-divider></mat-divider>
+    <ng-template tdLoading [tdLoadingUntil]="!jobsLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
+        <mat-list class="will-load">
+            <div class="md-padding" *ngIf="(filteredJobs | async)?.length === 0" layout="row" layout-align="center center">
+                <h3>No Jobs to display.</h3>
+            </div>
+            <ng-template let-job let-last="last" ngFor [ngForOf]="(filteredJobs | async)">
+                <mat-list-item>
+                    <mat-icon matListAvatar>business</mat-icon>
+                    <h3 matLine>{{job.name}}</h3>
+                    <p matLine> {{job.type}} </p>
+                    <span flex></span>
+                    <span>
+                        <button mat-icon-button [mat-menu-trigger-for]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu x-position="before" #menu="matMenu">
+                            <a [routerLink]="[job.id, 'edit']" mat-menu-item>
+                                <mat-icon>edit</mat-icon> Edit
+                            </a>
+                            <button mat-menu-item (click)="delete(job.id)">
+                                <mat-icon>delete</mat-icon> Delete
+                            </button>
+                        </mat-menu>
+                    </span>
+                </mat-list-item>
+                <mat-divider *ngIf="!last" matInset></mat-divider>
+            </ng-template>
+        </mat-list>
+    </ng-template>
+</mat-card>
+
+<a mat-fab color="accent" matTooltip="Add new job" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
+    (click)="showAddJobForm()">
+    <mat-icon>add</mat-icon>
+</a>

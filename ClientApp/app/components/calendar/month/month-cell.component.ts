@@ -15,10 +15,10 @@ import { DayView, CalendarDay, CalendarJob, Worker } from '../../calendar/common
         workers: Worker[] = [];
 
         ngOnInit(){
-            this.dayView$.subscribe( result => {
+            this.dayView$.subscribe( result => setTimeout( () => {
                 this.calendarDay = result.calendarDay;
                 this.jobs = result.jobs;
                 this.workers = result.availableWorkers;
-            })
+            }));
         }
     }
