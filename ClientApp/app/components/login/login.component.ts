@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
+import { TdLoadingService } from '@covalent/core';
 
 import { LoginModel } from './loginModel';
 
@@ -9,19 +10,46 @@ import { LoginModel } from './loginModel';
     templateUrl: './login.component.html'
 })
 export class LoginComponent {
-
+    private self = this;
+    
     public username: string;
     public password: string;
 
+    public showErrorMessage: boolean;
+
     constructor(
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private loadingService: TdLoadingService
     ) {}
 
     public login(): void {
-        if (this.username && this.password) {
-            var loginModel = new LoginModel(this.username, this.password, false);
-            this.authService.login(loginModel);
+        this.showErrorMessage = false;          
+        this.toggleShowLoading( true );
+
+        if (!this.username || !this.password) 
+            return;
+
+        var loginModel = new LoginModel(this.username, this.password, false);
+
+        this.authService.login(
+            loginModel,                
+            () => {
+                this.toggleShowLoading( false );
+            },
+            () => {               
+                this.showErrorMessage = true;
+                this.toggleShowLoading( false );
+            }
+        );
+    }
+
+    private toggleShowLoading(show:boolean): void {
+        if (show) {
+            this.loadingService.register('showLoading');
+        } 
+        else {
+            this.loadingService.resolve('showLoading');
         }
     }
 }

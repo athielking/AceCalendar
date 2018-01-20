@@ -198,3 +198,7 @@ ac-month-cell:nth-child(7n+1) .month-cell
   .form-container > * {
     width: 100%;
   }
+
+.error-message {
+    margin-bottom: 10px;
+}
