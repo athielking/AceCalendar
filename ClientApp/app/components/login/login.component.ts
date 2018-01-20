@@ -2,29 +2,26 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
 
+import { LoginModel } from './loginModel';
+
 @Component({
     selector: 'login',
     templateUrl: './login.component.html'
 })
 export class LoginComponent {
 
-    username: string;
-    password: string;
+    public username: string;
+    public password: string;
 
     constructor(
         private router: Router,
         private authService: AuthService
     ) {}
 
-    login(): void {
+    public login(): void {
         if (this.username && this.password) {
-            // this.authService.login(this.username, this.password)
-            //     .subscribe(
-            //         () => {
-            //             console.log("User is logged in");
-            //             this.router.navigateByUrl('/');
-            //         }
-            //     );
+            var loginModel = new LoginModel(this.username, this.password, false);
+            this.authService.login(loginModel);
         }
     }
 }
