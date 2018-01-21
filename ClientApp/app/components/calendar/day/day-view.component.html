@@ -1,0 +1,32 @@
+<ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
+    <mat-toolbar layout-align="center">
+        <button mat-icon-button><mat-icon>chevron_left</mat-icon></button>
+        <span>{{viewDate | date: 'fulldate'}}</span>
+        <button mat-icon-button><mat-icon>chevron_right</mat-icon></button>
+    </mat-toolbar>
+    
+    <mat-card>
+        <mat-card-title>
+            <div layout="row" layout-align="start center">
+                <span flex>Jobs Workers</span>
+            </div>
+        </mat-card-title>
+        <mat-divider></mat-divider>
+        Jobs Go here
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>
+                <div layout="row" layout-align="start center">
+                    <span flex>Available Workers</span>
+                </div>
+        </mat-card-title>
+        <mat-divider></mat-divider>
+        
+        <ac-availableWorkers 
+            [date]="viewDate"
+            [hideTitle]="true">
+        </ac-availableWorkers>
+    </mat-card>
+
+</ng-template>

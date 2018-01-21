@@ -1,0 +1,17 @@
+
+<mat-toolbar layout-align="center">
+    <button mat-icon-button>
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+    <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
+    <button mat-icon-button>
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+</mat-toolbar>
+<div class="cell-wrapper">
+    <ac-week-cell 
+        *ngFor="let dayView of (calendarStore.weekData | async)" 
+        [dayView]="dayView" 
+        (workerMoved)="onWorkerMoved($event)">
+    </ac-week-cell>
+</div>

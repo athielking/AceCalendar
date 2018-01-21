@@ -75,9 +75,15 @@ body {
     justify-content: center;
 }
 
-.month-wrapper{
+.view-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.cell-wrapper{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 100%;
     margin:10px;
 }
 

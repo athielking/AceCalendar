@@ -1,0 +1,25 @@
+@import '~@angular/material/theming';
+@import '../../../../ace-calendar-theme';
+
+.week-cell-job-header{
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-weight: 700;
+    color: mat-color($primary);
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-bottom: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: rgba(0,0,0, .25)
+}
+
+.week-cell-job-workers{
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+}
+
+.week-cell-job-noworkers{
+    color: mat-color($warn);
+}

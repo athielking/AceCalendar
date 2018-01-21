@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgDragDropModule } from 'ng-drag-drop';
+
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
   MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule, MatGridListModule,
@@ -15,8 +17,6 @@ import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuMo
 import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
   CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
   CovalentNotificationsModule, CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule } from '@covalent/core';
-
-import { AlertModule } from 'ngx-bootstrap';
 
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
@@ -28,6 +28,9 @@ import { AddJobComponent } from './components/job/addJob.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
+import { DayViewComponent } from "./components/calendar/day/day-view.component";
+import { WeekViewComponent } from "./components/calendar/week/week-view.component";
+import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
 import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
@@ -38,6 +41,7 @@ import { AuthService } from "./services/auth.service";
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
+import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.component";
 
 import { AuthRequestOptions } from './tools/authRequestOptions';
 
@@ -46,13 +50,25 @@ import { AuthRequestOptions } from './tools/authRequestOptions';
     AppComponent,
     NavMenuComponent,
     CalendarComponent,
+
+    //Worker CRUD
     WorkerComponent,
     AddWorkerComponent,
     AvailableWorkerPickerComponent,
+
+    //Job CRUD
     JobComponent,
     AddJobComponent,
+
+    //Month View
     MonthViewComponent,
     MonthCellComponent,
+
+    //Week View
+    WeekViewComponent,
+    WeekCellComponent,
+    WeekCellJobComponent,
+    DayViewComponent,
     LoginComponent
   ],
   entryComponents: [
@@ -65,6 +81,7 @@ import { AuthRequestOptions } from './tools/authRequestOptions';
     FormsModule, ReactiveFormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    NgDragDropModule.forRoot(),
     /** Material Modules */
     MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatSelectModule,
     MatButtonToggleModule, MatSlideToggleModule, MatProgressSpinnerModule, MatDialogModule, MatSnackBarModule,
@@ -74,7 +91,6 @@ import { AuthRequestOptions } from './tools/authRequestOptions';
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule, CovalentStepsModule,
     CovalentDialogsModule, CovalentLoadingModule, CovalentSearchModule, CovalentPagingModule, CovalentNotificationsModule,
     CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule,
-    AlertModule.forRoot(),
     RouterModule.forRoot([
       { path: '', redirectTo: 'home', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },

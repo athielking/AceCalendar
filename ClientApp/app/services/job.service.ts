@@ -10,6 +10,10 @@ import * as isSameDay from 'date-fns/is_same_day';
 export class JobService {
 
     private serviceUri: string;
+    private headers = new HttpHeaders(
+        {
+            'Content-Type': 'application/json'
+        });
 
     constructor(private http: Http,
         private httpClient: HttpClient) {
@@ -83,16 +87,23 @@ export class JobService {
 
     addJob(job: AddJobModel) {
 
-        const headers = new HttpHeaders(
-            {
-                'Content-Type': 'application/json'
-            });
 
-        return this.httpClient.post(this.serviceUri, job, { headers: headers }).shareReplay();
+        return this.httpClient.post<CalendarJob>(this.serviceUri, job, { headers: this.headers }).shareReplay();
 
     }
 
     deleteJob( jobId: string ){
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
+    }
+
+    moveWorkerToJob(jobId: string, workerId: string, date?: Date){
+
+        var body = {
+            idJob: jobId, 
+            idWorker: workerId,
+            date: date.toISOString()
+        };
+
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, body, {headers: this.headers}  ).shareReplay();
     }
 }

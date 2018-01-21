@@ -8,6 +8,8 @@ export class MonthView{
 
 export class DayView{
 
+    public workersByJob : Map<string, Worker[]>;
+    
     constructor(public calendarDay: CalendarDay, 
                 public jobs: CalendarJob[],
                 public availableWorkers: Worker[])
@@ -28,15 +30,12 @@ export class CalendarDay {
 }
 
 export class CalendarJob {
+    public workers: Worker[] = [];
+
     constructor(public id: string,
                 public number: number,
                 public name: string,
-                public type: string,
-                public color?: string,
-                public cssClass?: string,
-                public resizable?: boolean,
-                public draggable?: boolean
-            ){
+                public type: string){
     }
 }
 
@@ -64,3 +63,4 @@ export class AddJobModel {
                 {
                 }
 }
+

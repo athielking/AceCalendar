@@ -8,16 +8,16 @@ import { CalendarDay, CalendarJob, AddJobModel } from '../components/calendar/co
 
 @Injectable()
 export class JobStore{
-    private _jobs : BehaviorSubject<List<CalendarJob>> = new BehaviorSubject(List([]));
+    private _jobs : BehaviorSubject<CalendarJob[]> = new BehaviorSubject([]);
 
-    public readonly jobs : Observable<List<CalendarJob>> = this._jobs.asObservable();
+    public readonly jobs : Observable<CalendarJob[]> = this._jobs.asObservable();
 
     constructor(private jobService: JobService){
     }
 
     getJobs(){
         this.jobService.getJobs()
-            .subscribe( result => this._jobs.next(List(result)));
+            .subscribe( result => this._jobs.next(result));
     }
 
     addJob(job: AddJobModel){
@@ -26,7 +26,10 @@ export class JobStore{
 
         obs.subscribe(
             result => {
-                this.getJobs();
+                let jobs = this._jobs.getValue();
+                jobs.push(result);
+                
+                this._jobs.next( jobs );
             });
 
         return obs;

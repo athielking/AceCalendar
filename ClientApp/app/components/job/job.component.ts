@@ -28,7 +28,7 @@ export class JobComponent implements OnInit{
 
     ngOnInit(){
         this.jobStore.jobs.subscribe( result => {
-            this.jobs = result.toArray();
+            this.jobs = result
             this.filterJobs('');
 
             this.jobsLoading = false;

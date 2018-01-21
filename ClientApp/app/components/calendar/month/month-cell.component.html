@@ -1,24 +1,24 @@
 <div class="month-cell" 
-    [class.cal-today]="calendarDay?.isToday" 
-    [class.cal-weekend]="calendarDay?.isWeekend" 
-    [class.cal-in-month]="calendarDay?.inMonth"
-    [class.cal-out-month]="!calendarDay?.inMonth">
+    [class.cal-today]="dayView.calendarDay?.isToday" 
+    [class.cal-weekend]="dayView.calendarDay?.isWeekend" 
+    [class.cal-in-month]="dayView.calendarDay?.inMonth"
+    [class.cal-out-month]="!dayView.calendarDay?.inMonth">
 
     <div class="month-cell-top">
         <!-- <span class="cell-badge" [hidden]="(jobStore.jobs | async)?.size == 0">{{ (jobStore.jobs | async)?.size }}</span> -->
-        <span class="cell-day-number" [class.cal-weekend]="calendarDay?.isWeekend">
-            {{ calendarDay?.date | date:'d' }}
+        <span class="cell-day-number" [class.cal-weekend]="dayView.calendarDay?.isWeekend">
+            {{ dayView.calendarDay.date | date:'d' }}
         </span>
     </div>
 
-    <div class="month-cell-content" *ngIf="calendarDay?.inMonth">
+    <div class="month-cell-content" *ngIf="dayView.calendarDay?.inMonth">
         <button mat-button 
             style="text-align:left">
-            <mat-icon class="material-icons md-18" matListIcon>business</mat-icon> {{ jobs.length }} Jobs
+            <mat-icon class="material-icons md-18" matListIcon>business</mat-icon> {{ dayView.jobs?.length }} Jobs
         </button>
         <button mat-button 
             style="text-align:left">
-            <mat-icon class="material-icons md-18" matListIcon>people</mat-icon> {{ workers.length }} Available
+            <mat-icon class="material-icons md-18" matListIcon>people</mat-icon> {{ dayView.workers?.length }} Available
         </button>
     </div>
 </div>

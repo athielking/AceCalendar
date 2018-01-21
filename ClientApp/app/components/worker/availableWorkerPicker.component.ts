@@ -11,6 +11,7 @@ import { WorkerStore } from '../../stores/worker.store';
 export class AvailableWorkerPickerComponent implements OnInit, OnChanges{
     @Input() date: Date;
     @Input() endDate?: Date;
+    @Input() hideTitle?: Boolean;
 
     public selectedRows: Worker[] = [];
 

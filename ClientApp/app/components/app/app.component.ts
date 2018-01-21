@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
-import { TdLayoutComponent, TdLayoutNavComponent, TdNavigationDrawerComponent, TdLayoutFooterComponent, } from '@covalent/core';
+import { 
+  TdLayoutComponent, 
+  TdLayoutNavComponent, 
+  TdLayoutManageListComponent, 
+  TdLayoutManageListToggleDirective, 
+  TdNavigationDrawerComponent, 
+  TdLayoutFooterComponent 
+} from '@covalent/core';
 import { 
   MatList,
   MatListItem,
