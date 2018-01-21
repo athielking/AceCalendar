@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpModule } from '@angular/http';
+import { HttpModule, RequestOptions } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
@@ -38,6 +38,8 @@ import { AuthService } from "./services/auth.service";
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
+
+import { AuthRequestOptions } from './tools/authRequestOptions';
 
 @NgModule({
   declarations: [
@@ -90,7 +92,11 @@ import { JobStore } from './stores/job.store';
     //Stores
     CalendarStore,
     WorkerStore,
-    JobStore
+    JobStore,
+    {
+      provide: RequestOptions, 
+      useClass: AuthRequestOptions
+    }
   ],
   bootstrap: [AppComponent]
 })
