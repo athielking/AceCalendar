@@ -1,0 +1,26 @@
+<div class="week-cell">
+    <div class="week-cell-title">
+        {{ dayView.calendarDay?.date | date:'d' }}
+    </div>
+
+    <div class="week-cell-subtitle">
+        {{ dayView.calendarDay?.date | date:'EEEE' }}
+    </div>
+
+    <div class="week-cell-header-divider"></div>
+
+    <div class="week-cell-content">
+        <ac-week-cell-job 
+            *ngFor="let job of dayView.jobs" 
+            [calendarJob]="job"
+            (workerAdded)="onWorkerAddedToJob($event)">
+        </ac-week-cell-job>
+    </div>
+
+    <div class="week-cell-footer" droppable (onDrop)="onWorkerDropped($event)">
+        <h3>Available</h3>
+        <div *ngFor="let worker of dayView.availableWorkers" draggable [dragData]="worker">
+            {{ worker.firstName }} {{ worker.lastName }}
+        </div>
+    </div>
+</div>

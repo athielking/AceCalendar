@@ -1,9 +1,9 @@
-<div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+<div *ngIf="hideTitle !== true" layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
     <span class="mat-title push-left-sm">
         Available Workers
     </span>
 </div>
-<mat-divider></mat-divider>
+<mat-divider *ngIf="hideTitle !== true"></mat-divider>
 <ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ;>
     <td-data-table
         #dataTable

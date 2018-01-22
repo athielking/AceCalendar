@@ -1,0 +1,10 @@
+<div class="week-cell-job-header"
+    [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0">
+    <div>{{calendarJob.name}}</div>
+    <div>{{calendarJob.number}}</div>
+</div>
+<div class="week-cell-job-workers" droppable (onDrop)="onWorkerDropped($event)">
+    <div *ngFor="let worker of calendarJob.workers" draggable [dragData]="worker">
+        {{ worker.firstName }} {{ worker.lastName }}
+    </div>
+</div>

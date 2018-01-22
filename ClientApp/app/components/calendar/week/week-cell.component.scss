@@ -1,0 +1,68 @@
+@import '~@angular/material/theming';
+
+%mat-card-section-base {
+    margin-bottom: 16px;
+}
+
+%mat-card-title-base{
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+%week-cell-divider-base{
+    margin:0;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: rgba(0,0,0,.12)
+}
+
+.week-cell{
+    display: flex;
+    flex-direction: column;
+    background: white;
+    margin: 4px;
+    height: 100%;
+    @include mat-elevation-transition;
+    @include mat-overridable-elevation(2);
+    @include cdk-high-contrast {
+        outline: solid 1px;
+      }
+}
+
+.week-cell-title, .week-cell-subtitle{
+    @extend %mat-card-section-base; 
+    @extend %mat-card-title-base;
+}
+
+.week-cell-title{
+    padding-top: 16px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.week-cell-subtitle{
+    margin-top: -4px;
+    font-size: 14px;
+    color: rgba(0,0,0,.54);
+}
+
+.week-cell-content{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.week-cell-footer{
+    @extend %mat-card-title-base;
+}
+
+.week-cell-divider{
+    @extend %week-cell-divider-base;
+}
+
+.week-cell-header-divider{
+    @extend %week-cell-divider-base;
+    margin-bottom: 8px;
+}
