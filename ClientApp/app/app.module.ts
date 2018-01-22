@@ -4,8 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpModule, RequestOptions } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
@@ -39,7 +38,7 @@ import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
 
-import { AuthRequestOptions } from './tools/authRequestOptions';
+import { AuthInterceptor } from './tools/authInterceptor';
 
 @NgModule({
   declarations: [
@@ -60,7 +59,6 @@ import { AuthRequestOptions } from './tools/authRequestOptions';
     AddJobComponent
   ],
   imports: [
-    HttpModule,
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
     BrowserModule,
@@ -94,8 +92,9 @@ import { AuthRequestOptions } from './tools/authRequestOptions';
     WorkerStore,
     JobStore,
     {
-      provide: RequestOptions, 
-      useClass: AuthRequestOptions
+      provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

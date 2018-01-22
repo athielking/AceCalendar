@@ -1,6 +1,6 @@
 import { Injectable, keyframes } from '@angular/core';
-import { Http, Headers, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
@@ -17,7 +17,7 @@ export class CalendarService{
 
     api: string = `${environment.webServiceUrl}/api/calendar/`;
 
-    constructor( private http: Http ){
+    constructor( private httpClient: HttpClient ){
     }
     
     getMonthData(date:Date){
@@ -34,12 +34,12 @@ export class CalendarService{
 
     private _getData(date: Date, type: ApiMethod){
 
-        return this.http.get(this.api+ `${type}?date=${date.toISOString()}`)
+        return this.httpClient.get(this.api+ `${type}?date=${date.toISOString()}`)
             .map(response => {
                 
                 let daymap : Map<Date, DayView> = new Map<Date, DayView>();
 
-                var obj = response.json().data;
+                var obj = response["data"];
                 let keys = Object.keys(obj);
 
                 keys.forEach(key => {

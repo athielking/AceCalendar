@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Http, Headers, URLSearchParams } from '@angular/http';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CalendarJob, AddJobModel } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
@@ -11,8 +10,7 @@ export class JobService {
 
     private serviceUri: string;
 
-    constructor(private http: Http,
-        private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient) {
 
         this.serviceUri = `${environment.webServiceUrl}/api/job`
     }
@@ -29,10 +27,9 @@ export class JobService {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForDay?date=${date.toISOString()}`
 
-        return this.http.get(api)
+        return this.httpClient.get(api)
             .map(response => {
-                let jobs: CalendarJob[] = [];
-                return response.json().data.map(item => {
+                return response["data"].map(item => {
                     return new CalendarJob(
                         item.id,
                         item.number,
@@ -47,10 +44,10 @@ export class JobService {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForWeek?date=${date.toISOString()}`
 
-        return this.http.get(api)
+        return this.httpClient.get(api)
             .map(response => {
                 let jobs: CalendarJob[] = [];
-                return response.json().data.map(item => {
+                return response["data"].map(item => {
                     item.key, item.value.map(value => {
                         return new CalendarJob(
                             value.id,
@@ -67,10 +64,10 @@ export class JobService {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForMonth?date=${date.toISOString()}`
 
-        return this.http.get(api)
+        return this.httpClient.get(api)
             .map(response => {
                 let jobs: CalendarJob[] = [];
-                return response.json().data.map(item => {
+                return response["data"].map(item => {
                     return new CalendarJob(
                         item.id,
                         item.number,
@@ -89,7 +86,6 @@ export class JobService {
             });
 
         return this.httpClient.post(this.serviceUri, job, { headers: headers }).shareReplay();
-
     }
 
     deleteJob( jobId: string ){
