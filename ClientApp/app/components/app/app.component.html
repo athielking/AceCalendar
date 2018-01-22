@@ -8,7 +8,7 @@
 
             <!-- Main Toolbar -->
             <div td-toolbar-content layout="row" layout-align="start center" flex>
-                <button mat-icon-button class="td-menu-button" (click)="sidenav.toggle()" mdTooltip="Main menu">
+                <button mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
                     <mat-icon>menu</mat-icon>
                 </button>
                 <mat-icon class="mat-icon-logo"></mat-icon>
@@ -22,27 +22,22 @@
                     </button>
                 </mat-menu>               
             </div>       
-            <mat-sidenav-container fullscreen>
-                <mat-sidenav #sidenav mode="side" opened="true" style="width:257px;border-right:1px solid #ccc">
-                    <div flex class="mat-content bgc-grey-50">
-                        <mat-nav-list>
-                            <a mat-list-item>
-                                <mat-icon matListIcon>home</mat-icon>Home</a>
-                            <a mat-list-item routerLink="/calendar">
-                                <mat-icon matListIcon>today</mat-icon>Calendar</a>
-                            <a mat-list-item routerLink="/worker">
-                                <mat-icon matListIcon>people</mat-icon>Workers</a>
-                            <a mat-list-item routerLink="/job">
-                                <mat-icon matListIcon>business</mat-icon>Jobs</a>
-                        </mat-nav-list>
-                    </div>
-                </mat-sidenav>
-                <div tdMediaToggle="gt-xs" [mediaClasses]="['push-md']">
-                    <mat-card>
-                        <router-outlet></router-outlet>       
-                    </mat-card>
-                </div>
-            </mat-sidenav-container>
+            <td-layout-manage-list [opened]="menuOpen" mode="side">
+                <!-- Side Nav -->
+                <mat-nav-list td-sidenav-content>
+                    <a mat-list-item>
+                        <mat-icon matListIcon>home</mat-icon>Home</a>
+                    <a mat-list-item routerLink="/calendar">
+                        <mat-icon matListIcon>today</mat-icon>Calendar</a>
+                    <a mat-list-item routerLink="/worker">
+                        <mat-icon matListIcon>people</mat-icon>Workers</a>
+                    <a mat-list-item routerLink="/job">
+                        <mat-icon matListIcon>business</mat-icon>Jobs</a>
+                </mat-nav-list>  
+                
+                <!-- View Outlet -->
+                <router-outlet></router-outlet>
+            </td-layout-manage-list>
         </td-layout-nav>
         <td-layout-footer>
             <div layout="row" layout-align="start center">
