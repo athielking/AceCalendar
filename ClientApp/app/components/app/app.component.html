@@ -7,8 +7,8 @@
         <td-layout-nav>
 
             <!-- Main Toolbar -->
-            <div td-toolbar-content layout="row" layout-align="center center" flex>
-                <button mat-icon-button td-menu-button (click)="toggleMenu()" class="td-menu-button" mdTooltip="Main menu">
+            <div td-toolbar-content layout="row" layout-align="start center" flex>
+                <button mat-icon-button class="td-menu-button" (click)="sidenav.toggle()" mdTooltip="Main menu">
                     <mat-icon>menu</mat-icon>
                 </button>
                 <mat-icon class="mat-icon-logo"></mat-icon>
@@ -48,25 +48,6 @@
             <div layout="row" layout-align="start center">
                 <span class="mat-caption">Copyright &copy; 2017 501 Software. All rights reserved</span>
             </div>
-            
-            <td-layout-manage-list [opened]="menuOpen" mode="side">
-
-                <!-- Side Nav -->
-                <mat-nav-list td-sidenav-content>
-                    <a mat-list-item>
-                        <mat-icon matListIcon>home</mat-icon>Home</a>
-                    <a mat-list-item routerLink="/calendar">
-                        <mat-icon matListIcon>today</mat-icon>Calendar</a>
-                    <a mat-list-item routerLink="/worker">
-                        <mat-icon matListIcon>people</mat-icon>Workers</a>
-                    <a mat-list-item routerLink="/job">
-                        <mat-icon matListIcon>business</mat-icon>Jobs</a>
-                </mat-nav-list>  
-                
-                <!-- View Outlet -->
-                <router-outlet></router-outlet>
-
-            </td-layout-manage-list>
-        </td-layout-nav>
+        </td-layout-footer>
     </td-layout>
 </ng-template>
