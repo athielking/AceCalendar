@@ -92,7 +92,7 @@ export class CalendarService{
 
                     
 
-                    let dv = new DayView(getCalendarDay( d ), jobs,workers );
+                    let dv = new DayView(getCalendarDay( d, date ), jobs,workers );
                     dv.workersByJob = workersByJob;
 
                     dayViews.push(dv);

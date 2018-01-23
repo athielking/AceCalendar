@@ -1,11 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { Observable } from 'rxjs/Rx';
 import * as isSameWeek from 'date-fns/is_same_week'
+import * as add_weeks from 'date-fns/add_weeks';
 
 import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerMovedEvent } from './week-cell.component';
+
 
 
 @Component({
@@ -14,6 +16,7 @@ import { WorkerMovedEvent } from './week-cell.component';
 })
 export class WeekViewComponent implements OnInit {
     @Input() viewDate: Date;
+    @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
     private dayViews: Observable<DayView>[];
     private dayMap: Map<Date, Observable<DayView>>;
@@ -28,6 +31,20 @@ export class WeekViewComponent implements OnInit {
         // });
 
         this.calendarStore.getDataForWeek(this.viewDate);
+    }
+    ngOnChanges(changes: SimpleChanges){
+        if(changes.viewDate && !changes.viewDate.firstChange)
+        {
+            this.calendarStore.getDataForWeek(this.viewDate);
+        }
+    }
+
+    viewDateForward(){
+        this.changeViewDate.emit( add_weeks(this.viewDate, 1))
+    }
+
+    viewDateBack(){
+        this.changeViewDate.emit( add_weeks(this.viewDate, -1))
     }
 
     onWorkerMoved(event: WorkerMovedEvent){
