@@ -10,6 +10,13 @@
     <div class="week-cell-header-divider"></div>
 
     <div class="week-cell-content">
+        <div class="week-cell-header">
+            <span style="text-align:center">Jobs</span>
+            <span flex></span>
+            <button mat-icon-button matTooltip="Add Job" (click)="showAddJob()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
         <ac-week-cell-job 
             *ngFor="let job of dayView.jobs" 
             [calendarJob]="job"
