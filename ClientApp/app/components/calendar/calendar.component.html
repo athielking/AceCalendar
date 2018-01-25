@@ -1,10 +1,10 @@
 <mat-tab-group flex>
     <mat-tab label="Month View">
-        <ac-month-view [viewDate]="viewDate">
+        <ac-month-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
         </ac-month-view>
     </mat-tab>
     <mat-tab label="Week View">
-        <ac-week-view [viewDate]="viewDate">
+        <ac-week-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
         </ac-week-view>
     </mat-tab>
     <mat-tab label="Day View">
