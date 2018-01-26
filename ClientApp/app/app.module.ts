@@ -19,6 +19,7 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
 
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { CalendarCellComponent } from './components/calendar/common/calendar-cell.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
@@ -49,7 +50,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AppComponent,
     NavMenuComponent,
     CalendarComponent,
-
+    CalendarCellComponent,
+    
     //Worker CRUD
     WorkerComponent,
     AddWorkerComponent,
