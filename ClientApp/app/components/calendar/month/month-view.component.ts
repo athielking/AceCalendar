@@ -1,10 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, Output, OnInit,OnChanges, SimpleChanges, EventEmitter } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { Observable } from 'rxjs/Rx';
 
 import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
 import { MonthView, CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
+import * as add_months from 'date-fns/add_months'
+import { addMonths } from 'date-fns';
+
+
 
 @Component({
   selector: 'ac-month-view',
@@ -12,6 +16,7 @@ import { CalendarStore } from '../../../stores/calendar.store'
 })
 export class MonthViewComponent implements OnInit {
   @Input() viewDate: Date;
+  @Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
 
   private header: CalendarDay[];
   private dayViews: Observable<DayView>[];
@@ -22,12 +27,21 @@ export class MonthViewComponent implements OnInit {
 
   ngOnInit() {
     this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
-
-    // this.calendarStore.monthData.subscribe(result => {
-    //   this.dayMap = result;
-    //   this.dayViews = Array.from(result.values());
-    // })
-
     this.calendarStore.getDataForMonth(this.viewDate);
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if(changes.viewDate && !changes.viewDate.firstChange)
+    {
+      this.calendarStore.getDataForMonth(this.viewDate);
+    }
+  }
+
+  public viewDateBack(){
+    this.changeViewDate.emit( add_months(this.viewDate, -1) );
+  }
+
+  public viewDateForward(){
+    this.changeViewDate.emit( add_months(this.viewDate, 1) );
   }
 }

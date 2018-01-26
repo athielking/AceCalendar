@@ -1,8 +1,8 @@
 <ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
     <mat-toolbar layout-align="center">
-        <button mat-icon-button><mat-icon>chevron_left</mat-icon></button>
+        <button mat-icon-button (click)="viewDateBack()"><mat-icon>chevron_left</mat-icon></button>
         <span>{{viewDate | date: 'MMMM'}}</span>
-        <button mat-icon-button><mat-icon>chevron_right</mat-icon></button>
+        <button mat-icon-button (click)="viewDateForward()"><mat-icon>chevron_right</mat-icon></button>
     </mat-toolbar>
     <div class="cell-wrapper">
         <div class="week-day-header" *ngFor="let dayHeader of header">

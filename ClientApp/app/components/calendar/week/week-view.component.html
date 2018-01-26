@@ -1,10 +1,10 @@
 
 <mat-toolbar layout-align="center">
-    <button mat-icon-button>
+    <button mat-icon-button (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
     </button>
     <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="viewDateForward()">
         <mat-icon>chevron_right</mat-icon>
     </button>
 </mat-toolbar>

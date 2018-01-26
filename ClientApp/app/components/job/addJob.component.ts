@@ -1,6 +1,6 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, Input, Inject, ViewChild} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {ITdDataTableColumn} from '@covalent/core';
 
@@ -14,7 +14,7 @@ import { AvailableWorkerPickerComponent } from '../worker/availableWorkerPicker.
     templateUrl: './addJob.component.html'
 })
 export class AddJobComponent {
-
+    
     @ViewChild(AvailableWorkerPickerComponent) picker: AvailableWorkerPickerComponent;
 
     hasError : boolean = false;
@@ -26,13 +26,16 @@ export class AddJobComponent {
     typeInput = new FormControl('', [Validators.required]);
     startDateInput = new FormControl('', [Validators.required]);
     endDateInput = new FormControl('');
-    
+    job: AddJobModel;
 
     constructor(private jobStore: JobStore,
-                private dialogRef: MatDialogRef<AddJobComponent>){ 
+                private dialogRef: MatDialogRef<AddJobComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: any){ 
+        if(this.data.model)
+            this.job = <AddJobModel>this.data.model;
+        else
+            this.job = new AddJobModel(0, '', '', new Date());
     }
-
-    job: AddJobModel = new AddJobModel(0, '', '', new Date());
 
     onCancelClick(): void {
         this.dialogRef.close();

@@ -1,4 +1,5 @@
 @import '~@angular/material/theming';
+@import '../../../../ace-calendar-theme';
 
 %mat-card-section-base {
     margin-bottom: 16px;
@@ -52,7 +53,20 @@
     flex-direction: column;
     padding: 8px;
     font-size: 14px;
+
+    .week-cell-header{
+        color: mat-color($primary,800);
+        display: flex;
+        font-weight: 700;
+        font-size: 14px;
+        padding-left: 8px;
+
+        button{
+            margin-top: -10px;
+        }
+    }
 }
+
 
 .week-cell-footer{
     @extend %mat-card-title-base;

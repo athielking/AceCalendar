@@ -7,4 +7,8 @@ import { MonthViewComponent } from '../calendar/month/month-view.component'
 })
 export class CalendarComponent {
     viewDate : Date = new Date();
+
+    onChangeViewDate( newDate: Date ){
+        this.viewDate = newDate;
+    }
 }
