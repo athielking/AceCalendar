@@ -21,8 +21,9 @@ export class MonthViewComponent implements OnInit {
   private header: CalendarDay[];
   private dayViews: Observable<DayView>[];
   private dayMap: Map<Date, Observable<DayView>>;
+  public dataLoading: boolean;
 
-  constructor(private calendarStore: CalendarStore) {
+  constructor(public calendarStore: CalendarStore) {
   }
 
   ngOnInit() {

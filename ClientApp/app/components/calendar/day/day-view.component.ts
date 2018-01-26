@@ -13,6 +13,8 @@ export class DayViewComponent implements OnInit{
     @Input() viewDate: Date;
 
     private _dayView: Observable<DayView>;
+    public dataLoading: boolean;
+    
     constructor( private calendarStore: CalendarStore ){
     }
 

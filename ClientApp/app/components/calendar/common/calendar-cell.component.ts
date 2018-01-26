@@ -5,6 +5,7 @@ import { DayView, CalendarDay, CalendarJob, Worker } from '../../calendar/common
 
 @Component({
     selector: 'ac-cell',
+    template: ``
   })
   export class CalendarCellComponent implements OnInit {
         @Input() dayView : DayView;
