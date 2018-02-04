@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TdLoadingService, ITdDataTableColumn } from '@covalent/core';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { TdLoadingService, TdDialogService } from '@covalent/core';
+import { BehaviorSubject } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
 import { List } from 'immutable';
 
@@ -14,54 +14,112 @@ import { AddWorkerComponent } from './addWorker.component';
 })
 export class WorkerComponent implements OnInit {
     
+    private workers: Worker[];
+
+    public filteredWorkers: BehaviorSubject<List<Worker>> = new BehaviorSubject<List<Worker>>(List([]));
+
+    public showErrorMessage: boolean;
+    
+    public errorMessage: string;
+    
     constructor(
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private dialogService: TdDialogService
     ) {
-    }
-  
-    workersLoading : boolean = true;
+    } 
+    
+    public ngOnInit() {
+        this.workerStore.isLoading.subscribe( result => {
+            this.toggleShowLoading(result); 
+        });
 
-    workers: Worker[];
-    filteredWorkers: BehaviorSubject<List<Worker>> = new BehaviorSubject<List<Worker>>(List([]));
-
-    showAddWorkerForm(): void {
-        let dialogRef = this.dialog.open(AddWorkerComponent, {
-            disableClose: true
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
-            //this.load();
-          });
-    }
-
-    ngOnInit(){
+        this.workerStore.hasError.subscribe( result => {
+            this.showErrorMessage = result;
+            this.errorMessage = this.workerStore.errorMessage;
+        });
 
         this.workerStore.workers.subscribe( result => {
             this.workers = result.toArray();
-            this.filterUsers('');
+            this.filterWorkers();          
         });
 
-        this.filteredWorkers.subscribe( result => {
-            this.workersLoading = false;
-        })
-        
         this.workerStore.getWorkers();
     }
 
-    filterUsers(displayName: string = ''): void {
+    public filterWorkers(displayName: string = '') {              
         this.filteredWorkers.next( 
             List(this.workers.filter( (user: Worker) => {
-                return (user.firstName.toLowerCase() + user.lastName.toLowerCase()).indexOf(displayName.toLowerCase()) > -1;
+                return (user.firstName + user.lastName).toLowerCase().indexOf(displayName.toLowerCase()) > -1;
         })));
       }
 
-    delete(userId: string){
-        this.workerStore.deleteWorker(userId)
-            .subscribe(result => {
-                console.log(`User Deleted: ${userId}`)
-            });
+    public addWorker(){
+        this.showAddWorkerForm();
     }
-  }
+
+    public editWorker(worker: Worker){
+        this.showAddWorkerForm(
+            true,
+            worker.id,            
+            worker.firstName,
+            worker.lastName,
+            worker.email,
+            worker.phone
+        );
+    }
+
+    public deleteWorker(userId: string){
+        this.dialogService.openConfirm({
+            message: 'Are you sure you wish to delete this worker?',
+            title: 'Confirm Delete'
+          }).afterClosed().subscribe((accept: boolean) => {
+            if (accept) {
+                this.toggleShowLoading(true);
+
+                this.workerStore.deleteWorker(userId)
+                    .subscribe(result => {
+                        this.toggleShowLoading(false);                        
+                    }, error => {
+                        this.toggleShowLoading(false);
+                        this.dialogService.openAlert({
+                            message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                            title: 'Unable to Delete Worker'
+                        });
+                    });
+            }
+          });
+    }
+
+    private showAddWorkerForm(
+        isEdit: boolean = false,
+        editWorkerId: string = '',
+        firstName: string = '',
+        lastName: string = '',
+        email: string = '',
+        phone: string = ''
+    ) {
+        let dialogRef = this.dialog.open(AddWorkerComponent, {
+            disableClose: true,
+            data: { 
+                isEdit: isEdit,
+                editWorkerId: editWorkerId,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone
+            }
+        });
+    }
+
+    private toggleShowLoading(show:boolean) {
+        if (show) {
+            this.loadingService.register('showLoading');
+        } 
+        else {
+            this.loadingService.resolve('showLoading');
+        }
+    }
+}
 
