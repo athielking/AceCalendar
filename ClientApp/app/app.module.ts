@@ -25,6 +25,7 @@ import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
+import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -45,6 +46,7 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 
 import { AuthInterceptor } from './tools/authInterceptor';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +62,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     //Job CRUD
     JobComponent,
     AddJobComponent,
+    JobNotesComponent,
 
     //Month View
     MonthViewComponent,
@@ -74,7 +77,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
   ],
   entryComponents: [
     AddWorkerComponent,
-    AddJobComponent
+    AddJobComponent,
+    JobNotesComponent
   ],
   imports: [
     HttpClientModule,

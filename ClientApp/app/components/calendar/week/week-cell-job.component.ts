@@ -1,5 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { CalendarJob, Worker } from '../../calendar/common/models'
+import { MatSnackBar } from '@angular/material';
+import { JobNotesComponent } from '../../job/jobNotes.component';
 
 
 @Component({
@@ -10,6 +12,10 @@ import { CalendarJob, Worker } from '../../calendar/common/models'
 export class WeekCellJobComponent {
     @Input() calendarJob: CalendarJob;
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter()
+
+    constructor(public snackBar: MatSnackBar){
+
+    }
 
     onWorkerDropped(e: any) {
 
@@ -23,6 +29,10 @@ export class WeekCellJobComponent {
             worker: <Worker>e.dragData
         });
     
+    }
+
+    showNotes(){
+        var ref = this.snackBar.openFromComponent(JobNotesComponent,{ data: {model:this.calendarJob}});
     }
 }
 

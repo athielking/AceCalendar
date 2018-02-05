@@ -72,7 +72,8 @@ export class CalendarService{
                             item.id, 
                             item.number, 
                             item.name, 
-                            item.type );
+                            item.type, 
+                            item.notes);
                     
                         if( workersByJob.has(item.id))
                             cj.workers = workersByJob.get(item.id);

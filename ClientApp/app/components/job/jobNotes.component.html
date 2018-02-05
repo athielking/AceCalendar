@@ -1,0 +1,31 @@
+<div style="display: flex; flex-direction: row">
+    <div flex>
+        <h1 class="mat-dialog-title">Notes</h1>
+    </div>
+    <button mat-icon-button matTooltip="Edit Notes" (click)="toggleEdit()" style="margin-top:8px">
+        <mat-icon>create</mat-icon>
+    </button>
+</div>
+
+<div class="mat-dialog-content form-container">
+    <mat-form-field>
+        <textarea 
+            [readonly]="!editing" 
+            matInput 
+            matTextareaAutosize 
+            matAutosizeMinRows="2" 
+            matAutosizeMaxRows="5" 
+            [(ngModel)]="job.notes">
+        </textarea>
+    </mat-form-field>
+</div>
+
+<div class="mat-dialog-actions" style="display: flex; flex-direction:row">
+    <span flex></span>
+    <button color="accent" *ngIf="editing" mat-button (click)="onSaveClick()">
+        Save
+    </button>
+    <button color="accent" mat-button (click)="onCloseClick()">
+        Close
+    </button>
+</div>
