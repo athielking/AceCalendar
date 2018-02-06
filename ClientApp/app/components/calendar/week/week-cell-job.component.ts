@@ -13,7 +13,7 @@ export class WeekCellJobComponent {
     @Input() calendarJob: CalendarJob;
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter()
 
-    constructor(public snackBar: MatSnackBar){
+    constructor(public snackBar: MatSnackBar) {
 
     }
 
@@ -28,11 +28,11 @@ export class WeekCellJobComponent {
             calendarJob: this.calendarJob,
             worker: <Worker>e.dragData
         });
-    
+
     }
 
-    showNotes(){
-        var ref = this.snackBar.openFromComponent(JobNotesComponent,{ data: {model:this.calendarJob}});
+    showNotes() {
+        var ref = this.snackBar.openFromComponent(JobNotesComponent, { data: { model: this.calendarJob } });
     }
 }
 

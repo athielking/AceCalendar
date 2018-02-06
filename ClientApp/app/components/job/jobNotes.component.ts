@@ -1,13 +1,10 @@
-import {Component, Input, Inject, ViewChild} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA, MatSnackBarRef, MAT_SNACK_BAR_DATA} from '@angular/material';
+import {Component, Inject} from '@angular/core';
+import {MatSnackBarRef, MAT_SNACK_BAR_DATA} from '@angular/material';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {ITdDataTableColumn} from '@covalent/core';
 
-import { Worker, AddJobModel, CalendarJob } from '../calendar/common/models';
+import { CalendarJob } from '../calendar/common/models';
 import { JobStore } from '../../stores/job.store';
-import {AcErrorStateMatcher} from '../../tools/AcErrorStateMatcher';
-import { AvailableWorkerPickerComponent } from '../worker/availableWorkerPicker.component';
 
 @Component({
     selector: 'ac-jobNotes',
@@ -22,6 +19,11 @@ export class JobNotesComponent {
                 private snacBarRef: MatSnackBarRef<JobNotesComponent>,
                 @Inject(MAT_SNACK_BAR_DATA) public data: any){ 
         this.job = <CalendarJob>data.model;
+
+        window.setTimeout(()=>{
+            if(!this.editing)
+                this.snacBarRef.closeWithAction();
+        }, 5000);
     }
 
     toggleEdit() : void{
@@ -29,8 +31,9 @@ export class JobNotesComponent {
     }
 
     onSaveClick(): void {
-        this.jobStore.saveNotes(this.job.id, this.job.notes);
-        this.snacBarRef.closeWithAction();
+        this.jobStore.saveNotes(this.job.id, this.job.notes).subscribe( result => {
+            this.snacBarRef.closeWithAction();
+        });
     }
 
     onCloseClick(): void{

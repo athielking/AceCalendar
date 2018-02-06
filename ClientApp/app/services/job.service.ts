@@ -108,10 +108,6 @@ export class JobService {
     }
 
     saveNotes( jobId: string, notes: string){
-        var body = {
-            notes: notes
-        }
-
-        return this.httpClient.post(this.serviceUri+`/saveJobNotes?id=${jobId}`, notes, {headers: this.headers}).shareReplay();
+        return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, JSON.stringify(notes), {headers: this.headers}).shareReplay();
     }
 }
