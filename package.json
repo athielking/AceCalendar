@@ -34,7 +34,8 @@
     "ngx-bootstrap": "^2.0.1",
     "popper.js": "^1.13.0",
     "rxjs": "^5.5.5",
-    "zone.js": "^0.8.18"
+    "zone.js": "^0.8.18",
+    "angular2-text-mask": "8.0.0"
   },
   "devDependencies": {
     "@angular/cli": "1.6.1",

@@ -49,6 +49,16 @@ export class Worker {
     }
 }
 
+export class AddWorkerModel {
+    constructor(
+        public firstName: string,
+        public lastName: string,
+        public email: string,
+        public phone: string
+    ){
+    }
+}
+
 export class AddJobModel {
 
     public endDate?: Date = null;

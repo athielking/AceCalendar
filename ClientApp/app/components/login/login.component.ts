@@ -10,8 +10,6 @@ import { LoginModel } from './loginModel';
     templateUrl: './login.component.html'
 })
 export class LoginComponent {
-    private self = this;
-    
     public username: string;
     public password: string;
 

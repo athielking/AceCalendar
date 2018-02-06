@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgDragDropModule } from 'ng-drag-drop';
+import { TextMaskModule } from 'angular2-text-mask';
 
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
@@ -83,6 +84,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
   imports: [
     HttpClientModule,
     FormsModule, ReactiveFormsModule,
+    TextMaskModule,
     BrowserModule,
     BrowserAnimationsModule,
     NgDragDropModule.forRoot(),

@@ -1,50 +1,58 @@
-<h1 class="mat-dialog-title">Add Worker</h1>
+<h1 class="mat-dialog-title">{{isEdit ? 'Edit' : 'Add'}} Worker</h1>
 
-<div class="mat-dialog-content form-container">
-    <mat-form-field>
-        <input matInput placeholder="First Name" [formControl]="firstNameInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.firstName">
-        <mat-error *ngIf="firstNameInput.hasError('required')">
-            First Name is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+<div *tdLoading="'addWorkerShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
 
-    <mat-form-field>
-        <input matInput placeholder="Last Name" [formControl]="lastNameInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.lastName">
-        <mat-error *ngIf="lastNameInput.hasError('required')">
-            Last Name is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+    <form #addWorkerForm="ngForm">   
+        <div class="mat-dialog-content form-container">
 
-    <mat-form-field>
-        <input matInput placeholder="Email" [formControl]="emailInput" [errorStateMatcher]='matcher' [(ngModel)]="worker.email">
-        <mat-error *ngIf="emailInput.hasError('email') && !emailInput.hasError('required')">
-            Please enter a valid email address
-        </mat-error>
-        <mat-error *ngIf="emailInput.hasError('required')">
-            Email is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+            <mat-form-field>
+                <input matInput #firstNameControl="ngModel" placeholder="First Name" type="text" maxlength="50" name="firstName" [(ngModel)]="firstName" required>
+                <mat-error align="start">
+                    <span [hidden]="!firstNameControl.errors?.required || firstNameControl.pristine" class="tc-red-600">First Name is Required</span>
+                </mat-error>
+            </mat-form-field>
 
-    <mat-form-field>
-        <input matInput placeholder="Phone Number" [(ngModel)]="worker.phone">
-    </mat-form-field>
+            <mat-form-field>
+                <input matInput #lastNameControl="ngModel" placeholder="Last Name" type="text" maxlength="50" name="lastName" [(ngModel)]="lastName" required>
+                <mat-error align="start">
+                    <span [hidden]="!lastNameControl.errors?.required || lastNameControl.pristine" class="tc-red-600">Last Name is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #emailControl="ngModel" placeholder="Email" type="text" maxlength="200" name="email" [(ngModel)]="email" required email>
+                <mat-error align="start">
+                    <span [hidden]="!emailControl.errors?.email || emailControl.errors?.required" class="tc-red-600">Please Enter a Valid Email Address</span>
+                    <span [hidden]="!emailControl.errors?.required || emailControl.pristine" class="tc-red-600">Email is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #phoneControl="ngModel" [textMask]="{mask: phoneMask}" placeholder="Phone Number" type="text" name="phone" [(ngModel)]="phone">
+                <mat-hint align="start">       
+                    <span [hidden]="phoneIsValid() || !phoneControl.touched" class="tc-red-600">Please Enter a Valid Phone Number</span>                
+                </mat-hint>
+            </mat-form-field>
+
+        </div>
+
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            
+            <button class="mat-button" (click)="onCancelClick()">
+                <span class="mat-button-wrapper">Cancel</span>
+                <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                <div class="mat-button-focus-overlay"></div>
+            </button> 
+            
+            <button class="mat-button" [disabled]="!addWorkerForm.form.valid || !phoneIsValid()" (click)="onOkClick()">
+                <span class="mat-button-wrapper">Ok</span>
+                <div class="mat-button-ripple mat-ripple" matripple=""></div>
+                <div class="mat-button-focus-overlay"></div>
+            </button>
+        </div>
+    </form>
 </div>
 
-<div class="mat-dialog-actions">
-    <span flex></span>
-    
-    <button class="mat-button" (click)="onCancelClick()">
-        <span class="mat-button-wrapper">Cancel</span>
-        <div class="mat-button-ripple mat-ripple" matripple=""></div>
-        <div class="mat-button-focus-overlay"></div>
-    </button> 
-    
-    <button class="mat-button" (click)="onOkClick()">
-        <span class="mat-button-wrapper">Ok</span>
-        <div class="mat-button-ripple mat-ripple" matripple=""></div>
-        <div class="mat-button-focus-overlay"></div>
-    </button>
-
-</div>
 
       
