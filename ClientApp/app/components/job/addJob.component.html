@@ -26,6 +26,12 @@
     </mat-form-field>
 
     <mat-form-field>
+        <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="2"
+            matAutosizeMaxRows="5" [(ngModel)]="job.notes">
+        </textarea>
+    </mat-form-field>
+
+    <mat-form-field>
         <input matInput placeholder="Start Date" 
             [matDatepicker]="startPicker" 
             [formControl]="startDateInput" 

@@ -45,4 +45,7 @@ export class JobStore{
         return obs;
     }
 
+    saveNotes( jobId: string, notes: string){
+        return this.jobService.saveNotes(jobId, notes);
+    }
 }

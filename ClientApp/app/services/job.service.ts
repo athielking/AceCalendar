@@ -38,7 +38,8 @@ export class JobService {
                         item.id,
                         item.number,
                         item.name,
-                        item.type
+                        item.type,
+                        item.notes
                     );
                 })
             });
@@ -57,7 +58,8 @@ export class JobService {
                             value.id,
                             value.number,
                             value.name,
-                            item.type
+                            item.type,
+                            item.notes
                         );
                     })
                 })
@@ -76,7 +78,8 @@ export class JobService {
                         item.id,
                         item.number,
                         item.name,
-                        item.type
+                        item.type,
+                        item.notes
                     );
                 })
             });
@@ -102,5 +105,9 @@ export class JobService {
         };
 
         return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, body, {headers: this.headers}  ).shareReplay();
+    }
+
+    saveNotes( jobId: string, notes: string){
+        return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, JSON.stringify(notes), {headers: this.headers}).shareReplay();
     }
 }

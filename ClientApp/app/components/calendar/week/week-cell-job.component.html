@@ -1,7 +1,12 @@
-<div class="week-cell-job-header"
-    [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0">
-    <div>{{calendarJob.name}}</div>
-    <div>{{calendarJob.number}}</div>
+<div class="week-cell-job-header" [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0">
+    <div style="display: flex; flex-direction:column" flex>
+        <div>{{calendarJob.name}}</div>
+        <div>{{calendarJob.number}}</div>
+    </div>
+    
+    <a mat-icon-button *ngIf="calendarJob.notes && calendarJob.notes.length > 0" (click)="showNotes()">
+        <mat-icon color="accent">note</mat-icon>
+    </a>
 </div>
 <div class="week-cell-job-workers" droppable (onDrop)="onWorkerDropped($event)">
     <div *ngFor="let worker of calendarJob.workers" draggable [dragData]="worker">

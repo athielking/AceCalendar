@@ -35,7 +35,8 @@ export class CalendarJob {
     constructor(public id: string,
                 public number: number,
                 public name: string,
-                public type: string){
+                public type: string,
+                public notes: string){
     }
 }
 
@@ -65,6 +66,7 @@ export class AddJobModel {
     public durationMonths?: Number = null;
 
     public workerIds: string[] = [];
+    public notes: string = '';
     
     constructor(public number: Number,
                 public name: string,
