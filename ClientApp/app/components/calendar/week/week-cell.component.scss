@@ -30,6 +30,10 @@
       }
 }
 
+.week-cell.is-past{
+    background: mat-color($primary, 200)
+}
+
 .week-cell-title, .week-cell-subtitle{
     @extend %mat-card-section-base; 
     @extend %mat-card-title-base;
@@ -53,23 +57,34 @@
     flex-direction: column;
     padding: 8px;
     font-size: 14px;
+}
 
-    .week-cell-header{
-        color: mat-color($primary,800);
-        display: flex;
-        font-weight: 700;
-        font-size: 14px;
-        padding-left: 8px;
+.week-cell-header{
+    color: mat-color($primary,800);
+    display: flex;
+    font-weight: 700;
+    font-size: 14px;
+    padding-left: 8px;
 
-        button{
-            margin-top: -10px;
-        }
+    button{
+        margin-top: -10px;
     }
 }
 
+.week-cell-header:not(:nth-of-type(1))
+{
+    padding-top: 8px;
+}
+
+.week-cell-avail-workers{
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+}
 
 .week-cell-footer{
     @extend %mat-card-title-base;
+    padding-top: 16px;
 }
 
 .week-cell-divider{

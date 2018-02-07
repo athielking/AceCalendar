@@ -45,8 +45,8 @@ export class CalendarStore {
 
     }
 
-    public moveWorker(worker: Worker, toJob: CalendarJob, date?: Date){
-        return this.jobService.moveWorkerToJob(toJob.id, worker.id, date)
+    public moveWorker(worker: Worker, toJob?: CalendarJob, date?: Date){
+        return this.jobService.moveWorkerToJob( worker.id, toJob ? toJob.id : null, date);
     }
 
     private _initialize() {

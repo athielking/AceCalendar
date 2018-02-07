@@ -22,15 +22,15 @@ export class CalendarService{
     }
     
     getMonthData(date:Date){
-        return this._getData(date, ApiMethod.Month);
+        return this._getData(date, ApiMethod.Month).shareReplay();
     }
 
     getWeekData(date: Date){
-        return this._getData(date, ApiMethod.Week);
+        return this._getData(date, ApiMethod.Week).shareReplay();
     }
 
     getDayData(date: Date){
-        return this._getData(date, ApiMethod.Day);
+        return this._getData(date, ApiMethod.Day).shareReplay();
     }
 
     private _getData(date: Date, type: ApiMethod){

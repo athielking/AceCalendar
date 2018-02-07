@@ -96,7 +96,7 @@ export class JobService {
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
     }
 
-    moveWorkerToJob(jobId: string, workerId: string, date?: Date){
+    moveWorkerToJob(workerId: string, jobId?: string, date?: Date){
 
         var body = {
             idJob: jobId, 

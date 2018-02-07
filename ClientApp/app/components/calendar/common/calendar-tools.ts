@@ -34,10 +34,17 @@ export enum DAYS_OF_WEEK {
     SATURDAY = 6
 }
 
+export enum StorageKeys{
+    viewDate = "VIEW_DATE",
+    selectedTab = "SELECTED_TAB",
+
+}
+
 const DAYS_IN_WEEK: number = 7;
 
 export function getCalendarDay(date : Date, viewDate:Date ): CalendarDay {
-    const today: Date = startOfDay(viewDate);
+    viewDate = startOfDay(viewDate);
+    const today : Date = startOfDay(new Date());
     
     return new CalendarDay(
         date,
@@ -45,7 +52,7 @@ export function getCalendarDay(date : Date, viewDate:Date ): CalendarDay {
         date < today,
         date > today,
         getDay(date) == DAYS_OF_WEEK.SATURDAY || getDay(date) == DAYS_OF_WEEK.SUNDAY,
-        isSameMonth(date, today)
+        isSameMonth(date, viewDate)
     );
 }
 

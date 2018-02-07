@@ -22,7 +22,7 @@ export class WeekCellJobComponent {
         let worker: Worker = <Worker>e.dragData;
 
         // jobFrom.workers = jobFrom.workers.splice( jobFrom.workers.indexOf(worker), 1);
-        this.calendarJob.workers.push(worker);
+        //this.calendarJob.workers.push(worker);
 
         this.workerAdded.emit({
             calendarJob: this.calendarJob,

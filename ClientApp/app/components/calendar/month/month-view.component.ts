@@ -6,7 +6,8 @@ import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
 import { MonthView, CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import * as add_months from 'date-fns/add_months'
-import { addMonths } from 'date-fns';
+import * as is_same_month from 'date-fns/is_same_month'
+
 
 
 
@@ -34,7 +35,8 @@ export class MonthViewComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges){
     if(changes.viewDate && !changes.viewDate.firstChange)
     {
-      this.calendarStore.getDataForMonth(this.viewDate);
+      if( !is_same_month(changes.viewDate.currentValue, changes.viewDate.previousValue ))
+        this.calendarStore.getDataForMonth(this.viewDate);
     }
   }
 

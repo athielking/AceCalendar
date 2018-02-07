@@ -1,4 +1,6 @@
-<div class="week-cell-job-header" [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0">
+<div class="week-cell-job-header" 
+    [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0"
+    droppable (onDrop)="onWorkerDropped($event)">
     <div style="display: flex; flex-direction:column" flex>
         <div>{{calendarJob.name}}</div>
         <div>{{calendarJob.number}}</div>

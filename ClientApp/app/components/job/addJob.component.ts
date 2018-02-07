@@ -31,7 +31,7 @@ export class AddJobComponent {
     constructor(private jobStore: JobStore,
                 private dialogRef: MatDialogRef<AddJobComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any){ 
-        if(this.data.model)
+        if(this.data && this.data.model)
             this.job = <AddJobModel>this.data.model;
         else
             this.job = new AddJobModel(0, '', '', new Date());
