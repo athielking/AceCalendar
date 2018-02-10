@@ -1,0 +1,48 @@
+.week-grid {
+    display: grid;
+    margin-top: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: "jobs"
+                         "available"
+                         "off";
+    grid-row-gap: 8px;
+    grid-column-gap: 8px;
+}
+
+.week-jobs{
+    grid-area: "jobs";
+    display: subgrid;
+    grid-template-columns: 1fr;
+    //grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+}
+
+.week-available-workers{
+    grid-area: "available"
+}
+
+.week-off-workers{
+    grid-area: "off"
+}
+
+.job {
+    background-color: aqua;
+    border: 1px solid black;
+    height: 50px;
+    width: 100%;
+}
+
+.available {
+    background-color: chartreuse;
+    border: 1px solid black;
+    height: 100px;
+}
+
+.off {
+    background-color: coral;
+    border: 1px solid black;
+    height: 75px;
+}

@@ -12,9 +12,86 @@ export class DayView{
     
     constructor(public calendarDay: CalendarDay, 
                 public jobs: CalendarJob[],
-                public availableWorkers: Worker[])
+                public availableWorkers: Worker[],
+                public timeOffWorkers: Worker[])
                 {
                 }
+
+    public makeWorkerAvailable( worker: Worker ){
+
+        if(this._workerIsAvailable(worker))
+            return;
+
+        if(this._workerIsOff(worker))
+            this._removeWorker(worker, this.timeOffWorkers);
+        else {
+            var job = this._findJobForWorker(worker);
+            this._removeWorker(worker, job.workers);
+        }
+
+        this.availableWorkers.push(worker);
+    }
+
+    public makeWorkerOff( worker: Worker){
+        if(this._workerIsOff(worker))
+            return;
+
+        if(this._workerIsAvailable(worker))
+            this._removeWorker(worker, this.availableWorkers);
+        else {
+            var job = this._findJobForWorker(worker);
+            this._removeWorker(worker, job.workers);
+        }
+        
+        this.timeOffWorkers.push(worker);
+    }
+
+    public addWorkerToJob( worker: Worker, calendarJob: CalendarJob){
+        if( this._workerIsAvailable(worker)){
+            this._removeWorker( worker, this.availableWorkers );
+        }
+        else if( this._workerIsOff(worker)){
+            this._removeWorker(worker, this.timeOffWorkers);
+        }
+        else{
+            var jobFrom = this._findJobForWorker(worker);
+            this._removeWorker(worker, jobFrom.workers);
+        }
+
+        calendarJob.workers.push(worker);
+    }
+
+    private _workerIsAvailable(worker: Worker): Boolean{
+        return this.availableWorkers.indexOf(worker) > -1;
+    }
+    
+    private _workerIsOff(worker: Worker): Boolean{
+        return this.timeOffWorkers.indexOf(worker) > -1;
+    }
+
+    private _findJobForWorker(worker: Worker): CalendarJob{
+
+        let workerJob: CalendarJob;
+
+        this.jobs.forEach(job => {
+            if (job.workers.indexOf(worker) >= 0)
+            {
+                workerJob = job;
+                return;
+            }
+        });
+
+        return workerJob;
+    }
+
+    private _removeWorker(worker: Worker, removeFrom: Worker[]){
+        var index = removeFrom.indexOf(worker);
+
+        if(index == -1)
+            return;
+
+        removeFrom.splice(index, 1);
+    }
 }
 
 export class CalendarDay {

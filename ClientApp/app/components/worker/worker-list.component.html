@@ -1,0 +1,14 @@
+<div class="cal-card" 
+    [class.is-past]="calendarDay.isPast"
+    droppable (onDrop)="onDropped($event)">
+
+    <div class="cal-card-content">
+        <div class="cal-card-header" style="padding-left: 0px">
+            {{ headerText }}
+        </div>
+        <div *ngFor="let worker of workers" draggable [dragData]="worker">
+            {{ worker.firstName }} {{ worker.lastName }}
+        </div>
+    </div>
+
+</div>

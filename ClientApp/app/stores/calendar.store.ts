@@ -81,20 +81,4 @@ export class CalendarStore {
 
         return value;
     }
-    // private _serviceCallback(value: Map<Date, DayView>): Map<Date, Observable<DayView>> {
-    //     var dataMap = new Map<Date, Observable<DayView>>();
-
-    //     value.forEach((dayView, key, map) => {
-    //         var subj = new BehaviorSubject(dayView);
-
-    //         this._dayViews.set(key, subj);
-    //         dataMap.set(key, subj.asObservable());
-    //     });
-
-    //     this._dayViews.forEach((dayView, date, map) => {
-    //         dayView.next(value.get(date));
-    //     });
-
-    //     return dataMap;
-    // }
 }

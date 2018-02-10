@@ -91,9 +91,17 @@ export class CalendarService{
                         );
                     });
 
-                    
+                    let offWorkers : Worker[] = obj[key].timeOffWorkers.map( item => {
+                        return new Worker(
+                            item.id,
+                            item.firstName,
+                            item.lastName,
+                            item.email,
+                            item.phone
+                        );
+                    });
 
-                    let dv = new DayView(getCalendarDay( d, date ), jobs,workers );
+                    let dv = new DayView(getCalendarDay( d, date ), jobs, workers, offWorkers );
                     dv.workersByJob = workersByJob;
 
                     dayViews.push(dv);

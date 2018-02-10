@@ -3,20 +3,19 @@ import { Observable } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
 
 import { DayView, CalendarDay, CalendarJob, Worker, AddJobModel } from '../../calendar/common/models'
-import { CalendarCellComponent } from '../common/calendar-cell.component';
 import { WorkerAddedJobEvent } from './week-cell-job.component';
 import { AddJobComponent } from '../../job/addJob.component';
 
 @Component({
     selector: 'ac-week-cell',
     templateUrl: './week-cell.component.html',
-    styleUrls: ['./week-cell.component.scss']
+    styleUrls: ['../common/calendar-card.scss']
 })
-export class WeekCellComponent extends CalendarCellComponent {
+export class WeekCellComponent {
+    @Input() dayView: DayView;
     @Output() workerMoved: EventEmitter<WorkerMovedEvent> = new EventEmitter();
 
     constructor(private dialog: MatDialog) {
-        super();
     }
     
     onWorkerDropped(e: any) {
@@ -75,7 +74,7 @@ export class WeekCellComponent extends CalendarCellComponent {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            //this.load();
+        
         });
     }
 }

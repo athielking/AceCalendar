@@ -1,4 +1,3 @@
-
 <mat-toolbar layout-align="center">
     <button mat-icon-button (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
@@ -8,10 +7,25 @@
         <mat-icon>chevron_right</mat-icon>
     </button>
 </mat-toolbar>
-<div class="cell-wrapper">
-    <ac-week-cell 
-        *ngFor="let dayView of (calendarStore.weekData | async)" 
+<div class="week-grid">
+        <ac-week-cell 
+        class="week-jobs"
+        *ngFor="let dayView of weekData" 
         [dayView]="dayView" 
         (workerMoved)="onWorkerMoved($event)">
     </ac-week-cell>
+    <ac-worker-list class="week-available"
+        *ngFor="let dayView of weekData"
+        [workers]="dayView.availableWorkers"
+        [calendarDay]="dayView.calendarDay"
+        [headerText]="'Available Workers'"
+        (workerAdded)="workerAddedAvailable($event)">
+    </ac-worker-list>
+        
+    <div class="week-off" *ngFor="let dayView of (calendarStore.weekData | async)">
+            <div class="off">
+                Time Off
+            </div>
+    </div>
+
 </div>

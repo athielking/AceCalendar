@@ -1,17 +1,17 @@
-<div class="week-cell"
+<div class="cal-card"
     [class.is-past] = "dayView.calendarDay.isPast">
-    <div class="week-cell-title">
+    <div class="cal-card-title">
         {{ dayView.calendarDay?.date | date:'d' }}
     </div>
 
-    <div class="week-cell-subtitle">
+    <div class="cal-card-subtitle">
         {{ dayView.calendarDay?.date | date:'EEEE' }}
     </div>
 
-    <div class="week-cell-header-divider"></div>
+    <div class="cal-card-header-divider"></div>
 
-    <div class="week-cell-content">
-        <div class="week-cell-header">
+    <div class="cal-card-content">
+        <div class="cal-card-header">
             <span style="text-align:center">Jobs</span>
             <span flex></span>
             <button mat-icon-button matTooltip="Add Job" (click)="showAddJob()">
@@ -20,16 +20,5 @@
         </div>
         <ac-week-cell-job *ngFor="let job of dayView.jobs" [calendarJob]="job" (workerAdded)="onWorkerAddedToJob($event)">
         </ac-week-cell-job>
-    </div>
-
-    <div class="week-cell-footer">
-        <div class="week-cell-header" droppable (onDrop)="onWorkerDropped($event)">
-            Available Workers
-        </div>
-        <div class="week-cell-avail-workers" droppable (onDrop)="onWorkerDropped($event)">
-            <div *ngFor="let worker of dayView.availableWorkers" draggable [dragData]="worker">
-                {{ worker.firstName }} {{ worker.lastName }}
-            </div>
-        </div>
     </div>
 </div>

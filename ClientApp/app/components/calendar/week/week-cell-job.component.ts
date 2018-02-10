@@ -34,6 +34,11 @@ export class WeekCellJobComponent {
     showNotes() {
         var ref = this.snackBar.openFromComponent(JobNotesComponent, { data: { model: this.calendarJob } });
     }
+
+    showWorkerMenu(e: any){
+        alert("Test")
+        return false;
+    }
 }
 
 export interface WorkerAddedJobEvent {
