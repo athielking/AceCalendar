@@ -1,5 +1,6 @@
 <div class="cal-card" 
-    [class.is-past]="calendarDay.isPast"
+    [class.is-past]="calendarDay && calendarDay.isPast"
+    [class.accent]="isAccent"
     droppable (onDrop)="onDropped($event)">
 
     <div class="cal-card-content">

@@ -1,6 +1,6 @@
 <mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
     <mat-tab label="Week View">
-        <ac-week-view [viewDate]="viewDate" [weekData]="(calendarStore.weekData | asnc)" (changeViewDate)="onChangeViewDate($event)">
+        <ac-week-view [viewDate]="viewDate" [weekData]="(calendarStore.weekData | async)" (changeViewDate)="onChangeViewDate($event)">
         </ac-week-view>
     </mat-tab>
     <mat-tab label="Month View">

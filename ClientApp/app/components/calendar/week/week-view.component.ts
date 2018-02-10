@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnIni
 import { TdLoadingService } from '@covalent/core'
 import { Observable } from 'rxjs/Rx';
 import * as isSameWeek from 'date-fns/is_same_week'
+import * as isSameDay from 'date-fns/is_same_day';
 import * as add_weeks from 'date-fns/add_weeks';
 import * as start_of_week from 'date-fns/start_of_week';
 import * as end_of_week from 'date-fns/end_of_week';
@@ -56,14 +57,42 @@ export class WeekViewComponent implements OnInit {
 
     onWorkerMoved(event: WorkerMovedEvent){
         
-        console.log(event);
-        this.calendarStore.moveWorker( event.worker, event.calendarJob, event.date ).subscribe( result => 
+        this.weekData.forEach( dv => {
+            if( isSameDay(dv.calendarDay.date, event.date)){
+                dv.addWorkerToJob(event.worker, event.calendarJob);
+                return;
+            }
+        })
+
+        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe( result => 
             this.calendarStore.getDataForWeek(this.viewDate)
         );
     }
 
     onWorkerAddedAvailable(event: WorkerListAdded){
-        this.calendarStore.moveWorker( event.worker, null, event.date).subscribe(result =>
+
+        this.weekData.forEach( dv => {
+            if( isSameDay(dv.calendarDay.date, event.date)){
+                dv.makeWorkerAvailable(event.worker)
+                return;
+            }
+        })
+
+        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result =>
+            this.calendarStore.getDataForWeek(this.viewDate) 
+        );
+    }
+
+    onWorkerAddedOff(event: WorkerListAdded){
+
+        this.weekData.forEach( dv => {
+            if( isSameDay(dv.calendarDay.date, event.date)){
+                dv.makeWorkerOff(event.worker)
+                return;
+            }
+        })
+
+        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result =>
             this.calendarStore.getDataForWeek(this.viewDate) 
         );
     }

@@ -11,6 +11,7 @@ import { WorkerListAdded } from '../../events/worker.events';
 export class WorkerListComponent {
     @Input() headerText: string;
     @Input() calendarDay: CalendarDay;
+    @Input() isAccent: Boolean = false;
     @Input() workers: Worker[];
     
     @Output() workerAdded: EventEmitter<WorkerListAdded> = new EventEmitter();
