@@ -1,0 +1,36 @@
+@import '~@angular/material/theming';
+@import '../../../../ace-calendar-theme';
+
+.week-grid {
+    display: grid;
+    margin: 8px;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    grid-row-gap: 8px;
+    grid-column-gap: 8px;
+}
+
+.week-jobs{
+    display: subgrid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
+}
+
+.job {
+    background-color: aqua;
+    border: 1px solid black;
+    height: 50px;
+    width: 100%;
+}
+
+.available {
+    background-color: chartreuse;
+    border: 1px solid black;
+    height: 100px;
+}
+
+.off {
+    background-color: coral;
+    border: 1px solid black;
+    height: 75px;
+}

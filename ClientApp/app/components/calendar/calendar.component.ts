@@ -3,6 +3,7 @@ import { MonthViewComponent } from '../calendar/month/month-view.component'
 import { StorageKeys } from './common/calendar-tools';
 import { equalSegments } from '@angular/router/src/url_tree';
 import { MatTabChangeEvent } from '@angular/material';
+import { CalendarStore } from '../../stores/calendar.store';
 
 
 @Component({
@@ -12,6 +13,9 @@ import { MatTabChangeEvent } from '@angular/material';
 export class CalendarComponent implements OnInit {
     viewDate : Date;
     selectedIndex: number = 0;
+
+    constructor(public calendarStore: CalendarStore){
+    }
 
     onChangeViewDate( newDate: Date ){
         this.viewDate = newDate;
@@ -29,6 +33,9 @@ export class CalendarComponent implements OnInit {
 
         this.storeViewDate();
         this.storeSelectedTab();
+
+        //this.calendarStore.getDataForMonth(this.viewDate);
+        this.calendarStore.getDataForWeek(this.viewDate);
     }
 
     onSelectedTabChange(event: MatTabChangeEvent){

@@ -96,7 +96,7 @@ export class JobService {
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
     }
 
-    moveWorkerToJob(workerId: string, jobId?: string, date?: Date){
+    moveWorkerToJob(workerId: string, jobId: string, date?: Date){
 
         var body = {
             idJob: jobId, 
@@ -105,6 +105,26 @@ export class JobService {
         };
 
         return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, body, {headers: this.headers}  ).shareReplay();
+    }
+
+    moveWorkerToAvailable(workerId: string, date: Date)
+    {
+        var body = {
+            idWorker: workerId,
+            date: date.toISOString()
+        };
+
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToAvailable`, body, {headers: this.headers}  ).shareReplay();
+    }
+
+    moveWorkerToOff(workerId: string, date: Date)
+    {
+        var body = {
+            idWorker: workerId,
+            date: date.toISOString()
+        };
+
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToOff`, body, {headers: this.headers}  ).shareReplay();
     }
 
     saveNotes( jobId: string, notes: string){

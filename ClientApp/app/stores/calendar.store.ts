@@ -45,8 +45,16 @@ export class CalendarStore {
 
     }
 
-    public moveWorker(worker: Worker, toJob?: CalendarJob, date?: Date){
+    public moveWorkerToJob(worker: Worker, date: Date, toJob: CalendarJob ){
         return this.jobService.moveWorkerToJob( worker.id, toJob ? toJob.id : null, date);
+    }
+
+    public moveWorkerToAvailable(worker: Worker, date: Date  ){
+        return this.jobService.moveWorkerToAvailable( worker.id, date);
+    }
+
+    public moveWorkerToOff(worker: Worker, date: Date  ){
+        return this.jobService.moveWorkerToOff( worker.id, date);
     }
 
     private _initialize() {
@@ -81,20 +89,4 @@ export class CalendarStore {
 
         return value;
     }
-    // private _serviceCallback(value: Map<Date, DayView>): Map<Date, Observable<DayView>> {
-    //     var dataMap = new Map<Date, Observable<DayView>>();
-
-    //     value.forEach((dayView, key, map) => {
-    //         var subj = new BehaviorSubject(dayView);
-
-    //         this._dayViews.set(key, subj);
-    //         dataMap.set(key, subj.asObservable());
-    //     });
-
-    //     this._dayViews.forEach((dayView, date, map) => {
-    //         dayView.next(value.get(date));
-    //     });
-
-    //     return dataMap;
-    // }
 }

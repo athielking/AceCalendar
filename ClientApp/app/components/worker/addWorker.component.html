@@ -38,18 +38,12 @@
 
         <div class="mat-dialog-actions">
             <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
             
-            <button class="mat-button" (click)="onCancelClick()">
-                <span class="mat-button-wrapper">Cancel</span>
-                <div class="mat-button-ripple mat-ripple" matripple=""></div>
-                <div class="mat-button-focus-overlay"></div>
-            </button> 
-            
-            <button class="mat-button" [disabled]="!addWorkerForm.form.valid || !phoneIsValid()" (click)="onOkClick()">
-                <span class="mat-button-wrapper">Ok</span>
-                <div class="mat-button-ripple mat-ripple" matripple=""></div>
-                <div class="mat-button-focus-overlay"></div>
-            </button>
+            <button mat-button 
+                [disabled]="!addWorkerForm.form.valid || !phoneIsValid()" 
+                (click)="onOkClick()">Ok</button>
         </div>
     </form>
 </div>

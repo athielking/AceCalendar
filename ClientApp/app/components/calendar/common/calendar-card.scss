@@ -10,18 +10,17 @@
     padding-right: 16px;
 }
 
-%week-cell-divider-base{
+%cal-card-divider-base{
     margin:0;
     border-top-width: 1px;
     border-top-style: solid;
     border-top-color: rgba(0,0,0,.12)
 }
 
-.week-cell{
+.cal-card{
     display: flex;
     flex-direction: column;
     background: white;
-    margin: 4px;
     height: 100%;
     @include mat-elevation-transition;
     @include mat-overridable-elevation(2);
@@ -30,28 +29,32 @@
       }
 }
 
-.week-cell.is-past{
+.cal-card.is-past{
     background: mat-color($primary, 200)
 }
 
-.week-cell-title, .week-cell-subtitle{
+.cal-card.accent{
+    background: mat-color($accent, 300)
+}
+
+.cal-card-title, .cal-card-subtitle{
     @extend %mat-card-section-base; 
     @extend %mat-card-title-base;
 }
 
-.week-cell-title{
+.cal-card-title{
     padding-top: 16px;
     font-size: 32px;
     font-weight: 700;
 }
 
-.week-cell-subtitle{
+.cal-card-subtitle{
     margin-top: -4px;
     font-size: 14px;
     color: rgba(0,0,0,.54);
 }
 
-.week-cell-content{
+.cal-card-content{
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -59,39 +62,28 @@
     font-size: 14px;
 }
 
-.week-cell-header{
+.cal-card-header{
     color: mat-color($primary,800);
     display: flex;
     font-weight: 700;
     font-size: 14px;
     padding-left: 8px;
 
-    button{
+    button {
         margin-top: -10px;
     }
 }
 
-.week-cell-header:not(:nth-of-type(1))
+.cal-card-header:not(:nth-of-type(1))
 {
     padding-top: 8px;
 }
 
-.week-cell-avail-workers{
-    display: flex;
-    flex-direction: column;
-    margin-left: 8px;
+.cal-card-divider{
+    @extend %cal-card-divider-base;
 }
 
-.week-cell-footer{
-    @extend %mat-card-title-base;
-    padding-top: 16px;
-}
-
-.week-cell-divider{
-    @extend %week-cell-divider-base;
-}
-
-.week-cell-header-divider{
-    @extend %week-cell-divider-base;
+.cal-card-header-divider{
+    @extend %cal-card-divider-base;
     margin-bottom: 8px;
 }

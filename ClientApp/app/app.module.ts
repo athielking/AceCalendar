@@ -1,4 +1,5 @@
 import "styles.css";
+import './components/calendar/common/calendar-card.scss';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -20,10 +21,10 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
 
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
-import { CalendarCellComponent } from './components/calendar/common/calendar-cell.component';
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
+import { WorkerListComponent } from './components/worker/worker-list.component';
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
 import { JobNotesComponent } from "./components/job/jobNotes.component";
@@ -33,6 +34,9 @@ import { MonthCellComponent } from './components/calendar/month/month-cell.compo
 import { DayViewComponent } from "./components/calendar/day/day-view.component";
 import { WeekViewComponent } from "./components/calendar/week/week-view.component";
 import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
+import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.component";
+
+
 import { LoginComponent } from "./components/login/login.component";
 
 import { JobService } from './services/job.service';
@@ -43,9 +47,10 @@ import { AuthService } from "./services/auth.service";
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
-import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.component";
+
 
 import { AuthInterceptor } from './tools/authInterceptor';
+
 
 
 @NgModule({
@@ -53,12 +58,12 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AppComponent,
     NavMenuComponent,
     CalendarComponent,
-    CalendarCellComponent,
     
     //Worker CRUD
     WorkerComponent,
     AddWorkerComponent,
     AvailableWorkerPickerComponent,
+    WorkerListComponent,
 
     //Job CRUD
     JobComponent,
@@ -98,11 +103,11 @@ import { AuthInterceptor } from './tools/authInterceptor';
     CovalentDialogsModule, CovalentLoadingModule, CovalentSearchModule, CovalentPagingModule, CovalentNotificationsModule,
     CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule,
     RouterModule.forRoot([
-      { path: '', redirectTo: 'home', pathMatch: 'full'},
+      { path: '', redirectTo: 'calendar', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
       { path: 'worker', component: WorkerComponent },     
       { path: 'job', component: JobComponent }, 
-      { path: "**", redirectTo: 'home' }
+      { path: "**", redirectTo: 'calendar' }
     ])
   ],
   providers: [
