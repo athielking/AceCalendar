@@ -1,15 +1,15 @@
 <div class="cal-card" 
     [class.is-past]="calendarDay && calendarDay.isPast"
     [class.accent]="isAccent"
-    droppable (onDrop)="onDropped($event)">
+    droppable (onDrop)="onDropped($event)"
+    [dropScope]="calendarDay.date.toString()">
 
     <div class="cal-card-content">
         <div class="cal-card-header" style="padding-left: 0px">
             {{ headerText }}
         </div>
-        <div *ngFor="let worker of workers" draggable [dragData]="worker">
-            {{ worker.firstName }} {{ worker.lastName }}
-        </div>
+        <ac-worker-card *ngFor="let worker of workers" [worker]="worker" [scope]="calendarDay.date.toString()" >
+        </ac-worker-card>
     </div>
 
 </div>

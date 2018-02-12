@@ -25,6 +25,7 @@ import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
 import { WorkerListComponent } from './components/worker/worker-list.component';
+import { WorkerCardComponent } from './components/worker/worker-card.component';
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
 import { JobNotesComponent } from "./components/job/jobNotes.component";
@@ -64,6 +65,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AddWorkerComponent,
     AvailableWorkerPickerComponent,
     WorkerListComponent,
+    WorkerCardComponent,
 
     //Job CRUD
     JobComponent,

@@ -1,0 +1,17 @@
+@import '~@angular/material/theming';
+@import '../../../ace-calendar-theme';
+@import '../calendar/common/calendar-card.scss';
+
+.worker-card{
+    @extend %cal-card-base;
+    background: rgba(0,0,0,.10);
+    flex-direction: row;
+    padding: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.worker-card-dragging{
+    border: 2px dashed mat-color($accent, 200);
+}

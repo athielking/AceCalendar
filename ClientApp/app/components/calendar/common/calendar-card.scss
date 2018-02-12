@@ -16,17 +16,20 @@
     border-top-style: solid;
     border-top-color: rgba(0,0,0,.12)
 }
-
-.cal-card{
+%cal-card-base{
     display: flex;
-    flex-direction: column;
-    background: white;
-    height: 100%;
     @include mat-elevation-transition;
     @include mat-overridable-elevation(2);
     @include cdk-high-contrast {
         outline: solid 1px;
       }
+}
+
+.cal-card{
+    @extend %cal-card-base;
+    flex-direction: column;
+    background: white;
+    height: 100%;
 }
 
 .cal-card.is-past{
@@ -86,4 +89,14 @@
 .cal-card-header-divider{
     @extend %cal-card-divider-base;
     margin-bottom: 8px;
+}
+
+.drag-target{
+   // border: 2px dashed mat-color($accent);
+   background: chartreuse;
+}
+
+.drag-hint{
+//    border: 2px dashed mat-color($primary, 800);
+background: aqua;
 }

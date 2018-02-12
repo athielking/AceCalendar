@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
-import { CalendarJob, Worker } from '../../calendar/common/models'
+import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { MatSnackBar } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
 
@@ -11,6 +11,7 @@ import { JobNotesComponent } from '../../job/jobNotes.component';
 })
 export class WeekCellJobComponent {
     @Input() calendarJob: CalendarJob;
+    @Input() calendarDay: CalendarDay;
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter()
 
     constructor(public snackBar: MatSnackBar) {
