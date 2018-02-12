@@ -12,6 +12,7 @@ import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerMovedEvent } from './week-cell.component';
 import { WeekCellJobComponent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
+import { TdDialogService } from '@covalent/core';
 
 @Component({
     selector: 'ac-week-view',
@@ -19,81 +20,117 @@ import { WorkerListAdded } from '../../../events/worker.events';
     styleUrls: ["./week-view.component.scss"]
 })
 export class WeekViewComponent implements OnInit {
-    @Input() viewDate: Date;
-    @Input() weekData: DayView[];
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
-    public dataLoading: boolean;
+    private weekData: DayView[];
+
+    private viewDate: Date;
+
     public startOfWeek: Date;
+    
     public endOfWeek: Date;
 
-    constructor(public calendarStore: CalendarStore) {
+    public showErrorMessage: boolean;
+    
+    public errorMessage: string;
+
+    constructor(
+        public calendarStore: CalendarStore,
+        private loadingService: TdLoadingService,
+        private dialogService: TdDialogService ) {
     }
 
-    ngOnInit() {
+    public ngOnInit() {
+        this.calendarStore.isWeekLoading.subscribe( result => {
+            this.toggleShowLoading(result); 
+        });
+
+        this.calendarStore.hasWeekError.subscribe( result => {
+            this.showErrorMessage = result;
+            this.errorMessage = this.calendarStore.weekErrorMessage;
+        });
+
+        this.calendarStore.weekData.subscribe( result => {
+            this.weekData = result.toArray();     
+        });
+    }
+
+    public updateViewDate(date: Date) {
+        this.viewDate = date;
+
         this.calendarStore.getDataForWeek(this.viewDate);
 
         this.startOfWeek = start_of_week(this.viewDate);
         this.endOfWeek = end_of_week(this.viewDate);
     }
 
-    ngOnChanges(changes: SimpleChanges){
-        if(changes.viewDate && !changes.viewDate.firstChange)
-        {
-            this.calendarStore.getDataForWeek(this.viewDate);
+    public viewDateForward(): void {
+        this.handleDateChanged( add_weeks(this.viewDate, 1))
+    }
 
-            this.startOfWeek = start_of_week(this.viewDate);
-            this.endOfWeek = end_of_week(this.viewDate);
+    public viewDateBack(): void {
+        this.handleDateChanged( add_weeks(this.viewDate, -1))
+    }
+
+    public onWorkerAddedJob(event: WorkerMovedEvent){
+        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe(result => {      
+            this.weekData.forEach( dv => {
+                if( isSameDay(dv.calendarDay.date, event.date)){
+                    dv.addWorkerToJob(event.worker, event.calendarJob);
+                    return;
+                }
+            });           
+        }, error => {
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Worker to Job'
+            });
+        });
+    }
+
+    public onWorkerAddedAvailable(event: WorkerListAdded){
+        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result => {      
+            this.weekData.forEach( dv => {
+                if( isSameDay(dv.calendarDay.date, event.date)){
+                    dv.makeWorkerAvailable(event.worker)
+                    return;
+                }
+            });                   
+        }, error => {
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Worker to Available'
+            });
+        });
+    }
+
+    public onWorkerAddedOff(event: WorkerListAdded){
+        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result => {      
+            this.weekData.forEach( dv => {
+                if( isSameDay(dv.calendarDay.date, event.date)){
+                    dv.makeWorkerOff(event.worker)
+                    return;
+                }
+            });                  
+        }, error => {
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Worker to Time Off'
+            });
+        });
+    }
+
+    private handleDateChanged(date: Date) {
+        this.updateViewDate(date);
+        this.changeViewDate.emit(date);
+    }
+
+    private toggleShowLoading(show:boolean) {
+        if (show) {
+            this.loadingService.register('showWeekViewLoading');
+        } 
+        else {
+            this.loadingService.resolve('showWeekViewLoading');
         }
-    }
-
-    viewDateForward(): void {
-        this.changeViewDate.emit( add_weeks(this.viewDate, 1))
-    }
-
-    viewDateBack(): void {
-        this.changeViewDate.emit( add_weeks(this.viewDate, -1))
-    }
-
-    onWorkerMoved(event: WorkerMovedEvent){
-        
-        this.weekData.forEach( dv => {
-            if( isSameDay(dv.calendarDay.date, event.date)){
-                dv.addWorkerToJob(event.worker, event.calendarJob);
-                return;
-            }
-        })
-
-        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe( result => 
-            this.calendarStore.getDataForWeek(this.viewDate)
-        );
-    }
-
-    onWorkerAddedAvailable(event: WorkerListAdded){
-
-        this.weekData.forEach( dv => {
-            if( isSameDay(dv.calendarDay.date, event.date)){
-                dv.makeWorkerAvailable(event.worker)
-                return;
-            }
-        })
-
-        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result =>
-            this.calendarStore.getDataForWeek(this.viewDate) 
-        );
-    }
-
-    onWorkerAddedOff(event: WorkerListAdded){
-
-        this.weekData.forEach( dv => {
-            if( isSameDay(dv.calendarDay.date, event.date)){
-                dv.makeWorkerOff(event.worker)
-                return;
-            }
-        })
-
-        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result =>
-            this.calendarStore.getDataForWeek(this.viewDate) 
-        );
     }
 }

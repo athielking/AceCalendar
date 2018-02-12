@@ -1,34 +1,46 @@
 <mat-toolbar layout-align="center">
+    
     <button mat-icon-button (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
     </button>
+    
     <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
+    
     <button mat-icon-button (click)="viewDateForward()">
         <mat-icon>chevron_right</mat-icon>
     </button>
-</mat-toolbar>
-<div class="week-grid">
-    <ac-week-cell 
-        class="week-jobs"
-        *ngFor="let dayView of weekData" 
-        [dayView]="dayView" 
-        (workerMoved)="onWorkerMoved($event)">
-    </ac-week-cell>
-    <ac-worker-list
-        *ngFor="let dayView of weekData"
-        [workers]="dayView.availableWorkers"
-        [calendarDay]="dayView.calendarDay"
-        [headerText]="'Available Workers'"
-        (workerAdded)="onWorkerAddedAvailable($event)">
-    </ac-worker-list>
-        
-    <ac-worker-list
-        *ngFor="let dayView of weekData"
-        [workers]="dayView.timeOffWorkers"
-        [calendarDay]="dayView.calendarDay"
-        [isAccent]="true"
-        [headerText]="'Time Off'"
-        (workerAdded)="onWorkerAddedOff($event)">
-    </ac-worker-list>
 
+</mat-toolbar>
+
+<td-message *ngIf="showErrorMessage" label="Error Getting Week of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+
+<div *tdLoading="'showWeekViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <div class="week-grid" *ngIf="!showErrorMessage">
+
+        <ac-week-cell 
+            class="week-jobs"
+            *ngFor="let dayView of weekData" 
+            [dayView]="dayView" 
+            (workerMoved)="onWorkerAddedJob($event)">
+        </ac-week-cell>
+
+        <ac-worker-list
+            *ngFor="let dayView of weekData"
+            [workers]="dayView.availableWorkers"
+            [calendarDay]="dayView.calendarDay"
+            [headerText]="'Available Workers'"
+            (workerAdded)="onWorkerAddedAvailable($event)">
+        </ac-worker-list>
+            
+        <ac-worker-list
+            *ngFor="let dayView of weekData"
+            [workers]="dayView.timeOffWorkers"
+            [calendarDay]="dayView.calendarDay"
+            [isAccent]="true"
+            [headerText]="'Time Off'"
+            (workerAdded)="onWorkerAddedOff($event)">
+        </ac-worker-list>
+        
+    </div>
 </div>

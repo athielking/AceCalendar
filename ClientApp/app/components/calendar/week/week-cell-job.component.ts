@@ -19,7 +19,7 @@ export class WeekCellJobComponent {
 
     onWorkerDropped(e: any) {
 
-        let worker: Worker = <Worker>e.dragData;
+        //let worker: Worker = <Worker>e.dragData;
 
         // jobFrom.workers = jobFrom.workers.splice( jobFrom.workers.indexOf(worker), 1);
         //this.calendarJob.workers.push(worker);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CalendarJob, AddJobModel } from '../components/calendar/common/models';
+import { CalendarJob, AddJobModel, MoveWorkerRequestModel, SaveNotesRequestModel } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
 import * as isSameDay from 'date-fns/is_same_day';
 
@@ -9,17 +9,12 @@ import * as isSameDay from 'date-fns/is_same_day';
 export class JobService {
 
     private serviceUri: string;
-    private headers = new HttpHeaders(
-        {
-            'Content-Type': 'application/json'
-        });
 
     constructor(private httpClient: HttpClient) {
-
         this.serviceUri = `${environment.webServiceUrl}/api/job`
     }
 
-    getJobs(): Observable<CalendarJob[]> {
+    public getJobs(): Observable<CalendarJob[]> {
 
         return this.httpClient.get(this.serviceUri)
             .map(json => {
@@ -27,7 +22,7 @@ export class JobService {
             });
     }
 
-    getJobsForDay(date: Date): Observable<CalendarJob[]> {
+    public getJobsForDay(date: Date): Observable<CalendarJob[]> {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForDay?date=${date.toISOString()}`
 
@@ -45,7 +40,7 @@ export class JobService {
             });
     }
 
-    getJobsForWeek(date: Date): Observable<Map<Date, CalendarJob[]>> {
+    public getJobsForWeek(date: Date): Observable<Map<Date, CalendarJob[]>> {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForWeek?date=${date.toISOString()}`
 
@@ -66,7 +61,7 @@ export class JobService {
             });
     }
 
-    getJobsForMonth(date: Date): Observable<CalendarJob[]> {
+    public getJobsForMonth(date: Date): Observable<CalendarJob[]> {
 
         let api = `${environment.webServiceUrl}/api/job/getJobsForMonth?date=${date.toISOString()}`
 
@@ -85,49 +80,27 @@ export class JobService {
             });
     }
 
-    addJob(job: AddJobModel) {
-
-
-        return this.httpClient.post<CalendarJob>(this.serviceUri, job, { headers: this.headers }).shareReplay();
-
+    public addJob(job: AddJobModel) {
+        return this.httpClient.post<CalendarJob>(this.serviceUri, job).shareReplay();
     }
 
-    deleteJob( jobId: string ){
+    public deleteJob( jobId: string ){
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
     }
 
-    moveWorkerToJob(workerId: string, jobId: string, date?: Date){
-
-        var body = {
-            idJob: jobId, 
-            idWorker: workerId,
-            date: date.toISOString()
-        };
-
-        return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, body, {headers: this.headers}  ).shareReplay();
+    public moveWorkerToJob(moveWorkerRequestModel: MoveWorkerRequestModel){
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, moveWorkerRequestModel).shareReplay();
     }
 
-    moveWorkerToAvailable(workerId: string, date: Date)
-    {
-        var body = {
-            idWorker: workerId,
-            date: date.toISOString()
-        };
-
-        return this.httpClient.post(this.serviceUri+`/moveWorkerToAvailable`, body, {headers: this.headers}  ).shareReplay();
+    public moveWorkerToAvailable(moveWorkerRequestModel: MoveWorkerRequestModel) {
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToAvailable`, moveWorkerRequestModel ).shareReplay();
     }
 
-    moveWorkerToOff(workerId: string, date: Date)
-    {
-        var body = {
-            idWorker: workerId,
-            date: date.toISOString()
-        };
-
-        return this.httpClient.post(this.serviceUri+`/moveWorkerToOff`, body, {headers: this.headers}  ).shareReplay();
+    public moveWorkerToOff(moveWorkerRequestModel: MoveWorkerRequestModel) {
+        return this.httpClient.post(this.serviceUri+`/moveWorkerToOff`, moveWorkerRequestModel ).shareReplay();
     }
 
-    saveNotes( jobId: string, notes: string){
-        return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, JSON.stringify(notes), {headers: this.headers}).shareReplay();
+    public saveNotes( jobId: string, saveNotesRequestModel: SaveNotesRequestModel){
+        return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, saveNotesRequestModel ).shareReplay();
     }
 }

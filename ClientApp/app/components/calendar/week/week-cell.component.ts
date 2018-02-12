@@ -18,45 +18,45 @@ export class WeekCellComponent {
     constructor(private dialog: MatDialog) {
     }
     
-    onWorkerDropped(e: any) {
-        let worker: Worker = <Worker>e.dragData;
+    // onWorkerDropped(e: any) {
+    //     let worker: Worker = <Worker>e.dragData;
 
-        this.dayView.jobs.forEach(job => {
-            var index = job.workers.indexOf(worker);
-            if (index >= 0) {
-                job.workers.splice(index, 1);
-                return;
-            }
-        });
-        this.dayView.availableWorkers.push(worker);
+    //     this.dayView.jobs.forEach(job => {
+    //         var index = job.workers.indexOf(worker);
+    //         if (index >= 0) {
+    //             job.workers.splice(index, 1);
+    //             return;
+    //         }
+    //     });
+    //     this.dayView.availableWorkers.push(worker);
 
-        this.workerMoved.emit({
-            worker: worker,
-            calendarJob: null,
-            date: this.dayView.calendarDay.date
-        })
-    }
+    //     this.workerMoved.emit({
+    //         worker: worker,
+    //         calendarJob: null,
+    //         date: this.dayView.calendarDay.date
+    //     })
+    // }
 
-    onWorkerAddedToJob(event: WorkerAddedJobEvent) {
+    public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
 
-        if (this.dayView.availableWorkers.indexOf(event.worker) >= 0) {
-            this.dayView.availableWorkers.splice(
-                this.dayView.availableWorkers.indexOf(event.worker), 1
-            );
-        }
-        else {
-            this.dayView.jobs.forEach(job => {
-                var index = job.workers.indexOf(event.worker);
-                if (index >= 0) {
-                    job.workers.splice(index, 1);
-                    return;
-                }
-            });
-        }
+        // if (this.dayView.availableWorkers.indexOf(event.worker) >= 0) {
+        //     this.dayView.availableWorkers.splice(
+        //         this.dayView.availableWorkers.indexOf(event.worker), 1
+        //     );
+        // }
+        // else {
+        //     this.dayView.jobs.forEach(job => {
+        //         var index = job.workers.indexOf(event.worker);
+        //         if (index >= 0) {
+        //             job.workers.splice(index, 1);
+        //             return;
+        //         }
+        //     });
+        // }
 
-        var jobIndex = this.dayView.jobs.indexOf(event.calendarJob);
-        if (jobIndex >= 0)
-            this.dayView.jobs[jobIndex].workers.push(event.worker);
+        // var jobIndex = this.dayView.jobs.indexOf(event.calendarJob);
+        // if (jobIndex >= 0)
+        //     this.dayView.jobs[jobIndex].workers.push(event.worker);
 
         this.workerMoved.emit({
             worker: event.worker,
@@ -65,7 +65,7 @@ export class WeekCellComponent {
         });
     }
 
-    showAddJob() {
+    public showAddJob() {
         let dialogRef = this.dialog.open(AddJobComponent, {
             disableClose: true,
             data: {

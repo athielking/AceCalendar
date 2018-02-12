@@ -7,44 +7,72 @@ import { MonthView, CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import * as add_months from 'date-fns/add_months'
 import * as is_same_month from 'date-fns/is_same_month'
-
-
-
+import * as end_of_month from 'date-fns/end_of_month'
+import * as start_of_month from 'date-fns/start_of_month'
+import * as is_this_month from 'date-fns/is_this_month'
 
 @Component({
   selector: 'ac-month-view',
   templateUrl: './month-view.component.html'
 })
 export class MonthViewComponent implements OnInit {
-  @Input() viewDate: Date;
   @Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
 
-  private header: CalendarDay[];
-  private dayViews: Observable<DayView>[];
-  private dayMap: Map<Date, Observable<DayView>>;
-  public dataLoading: boolean;
+  private viewDate: Date;
 
-  constructor(public calendarStore: CalendarStore) {
+  private header: CalendarDay[];
+
+  public showErrorMessage: boolean;
+    
+  public errorMessage: string;
+
+  constructor(
+    public calendarStore: CalendarStore,
+    private loadingService: TdLoadingService) {
   }
 
-  ngOnInit() {
+  ngOnInit() {   
+    this.calendarStore.isMonthLoading.subscribe( result => {
+      this.toggleShowLoading(result); 
+    });
+
+    this.calendarStore.hasMonthError.subscribe( result => {
+        this.showErrorMessage = result;
+        this.errorMessage = this.calendarStore.monthErrorMessage;
+    });
+  }
+
+  public updateViewDate(date: Date) {
+    this.viewDate = date;
+
     this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
+
     this.calendarStore.getDataForMonth(this.viewDate);
   }
 
-  ngOnChanges(changes: SimpleChanges){
-    if(changes.viewDate && !changes.viewDate.firstChange)
-    {
-      if( !is_same_month(changes.viewDate.currentValue, changes.viewDate.previousValue ))
-        this.calendarStore.getDataForMonth(this.viewDate);
-    }
-  }
-
   public viewDateBack(){
-    this.changeViewDate.emit( add_months(this.viewDate, -1) );
+    this.handleDateChanged( end_of_month( add_months(this.viewDate, -1) ) );
   }
 
   public viewDateForward(){
-    this.changeViewDate.emit( add_months(this.viewDate, 1) );
+    this.handleDateChanged( start_of_month( add_months(this.viewDate, 1) ) );
+  }
+
+  private handleDateChanged(date: Date) {
+
+    if(is_this_month(date))
+      date= new Date();
+      
+    this.updateViewDate(date);
+    this.changeViewDate.emit(date);
+  }
+
+  private toggleShowLoading(show:boolean) {
+    if (show) {
+        this.loadingService.register('showMonthViewLoading');
+    } 
+    else {
+        this.loadingService.resolve('showMonthViewLoading');
+    }
   }
 }

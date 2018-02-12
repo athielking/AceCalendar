@@ -4,7 +4,7 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { JobService } from '../services/job.service';
-import { CalendarDay, CalendarJob, AddJobModel } from '../components/calendar/common/models';
+import { CalendarDay, CalendarJob, AddJobModel, SaveNotesRequestModel } from '../components/calendar/common/models';
 
 @Injectable()
 export class JobStore{
@@ -45,7 +45,7 @@ export class JobStore{
         return obs;
     }
 
-    saveNotes( jobId: string, notes: string){
-        return this.jobService.saveNotes(jobId, notes);
+    saveNotes( jobId: string, notes: string){       
+        return this.jobService.saveNotes(jobId, new SaveNotesRequestModel(notes));
     }
 }

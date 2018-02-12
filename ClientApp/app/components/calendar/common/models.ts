@@ -153,3 +153,18 @@ export class AddJobModel {
                 }
 }
 
+export class MoveWorkerRequestModel {
+    constructor(
+        public idWorker: string,
+        public idJob: string,
+        public date: Date
+    ){
+    }
+}
+
+export class SaveNotesRequestModel {
+    constructor(
+        public notes: string
+    ){
+    }
+}

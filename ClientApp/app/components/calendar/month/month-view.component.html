@@ -1,10 +1,22 @@
-<ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
-    <mat-toolbar layout-align="center">
-        <button mat-icon-button (click)="viewDateBack()"><mat-icon>chevron_left</mat-icon></button>
-        <span>{{viewDate | date: 'MMMM'}}</span>
-        <button mat-icon-button (click)="viewDateForward()"><mat-icon>chevron_right</mat-icon></button>
-    </mat-toolbar>
-    <div class="cell-wrapper">
+<mat-toolbar layout-align="center">
+
+    <button mat-icon-button (click)="viewDateBack()">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+        
+    <span>{{viewDate | date: 'MMMM'}}</span>
+    
+    <button mat-icon-button (click)="viewDateForward()">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+
+</mat-toolbar>
+  
+
+<div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+    <td-message *ngIf="showErrorMessage" label="Error Getting Month of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+    
+    <div class="cell-wrapper" *ngIf="!showErrorMessage">
         <div class="week-day-header" *ngFor="let dayHeader of header">
             {{dayHeader.date | date:'EEEE'}}
         </div>
@@ -12,4 +24,4 @@
         <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" [dayView]="dayView">
         </ac-month-cell>
     </div>
-</ng-template>
+</div>
