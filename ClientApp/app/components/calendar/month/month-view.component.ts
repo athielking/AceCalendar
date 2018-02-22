@@ -3,8 +3,10 @@ import { TdLoadingService } from '@covalent/core'
 import { Observable } from 'rxjs/Rx';
 
 import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
-import { MonthView, CalendarDay, DayView } from '../../calendar/common/models'
+import { MonthView, CalendarDay, DayView, CalendarViews } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
+import { ViewChangeRequest } from '../../../events/calendar.events';
+
 import * as add_months from 'date-fns/add_months'
 import * as is_same_month from 'date-fns/is_same_month'
 import * as end_of_month from 'date-fns/end_of_month'
@@ -13,10 +15,13 @@ import * as is_this_month from 'date-fns/is_this_month'
 
 @Component({
   selector: 'ac-month-view',
-  templateUrl: './month-view.component.html'
+  templateUrl: './month-view.component.html',
+  styleUrls: ['./month-view.component.scss', 
+              '../common/calendar-card.scss']
 })
 export class MonthViewComponent implements OnInit {
   @Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
 
   private viewDate: Date;
 
@@ -56,6 +61,13 @@ export class MonthViewComponent implements OnInit {
 
   public viewDateForward(){
     this.handleDateChanged( start_of_month( add_months(this.viewDate, 1) ) );
+  }
+
+  public onChangeView( event: ViewChangeRequest){
+    this.viewDate = event.viewDate;
+
+    this.changeViewDate.emit(event.viewDate);
+    this.changeSelectedView.emit(event.view);
   }
 
   private handleDateChanged(date: Date) {

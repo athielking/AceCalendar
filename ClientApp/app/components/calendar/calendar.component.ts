@@ -4,6 +4,7 @@ import { StorageKeys } from './common/calendar-tools';
 import { equalSegments } from '@angular/router/src/url_tree';
 import { MatTabChangeEvent } from '@angular/material';
 import { WeekViewComponent } from './week/week-view.component';
+import {CalendarViews} from '../calendar/common/models';
 
 
 @Component({
@@ -21,6 +22,10 @@ export class CalendarComponent implements OnInit {
     public onChangeViewDate( newDate: Date ){
         this.viewDate = newDate;
         this.storeViewDate();
+    }
+
+    public onChangeSelectedView( newView: CalendarViews ){
+        this.selectedIndex = newView;
     }
     
     public ngOnInit(){

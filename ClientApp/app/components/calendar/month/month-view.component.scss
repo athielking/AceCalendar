@@ -1,0 +1,23 @@
+@import '~@angular/material/theming';
+@import '../../../../ace-calendar-theme';
+
+%month-day-title-base{
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.month-grid {
+    display: grid;
+    margin: 8px;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    grid-gap: 4px;
+}
+
+.month-dayofweek {
+    @extend %month-day-title-base;
+    padding-top: 8px;
+    padding-left: 8px;
+    padding-bottom: 8px;
+}
+

@@ -11,17 +11,19 @@
     </button>
 
 </mat-toolbar>
-  
 
 <div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
     <td-message *ngIf="showErrorMessage" label="Error Getting Month of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
     
-    <div class="cell-wrapper" *ngIf="!showErrorMessage">
-        <div class="week-day-header" *ngFor="let dayHeader of header">
-            {{dayHeader.date | date:'EEEE'}}
+    <div class="month-grid" *ngIf="!showErrorMessage">
+        
+        <div class="cal-card" *ngFor="let dayHeader of header">
+            <div class="month-dayofweek">
+                {{dayHeader.date | date:'EEEE'}}
+            </div>
         </div>
 
-        <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" [dayView]="dayView">
+        <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" [dayView]="dayView" (changeView)="onChangeView($event)">
         </ac-month-cell>
     </div>
 </div>

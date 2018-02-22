@@ -1,7 +1,7 @@
 <mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
            
     <mat-tab label="Month View">
-        <ac-month-view (changeViewDate)="onChangeViewDate($event)">
+        <ac-month-view (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
         </ac-month-view>
     </mat-tab>
     

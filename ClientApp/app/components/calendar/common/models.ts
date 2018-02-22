@@ -172,4 +172,8 @@ export class SaveNotesRequestModel {
     }
 }
 
-
+export enum CalendarViews{
+    MonthView = 0,
+    WeekView = 1,
+    DayView = 2
+}

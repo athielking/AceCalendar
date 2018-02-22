@@ -103,22 +103,6 @@ body {
     border-bottom: 1px solid #464646;
 }
 
-.month-cell{
-    min-width: 100px;
-    min-height: 100px;
-    border-bottom: 1px solid #464646
-}
-
-ac-month-cell:nth-child(1n+1) .month-cell
-{
-    border-left: 1px solid #464646;
-}
-
-ac-month-cell:nth-child(7n+1) .month-cell
-{
-    border-right: 1px solid #464646;
-}
-
 .month-cell-top{
     display: flex;
     justify-content: space-between;
@@ -160,18 +144,6 @@ ac-month-cell:nth-child(7n+1) .month-cell
     color: darkred;
 }
 
-.cell-badge{
-    color: #ffffff;
-    margin: 5px;
-    padding: 3px 5px;
-    border-radius: 10px;
-    min-width: 10px;
-    background-color: #d12929;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-}
 
 .wrapper{
     display: grid;
