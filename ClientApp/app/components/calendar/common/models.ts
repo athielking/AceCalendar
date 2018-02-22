@@ -118,6 +118,9 @@ export class CalendarJob {
 }
 
 export class Worker {
+    public timeOff: Date[] = [];
+    public jobs: CalendarJob[] = [];
+    
     constructor(public id: string,
                 public firstName: string,
                 public lastName: string,
@@ -168,3 +171,5 @@ export class SaveNotesRequestModel {
     ){
     }
 }
+
+

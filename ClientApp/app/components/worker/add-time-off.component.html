@@ -1,0 +1,35 @@
+<h1 class="mat-dialog-title">Add Time Off</h1>
+
+<div *tdLoading="'addTimeOffShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+<form #addTimeOffForm="ngForm">
+    <div class="mat-dialog-content form-container">
+        <mat-form-field>
+            <input matInput #startDateControl="ngModel" placeholder="Start Date" name="startDate" 
+                [matDatepicker]="startPicker" 
+                [(ngModel)]="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error align="start">
+                <span [hidden]="!startDateControl.errors?.required || startDateControl.pristine" class="tc-red-600">Start Date is Required</span>
+            </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field>
+            <input matInput placeholder="End Date" name="endDate"
+                [matDatepicker]="endPicker" 
+                [(ngModel)]="endDate"> 
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+    </div>  
+    <div class="mat-dialog-actions">
+        <span flex></span>
+        <button mat-button 
+            (click)="onCancelClick()">Cancel</button>
+        
+        <button mat-button 
+            [disabled]="!addTimeOffForm.form.valid || !areDatesValid()" 
+            (click)="onOkClick()">Ok</button>
+    </div>  
+</form>
+</div>

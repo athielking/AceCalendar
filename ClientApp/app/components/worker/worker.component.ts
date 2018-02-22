@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
@@ -26,7 +27,8 @@ export class WorkerComponent implements OnInit {
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
         private dialog: MatDialog,
-        private dialogService: TdDialogService
+        private dialogService: TdDialogService,
+        private router: Router
     ) {
     } 
     
@@ -60,14 +62,7 @@ export class WorkerComponent implements OnInit {
     }
 
     public editWorker(worker: Worker){
-        this.showAddWorkerForm(
-            true,
-            worker.id,            
-            worker.firstName,
-            worker.lastName,
-            worker.email,
-            worker.phone
-        );
+        this.router.navigate(['worker', worker.id]);
     }
 
     public deleteWorker(userId: string){

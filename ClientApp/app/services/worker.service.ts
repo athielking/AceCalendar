@@ -5,6 +5,7 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { Worker, AddWorkerModel } from '../components/calendar/common/models';
+import { DateRangeModel } from '../models/shared/dateRangeModel';
 
 @Injectable()
 export class WorkerService{
@@ -32,6 +33,10 @@ export class WorkerService{
             .map(json => (<Worker[]>json['data']));
     }
 
+    public getWorker(id: string): Observable<Worker>{
+        return this.httpClient.get(this.serviceUri + `/${id}`).map(json => (<Worker>json['data']));
+    }
+
     public getAvailable(date: Date, end?: Date): Observable<Worker[]>{
 
         let api = this.serviceUri+`/getAvailableWorkers?start=${date.toISOString()}`;
@@ -40,5 +45,19 @@ export class WorkerService{
 
         return this.httpClient.get(api)
             .map(json => (<Worker[]>json['data']));
+    }
+
+    public addTimeOff(id: string, date: Date, end?:Date){
+        var body = new DateRangeModel(id, date, end);
+
+        return this.httpClient.post(this.serviceUri+`/addTimeOff`, body )
+            .map(json => <Worker>json['data']).shareReplay();
+    }
+
+    public deleteTimeOff(id: string, date: Date, end?: Date){
+        var body = new DateRangeModel(id, date, end);
+
+        return this.httpClient.post(this.serviceUri+`/deleteTimeOff`, body )
+            .map(json => <Worker>json['data']).shareReplay();
     }
 }

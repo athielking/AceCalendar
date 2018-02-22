@@ -26,6 +26,8 @@ import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
 import { WorkerListComponent } from './components/worker/worker-list.component';
 import { WorkerCardComponent } from './components/worker/worker-card.component';
+import { WorkerDetailComponent } from './components/worker/worker-detail.component';
+import { AddTimeOffComponent } from './components/worker/add-time-off.component';
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
 import { JobNotesComponent } from "./components/job/jobNotes.component";
@@ -66,6 +68,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AvailableWorkerPickerComponent,
     WorkerListComponent,
     WorkerCardComponent,
+    WorkerDetailComponent,
+    AddTimeOffComponent,
 
     //Job CRUD
     JobComponent,
@@ -86,7 +90,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
   entryComponents: [
     AddWorkerComponent,
     AddJobComponent,
-    JobNotesComponent
+    JobNotesComponent,
+    AddTimeOffComponent
   ],
   imports: [
     HttpClientModule,
@@ -107,7 +112,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     RouterModule.forRoot([
       { path: '', redirectTo: 'calendar', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
-      { path: 'worker', component: WorkerComponent },     
+      { path: 'worker', component: WorkerComponent }, 
+      { path: 'worker/:id', component: WorkerDetailComponent},    
       { path: 'job', component: JobComponent }, 
       { path: "**", redirectTo: 'calendar' }
     ])
