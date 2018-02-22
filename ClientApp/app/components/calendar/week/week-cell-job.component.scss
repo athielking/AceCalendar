@@ -6,7 +6,7 @@
     flex-direction: row;
     font-size: 12px;
     font-weight: 700;
-    color: mat-color($primary);
+    color: mat-color($primary, 800);
     margin-bottom: 8px;
     margin-top: 8px;
     border-bottom: 1px;
@@ -14,11 +14,25 @@
     border-bottom-color: rgba(0,0,0, .25)
 }
 
+.job-card{
+    background: rgba(0,0,0,.20);    
+    flex-direction: row;
+    padding: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 .week-cell-job-workers{
+    min-height: 36px;
     display: flex;
     flex-direction: column;
 }
 
 .week-cell-job-noworkers{
     color: mat-color($warn);
+}
+
+.week-cell-job-button-container{
+    margin-top: -10px;
+    margin-right: -10px;
 }

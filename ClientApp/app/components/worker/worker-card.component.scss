@@ -4,14 +4,16 @@
 
 .worker-card{
     @extend %cal-card-base;
-    background: rgba(0,0,0,.10);
     flex-direction: row;
     padding: 4px;
     margin-top: 4px;
     margin-bottom: 4px;
     cursor: pointer;
+    color: white;
+    text-align: center;
+    background-color: mat-color($primary, 500);
 }
 
-.worker-card-dragging{
-    border: 2px dashed mat-color($accent, 200);
+.worker-name-span{
+    width: 100%;
 }

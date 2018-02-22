@@ -6,7 +6,7 @@ import { WorkerListAdded } from '../../events/worker.events';
 @Component({
     selector: "ac-worker-list",
     templateUrl: "./worker-list.component.html",
-    styleUrls: ["../calendar/common/calendar-card.scss"]
+    styleUrls: ["../calendar/common/calendar-card.scss", "./worker-list.component.scss"]
 })
 export class WorkerListComponent {
     @Input() headerText: string;

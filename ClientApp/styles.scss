@@ -4,7 +4,7 @@
 /* Draggable*/
 
 .drag-border {
-    border: mat-color($primary,900) dashed 2px;
+    border: mat-color($primary) dashed 2px;
     background-color: mat-color($primary);
 }
 
@@ -24,7 +24,7 @@
 /* Droppable */
 
 .drag-hint-border {
-    border: mat-color($primary ) dashed 2px;
+    border: mat-color($mat-light-blue, 500 ) dashed 2px;
 }
 
 .drag-over-border {
@@ -32,5 +32,5 @@
 }
 
 .drag-transit {
-    border: mat-color($accent) dashed 2px;
+    border: mat-color($primary) dashed 2px;
 }

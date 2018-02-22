@@ -8,8 +8,9 @@
         <div class="cal-card-header" style="padding-left: 0px">
             {{ headerText }}
         </div>
-        <ac-worker-card *ngFor="let worker of workers" [worker]="worker" [scope]="calendarDay.date.toString()" >
-        </ac-worker-card>
+        <div class="worker-list-container">
+            <ac-worker-card *ngFor="let worker of workers" [worker]="worker" [scope]="calendarDay.date.toString()" >
+            </ac-worker-card>
+        </div>
     </div>
-
 </div>

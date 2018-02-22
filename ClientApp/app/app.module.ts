@@ -26,6 +26,7 @@ import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
 import { WorkerListComponent } from './components/worker/worker-list.component';
 import { WorkerCardComponent } from './components/worker/worker-card.component';
+import { JobListComponent } from './components/job/job-list.component';
 import { WorkerDetailComponent } from './components/worker/worker-detail.component';
 import { AddTimeOffComponent } from './components/worker/add-time-off.component';
 import { JobComponent } from './components/job/job.component';
@@ -75,6 +76,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     JobComponent,
     AddJobComponent,
     JobNotesComponent,
+    JobListComponent,
 
     //Month View
     MonthViewComponent,

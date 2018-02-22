@@ -15,15 +15,9 @@ export class WeekCellJobComponent {
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter()
 
     constructor(public snackBar: MatSnackBar) {
-
     }
 
-    onWorkerDropped(e: any) {
-
-        //let worker: Worker = <Worker>e.dragData;
-
-        // jobFrom.workers = jobFrom.workers.splice( jobFrom.workers.indexOf(worker), 1);
-        //this.calendarJob.workers.push(worker);
+    public onWorkerDropped(e: any) {
 
         this.workerAdded.emit({
             calendarJob: this.calendarJob,
@@ -32,13 +26,16 @@ export class WeekCellJobComponent {
 
     }
 
-    showNotes() {
+    public showNotes() {
         var ref = this.snackBar.openFromComponent(JobNotesComponent, { data: { model: this.calendarJob } });
     }
 
-    showWorkerMenu(e: any){
-        alert("Test")
-        return false;
+    public editJob(job: CalendarJob) {
+        alert('Edit ' + job.id);
+    } 
+
+    public deleteJob(jobId: string) {
+        alert('Delete ' + jobId);
     }
 }
 

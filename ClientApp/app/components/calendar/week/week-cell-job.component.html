@@ -1,15 +1,30 @@
-<div droppable (onDrop)="onWorkerDropped($event)" [dropScope]="calendarDay.date.toString()">
-    <div class="week-cell-job-header" 
-        [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0">
+<div class="job-card" droppable (onDrop)="onWorkerDropped($event)" [dropScope]="calendarDay.date.toString()">
+
+    <div class="week-cell-job-header">
+        <!-- [class.week-cell-job-noworkers]="!calendarJob.workers || calendarJob.workers.length == 0"></div> -->
 
         <div style="display: flex; flex-direction:column" flex>
             <div>{{calendarJob.name}}</div>
             <div>{{calendarJob.number}}</div>
         </div>
 
-        <a mat-icon-button *ngIf="calendarJob.notes && calendarJob.notes.length > 0" (click)="showNotes()">
+        <a class="week-cell-job-button-container" mat-icon-button *ngIf="calendarJob.notes && calendarJob.notes.length > 0" (click)="showNotes()">
             <mat-icon color="accent">note</mat-icon>
         </a>
+
+        <div class="week-cell-job-button-container">
+            <button mat-icon-button [mat-menu-trigger-for]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu x-position="before" #menu="matMenu">
+                <button mat-menu-item (click)="editJob(calendarJob)">
+                    <mat-icon>edit</mat-icon> Edit
+                </button>
+                <button mat-menu-item (click)="deleteJob(calendarJob.id)">
+                    <mat-icon>delete</mat-icon> Delete
+                </button>
+            </mat-menu>
+        </div>
     </div>
     <div class="week-cell-job-workers">
         <ac-worker-card *ngFor="let worker of calendarJob.workers" 
@@ -17,4 +32,5 @@
             [scope]="calendarDay.date.toString()">
         </ac-worker-card>
     </div>
+
 </div>

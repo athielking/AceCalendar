@@ -63,11 +63,12 @@
     flex-direction: column;
     padding: 8px;
     font-size: 14px;
+    height: 100%;
 }
 
 .cal-card-header{
     color: mat-color($primary,800);
-    display: flex;
+    //display: flex;
     font-weight: 700;
     font-size: 14px;
     padding-left: 8px;

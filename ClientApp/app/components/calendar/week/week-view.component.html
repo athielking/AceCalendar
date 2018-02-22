@@ -21,9 +21,14 @@
         <ac-week-cell 
             class="week-jobs"
             *ngFor="let dayView of weekData" 
-            [dayView]="dayView" 
-            (workerMoved)="onWorkerAddedJob($event)">
+            [dayView]="dayView">         
         </ac-week-cell>
+
+        <ac-job-list 
+            *ngFor="let dayView of weekData" 
+            [dayView]="dayView" 
+            (workerAddedToJob)="onWorkerAddedJob($event)">
+        </ac-job-list>
 
         <ac-worker-list
             *ngFor="let dayView of weekData"

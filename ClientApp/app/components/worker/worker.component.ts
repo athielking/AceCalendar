@@ -65,7 +65,7 @@ export class WorkerComponent implements OnInit {
         this.router.navigate(['worker', worker.id]);
     }
 
-    public deleteWorker(userId: string){
+    public deleteWorker(workerId: string){
         this.dialogService.openConfirm({
             message: 'Are you sure you wish to delete this worker?',
             title: 'Confirm Delete'
@@ -73,7 +73,7 @@ export class WorkerComponent implements OnInit {
             if (accept) {
                 this.toggleShowLoading(true);
 
-                this.workerStore.deleteWorker(userId)
+                this.workerStore.deleteWorker(workerId)
                     .subscribe(result => {
                         this.toggleShowLoading(false);                        
                     }, error => {

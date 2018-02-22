@@ -9,10 +9,10 @@ import * as end_of_week from 'date-fns/end_of_week';
 
 import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
-import { WorkerMovedEvent } from './week-cell.component';
 import { WeekCellJobComponent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
 import { TdDialogService } from '@covalent/core';
+import { WorkerAddedToJobEvent } from '../../job/job-list.component';
 
 @Component({
     selector: 'ac-week-view',
@@ -72,7 +72,7 @@ export class WeekViewComponent implements OnInit {
         this.handleDateChanged( add_weeks(this.viewDate, -1))
     }
 
-    public onWorkerAddedJob(event: WorkerMovedEvent){
+    public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
         this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe(result => {      
             this.weekData.forEach( dv => {
                 if( isSameDay(dv.calendarDay.date, event.date)){
