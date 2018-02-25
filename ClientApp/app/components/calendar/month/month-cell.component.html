@@ -23,7 +23,7 @@
     <div layout="row" style="justify-content: space-between" *ngIf='dayView.calendarDay.inMonth'>
         <div layout="column">
 
-            <button mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right' [matMenuTriggerFor]='jobsMenu'>
+            <button mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right' (click)="showDayDetails()">
                 <mat-icon *ngIf="dayView.jobs.length == 0">business</mat-icon>
                 <td-notification-count *ngIf="dayView.jobs.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.jobs.length">
                     <mat-icon>business</mat-icon>

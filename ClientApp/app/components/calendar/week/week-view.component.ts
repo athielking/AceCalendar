@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core'
-import { TdLoadingService } from '@covalent/core'
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core'
+import { TdLoadingService, TdDialogService } from '@covalent/core'
 import { Observable } from 'rxjs/Rx';
 import * as isSameWeek from 'date-fns/is_same_week'
 import * as isSameDay from 'date-fns/is_same_day';
@@ -11,7 +11,6 @@ import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WeekCellJobComponent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
-import { TdDialogService } from '@covalent/core';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
 
 @Component({

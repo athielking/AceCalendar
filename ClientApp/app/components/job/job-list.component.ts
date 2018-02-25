@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core'
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core'
 import { MatDialog } from '@angular/material';
 
 import { DayView, AddJobModel } from '../calendar/common/models'
@@ -12,9 +12,13 @@ import { AddJobComponent } from './addJob.component';
 })
 export class JobListComponent {
     @Input() dayView: DayView;
+    @Input() allowAdd: boolean = true;
+    @Input() showHeader: boolean = true;
+    @Input() isPast: boolean = false;
+
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
 
-    constructor(private dialog: MatDialog){
+    constructor(private dialog: MatDialog ){
     }
 
     public onWorkerAddedToJob(event: WorkerAddedJobEvent) {

@@ -1,32 +1,39 @@
-<ng-template tdLoading [tdLoadingUntil]="!dataLoading" tdLoadingStrategy="overlay" ; tdLoadingType="circle" ; tdLoadingColor="accent">
-    <mat-toolbar layout-align="center">
-        <button mat-icon-button><mat-icon>chevron_left</mat-icon></button>
-        <span>{{viewDate | date: 'fulldate'}}</span>
-        <button mat-icon-button><mat-icon>chevron_right</mat-icon></button>
-    </mat-toolbar>
-    
-    <mat-card>
-        <mat-card-title>
-            <div layout="row" layout-align="start center">
-                <span flex>Jobs Workers</span>
-            </div>
-        </mat-card-title>
-        <mat-divider></mat-divider>
-        Jobs Go here
-    </mat-card>
+<div layout="row">
+    <div class="day-title">{{dayView.calendarDay.date | date: 'EEEE'}}</div>
+    <div class="day-subtitle">{{dayView.calendarDay.date | date: 'MM/dd/yyyy'}}</div>
+</div>
+<div class="day-content" >
+    <div class='day-header'>Time Off</div>
+    <div class='day-header'>Available Workers</div>
+    <div class='day-header'>Jobs</div>
 
-    <mat-card>
-        <mat-card-title>
-                <div layout="row" layout-align="start center">
-                    <span flex>Available Workers</span>
-                </div>
-        </mat-card-title>
-        <mat-divider></mat-divider>
-        
-        <ac-availableWorkers 
-            [date]="viewDate"
-            [hideTitle]="true">
-        </ac-availableWorkers>
-    </mat-card>
+    <ac-worker-list 
+        [workers]="dayView.timeOffWorkers" 
+        [calendarDay]="dayView.calendarDay"
+        [isPast]="true"
+        (workerAdded)="onWorkerAddedOff($event)">
+    </ac-worker-list>
 
-</ng-template>
+    <ac-worker-list 
+        [workers]="dayView.availableWorkers"
+        [calendarDay]="dayView.calendarDay"
+        [isPast]="true"
+        (workerAdded)="onWorkerAddedAvailable($event)">
+    </ac-worker-list>
+
+    <div style="overflow:scroll; max-height:400px;">
+        <ac-job-list 
+            [dayView]="dayView" 
+            [allowAdd]="false"
+            [showHeader]="false" 
+            [isPast]="true" 
+            (workerAddedToJob)="onWorkerAddedJob($event)">
+        </ac-job-list>
+    </div>
+</div>
+<div class="mat-dialog-actions">
+    <span flex></span>
+    <button mat-button (click)="onCloseClick()">
+        Close
+    </button>
+</div>

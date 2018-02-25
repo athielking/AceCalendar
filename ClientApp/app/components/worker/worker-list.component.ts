@@ -12,6 +12,7 @@ export class WorkerListComponent {
     @Input() headerText: string;
     @Input() calendarDay: CalendarDay;
     @Input() isAccent: Boolean = false;
+    @Input() isPast: Boolean = false;
     @Input() workers: Worker[];
     
     @Output() workerAdded: EventEmitter<WorkerListAdded> = new EventEmitter();

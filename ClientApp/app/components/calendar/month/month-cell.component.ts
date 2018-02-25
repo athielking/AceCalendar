@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatDialog } from '@angular/material';
 import { TdNotificationCountComponent } from '@covalent/core'
 
 import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../../calendar/common/models'
 import { ViewChangeRequest } from '../../../events/calendar.events';
-
+import {DayViewComponent} from '../day/day-view.component';
 
 
 @Component({
@@ -20,7 +20,8 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
     @Input() dayView: DayView;
     @Output() changeView: EventEmitter<ViewChangeRequest> = new EventEmitter();
 
-    constructor(private router: Router){
+    constructor(private router: Router, 
+                private dialog: MatDialog){
     }
 
     public getJobsTooltip(){
@@ -33,6 +34,10 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
 
     public getOffTooltip(){
       return this.dayView.timeOffWorkers.length.toString() + " Off Workers";
+    }
+
+    public showDayDetails(){
+      this.dialog.open(DayViewComponent, {data: {dayView: this.dayView}})
     }
 
     public goToWeekView(date: Date){
