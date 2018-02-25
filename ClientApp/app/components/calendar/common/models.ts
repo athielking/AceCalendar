@@ -108,12 +108,14 @@ export class CalendarDay {
 
 export class CalendarJob {
     public workers: Worker[] = [];
+    public display: string;
 
     constructor(public id: string,
                 public number: number,
                 public name: string,
                 public type: string,
                 public notes: string){
+        this.display = number + ' ' + name;
     }
 }
 

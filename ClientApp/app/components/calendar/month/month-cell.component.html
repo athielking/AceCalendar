@@ -6,50 +6,29 @@
     <div class="month-dayofmonth">
         {{ dayView.calendarDay.date | date:'d' }}
     </div>
+    
+        <div class="month-job-details">
+            <span *ngFor="let job of dayView.jobs" [matTooltip]="job.display">{{job.name}}</span>
+        </div>
 
-    <mat-menu #jobsMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-        <button mat-menu-item *ngFor="let job of dayView.jobs">
-            <strong>{{job.number}}</strong> - {{job.name}}</button>
-    </mat-menu>
+        <div layout="row" *ngIf="dayView.calendarDay.inMonth" style="justify-content: space-between">
 
-    <mat-menu #availableMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-        <button mat-menu-item *ngFor="let worker of dayView.availableWorkers" (click)="goToWorker(worker)">{{worker.firstName}} {{worker.lastName}}</button>
-    </mat-menu>
-
-    <mat-menu #offMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-            <button mat-menu-item *ngFor="let worker of dayView.timeOffWorkers" (click)="goToWorker(worker)">{{worker.firstName}} {{worker.lastName}}</button>
-    </mat-menu>
-
-    <div layout="row" style="justify-content: space-between" *ngIf='dayView.calendarDay.inMonth'>
-        <div layout="column">
-
-            <button mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right' [matMenuTriggerFor]='jobsMenu'>
-                <mat-icon *ngIf="dayView.jobs.length == 0">business</mat-icon>
-                <td-notification-count *ngIf="dayView.jobs.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.jobs.length">
-                    <mat-icon>business</mat-icon>
-                </td-notification-count>
-            </button>
-
-            <button mat-icon-button color='primary' [matTooltip]="getAvailableTooltip()" matTooltipPosition='right' [matMenuTriggerFor]='availableMenu'>
+            <button mat-icon-button color='primary' [matTooltip]="getAvailableTooltip()" matTooltipPosition='right'>
                 <mat-icon *ngIf="dayView.availableWorkers.length == 0">people</mat-icon>
                 <td-notification-count *ngIf="dayView.availableWorkers.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.availableWorkers.length">
                     <mat-icon>people</mat-icon>
                 </td-notification-count>
             </button>
-
-            <button mat-icon-button color='primary' [matTooltip]="getOffTooltip()" matTooltipPosition='right' [matMenuTriggerFor]='offMenu'>
+    
+            <button mat-icon-button color='primary' [matTooltip]="getOffTooltip()" matTooltipPosition='right' >
                 <mat-icon *ngIf="dayView.timeOffWorkers.length == 0">perm_contact_calendar</mat-icon>
                 <td-notification-count *ngIf="dayView.timeOffWorkers.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.timeOffWorkers.length">
                     <mat-icon>perm_contact_calendar</mat-icon>
                 </td-notification-count>
             </button>
 
-        </div>
-
-        <div layout="column" style="flex-direction: column-reverse">
             <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Go to Week View" matTooltipPosition='before'>
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>
     </div>
-</div>
