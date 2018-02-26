@@ -6,6 +6,7 @@ import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
+import { WorkerAddedJobEvent } from '../../calendar/week/week-cell-job.component';
 
 @Component({
     selector: "ac-day-view",
@@ -33,6 +34,18 @@ export class DayViewComponent {
 
     public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
         this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe(result => {     
+            this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
+        }, error => {
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Worker to Job'
+            });
+        });
+    }
+
+    public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
+
+        this.calendarStore.moveWorkerToJob( event.worker, this.dayView.calendarDay.date, event.calendarJob ).subscribe(result => {     
             this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
         }, error => {
             this.dialogService.openAlert({

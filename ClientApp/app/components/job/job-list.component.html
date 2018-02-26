@@ -1,7 +1,7 @@
 <div class="cal-card"
     [class.is-past]="isPast">
     <div class="cal-card-content">
-        <div *ngIf="showHeader" class="cal-card-header" style="padding-left: 0px">
+        <div *ngIf="showHeader" class="cal-card-header" style="padding-top: 0px">
             Jobs
         </div>
         <ac-week-cell-job *ngFor="let job of dayView.jobs" 

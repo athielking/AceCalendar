@@ -2,12 +2,10 @@
     <div class="day-title">{{dayView.calendarDay.date | date: 'EEEE'}}</div>
     <div class="day-subtitle">{{dayView.calendarDay.date | date: 'MM/dd/yyyy'}}</div>
 </div>
-<div class="day-content" >
-    <div class='day-header'>Time Off</div>
-    <div class='day-header'>Available Workers</div>
-    <div class='day-header'>Jobs</div>
-
+<div class="day-content">
     <ac-worker-list 
+        style="grid-column: 1; grid-row: 2"
+        [headerText]="'Time Off'"
         [workers]="dayView.timeOffWorkers" 
         [calendarDay]="dayView.calendarDay"
         [isPast]="true"
@@ -15,20 +13,34 @@
     </ac-worker-list>
 
     <ac-worker-list 
+        style="grid-column: 1; grid-row: 1"
+        [headerText]="'Available Workers'"
         [workers]="dayView.availableWorkers"
         [calendarDay]="dayView.calendarDay"
         [isPast]="true"
         (workerAdded)="onWorkerAddedAvailable($event)">
     </ac-worker-list>
 
-    <div style="overflow:scroll; max-height:400px;">
-        <ac-job-list 
+    <div class="day-jobs-container">
+        <div class="cal-card is-past">
+            <div class="cal-card-header" style="padding-top: 8px; text-align: center;">
+                Jobs
+            </div>
+            <div class="day-jobs-grid">
+                <ac-week-cell-job *ngFor="let job of dayView.jobs"
+                    [calendarJob]="job" 
+                    [calendarDay]="dayView.calendarDay" 
+                    (workerAdded)="onWorkerAddedToJob($event)">
+                </ac-week-cell-job>
+            </div>
+        </div>
+        <!-- <ac-job-list 
             [dayView]="dayView" 
             [allowAdd]="false"
             [showHeader]="false" 
             [isPast]="true" 
             (workerAddedToJob)="onWorkerAddedJob($event)">
-        </ac-job-list>
+        </ac-job-list> -->
     </div>
 </div>
 <div class="mat-dialog-actions">
