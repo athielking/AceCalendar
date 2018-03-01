@@ -8,7 +8,7 @@
     </div>
     
         <div class="month-job-details">
-            <span *ngFor="let job of dayView.jobs" [matTooltip]="job.display">{{job.name}}</span>
+            <a *ngFor="let job of dayView.jobs" [matTooltip]="job.display" matTooltipPosition="above">{{job.name}}</a>
         </div>
 
         <div layout="row" *ngIf="dayView.calendarDay.inMonth" style="justify-content: space-between">
@@ -27,7 +27,11 @@
                 </td-notification-count>
             </button>
 
-            <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Go to Week View" matTooltipPosition='before'>
+            <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Week View" matTooltipPosition='before'>
+                <mat-icon>event_note</mat-icon>
+            </button>
+
+            <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Details..." matTooltipPosition='before'>
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>
