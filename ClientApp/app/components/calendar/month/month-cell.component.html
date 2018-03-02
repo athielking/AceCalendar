@@ -8,12 +8,21 @@
     </div>
     
         <div class="month-job-details">
-            <a *ngFor="let job of dayView.jobs" [matTooltip]="job.display" matTooltipPosition="above">{{job.name}}</a>
+            <ng-template *ngIf="showAllJobs" let-job ngFor [ngForOf]="dayView.jobs" >
+                <a [matTooltip]="job.display" matTooltipPosition="above">{{job.name}}</a>
+            </ng-template>
         </div>
 
         <div layout="row" *ngIf="dayView.calendarDay.inMonth" style="justify-content: space-between">
 
-            <button mat-icon-button color='primary' [matTooltip]="getAvailableTooltip()" matTooltipPosition='right'>
+            <button *ngIf="!showAllJobs" mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right'>
+                <mat-icon *ngIf="dayView.jobs.length == 0">business</mat-icon>
+                <td-notification-count *ngIf="dayView.jobs.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.jobs.length">
+                    <mat-icon>business</mat-icon>
+                </td-notification-count>
+            </button>
+
+            <button mat-icon-button color='primary' [matTooltip]="getAvailableTooltip()" matTooltipPosition='right' [matMenuTriggerFor]="availableMenu">
                 <mat-icon *ngIf="dayView.availableWorkers.length == 0">people</mat-icon>
                 <td-notification-count *ngIf="dayView.availableWorkers.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.availableWorkers.length">
                     <mat-icon>people</mat-icon>
@@ -22,13 +31,9 @@
     
             <button mat-icon-button color='primary' [matTooltip]="getOffTooltip()" matTooltipPosition='right' >
                 <mat-icon *ngIf="dayView.timeOffWorkers.length == 0">perm_contact_calendar</mat-icon>
-                <td-notification-count *ngIf="dayView.timeOffWorkers.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.timeOffWorkers.length">
+                <td-notification-count *ngIf="dayView.timeOffWorkers.length > 0" color="warn" positionX="after" positionY="top" [notifications]="dayView.timeOffWorkers.length">
                     <mat-icon>perm_contact_calendar</mat-icon>
                 </td-notification-count>
-            </button>
-
-            <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Week View" matTooltipPosition='before'>
-                <mat-icon>event_note</mat-icon>
             </button>
 
             <button mat-icon-button color='primary' (click)="goToWeekView(dayView.calendarDay.date)" matTooltip="Details..." matTooltipPosition='before'>
@@ -36,3 +41,7 @@
             </button>
         </div>
     </div>
+
+    <mat-menu #availableMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
+            <button mat-menu-item *ngFor="let worker of dayView.availableWorkers" (click)="showAddWorkerTo(worker)">{{worker.firstName}} {{worker.lastName}}</button>
+        </mat-menu>

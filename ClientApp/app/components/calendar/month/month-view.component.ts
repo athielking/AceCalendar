@@ -28,7 +28,7 @@ export class MonthViewComponent implements OnInit {
   private header: CalendarDay[];
 
   public showErrorMessage: boolean;
-    
+  public showAllJobs: boolean = false;
   public errorMessage: string;
 
   constructor(

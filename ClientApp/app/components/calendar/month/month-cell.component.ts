@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatDialog } from '@angular/material';
 import { TdNotificationCountComponent } from '@covalent/core'
 
 import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../../calendar/common/models'
 import { ViewChangeRequest } from '../../../events/calendar.events';
+import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
 
 
 
@@ -18,9 +19,11 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
   export class MonthCellComponent {
 
     @Input() dayView: DayView;
+    @Input() showAllJobs: Boolean;
     @Output() changeView: EventEmitter<ViewChangeRequest> = new EventEmitter();
 
-    constructor(private router: Router){
+    constructor(private router: Router,
+                private dialog: MatDialog){
     }
 
     public getJobsTooltip(){
@@ -40,9 +43,15 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
         this.changeView.emit({viewDate: date, view: CalendarViews.WeekView});
     }
 
-    public goToWorker(worker: Worker){
-      this.router.navigate(['worker', worker.id]);
-      console.log("navigating to worker " + worker.id );
+    public showAddWorkerTo(worker: Worker){
+      
+      var dialogRef = this.dialog.open(AddWorkerToComponent, {
+        data: {
+          workers: this.dayView.availableWorkers, 
+          jobs: this.dayView.jobs,
+          selectedWorker: worker
+        }
+      });
     }
     
     public goToJob( job: CalendarJob ){

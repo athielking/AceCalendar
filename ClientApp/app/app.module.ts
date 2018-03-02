@@ -29,6 +29,8 @@ import { WorkerCardComponent } from './components/worker/worker-card.component';
 import { JobListComponent } from './components/job/job-list.component';
 import { WorkerDetailComponent } from './components/worker/worker-detail.component';
 import { AddTimeOffComponent } from './components/worker/add-time-off.component';
+import { AddWorkerToComponent } from './components/worker/add-worker-to.component';
+
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
 import { JobNotesComponent } from "./components/job/jobNotes.component";
@@ -71,6 +73,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     WorkerCardComponent,
     WorkerDetailComponent,
     AddTimeOffComponent,
+    AddWorkerToComponent,
 
     //Job CRUD
     JobComponent,
@@ -93,7 +96,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AddWorkerComponent,
     AddJobComponent,
     JobNotesComponent,
-    AddTimeOffComponent
+    AddTimeOffComponent,
+    AddWorkerToComponent
   ],
   imports: [
     HttpClientModule,

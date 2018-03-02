@@ -1,0 +1,31 @@
+<h1 class="mat-dialog-title">Add Worker to Job</h1>
+
+<div class="mat-dialog-content form-container">
+        <mat-form-field>
+            <input type="text" placeholder="Select Worker" aria-label="Worker" matInput [formControl]="workerControl" [matAutocomplete]="autoWorker">
+            <mat-autocomplete #autoWorker="matAutocomplete" [displayWith]="workerDisplay">
+                <mat-option *ngFor="let option of filteredWorkers | async" [value]="option">
+                    {{ option.display }}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+                <input type="text" placeholder="Select Job" aria-label="Job" matInput [formControl]="jobControl" [matAutocomplete]="autoJob">
+                <mat-autocomplete #autoJob="matAutocomplete" [displayWith]="jobDisplay">
+                    <mat-option *ngFor="let option of filteredJobs | async" [value]="option">
+                        {{ option.display }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+</div>
+
+<div class="mat-dialog-actions" style="display: flex; flex-direction:row">
+        <span flex></span>
+        <button mat-button (click)="onSaveClick()">
+            Save
+        </button>
+        <button mat-button (click)="onCloseClick()">
+            Close
+        </button>
+    </div>
