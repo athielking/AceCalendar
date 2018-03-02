@@ -11,7 +11,9 @@
     </button>
 
     <div style="position: absolute; right: 0; margin-right: 30px">            
-        <mat-slide-toggle [(ngModel)]="showAllJobs">Show All Jobs</mat-slide-toggle>
+        <button mat-icon-button (click)="showDisplayOptions()" matTooltip="Display Options">
+            <mat-icon>settings</mat-icon>
+        </button>
     </div>
 </mat-toolbar>
 
@@ -28,7 +30,6 @@
 
         <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" 
             [dayView]="dayView" 
-            [showAllJobs]="showAllJobs" 
             (changeView)="onChangeView($event)">
         </ac-month-cell>
     </div>

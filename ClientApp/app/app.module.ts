@@ -37,6 +37,8 @@ import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
+import { MonthDisplayOptionsComponent } from './components/calendar/month/month-displayOptions.component';
+
 import { DayViewComponent } from "./components/calendar/day/day-view.component";
 import { WeekViewComponent } from "./components/calendar/week/week-view.component";
 import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
@@ -45,6 +47,7 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 
 import { LoginComponent } from "./components/login/login.component";
 
+import { StorageService } from './services/storage.service';
 import { JobService } from './services/job.service';
 import { CalendarService } from './services/calendar.service';
 import { WorkerService } from './services/worker.service';
@@ -84,6 +87,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     //Month View
     MonthViewComponent,
     MonthCellComponent,
+    MonthDisplayOptionsComponent,
 
     //Week View
     WeekViewComponent,
@@ -98,7 +102,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     JobNotesComponent,
     AddTimeOffComponent,
     AddWorkerToComponent,
-    DayViewComponent
+    DayViewComponent,
+    MonthDisplayOptionsComponent
   ],
   imports: [
     HttpClientModule,
@@ -132,6 +137,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     WorkerService,
     AuthService,
     CalendarService,
+    StorageService,
     //Stores
     CalendarStore,
     WorkerStore,

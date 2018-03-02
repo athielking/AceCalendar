@@ -46,6 +46,14 @@
         }
     }
 }
+.cal-card.month-card{
+    margin-right: 8px;
+    margin-top: 8px;
+    height: max-content;
+    background: rgba(0,0,0, .2)
+}
+
+
 
 .month-cell.out-month{
     background-color: mat-color($primary,800);
