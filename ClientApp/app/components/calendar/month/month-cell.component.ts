@@ -6,7 +6,7 @@ import { TdNotificationCountComponent } from '@covalent/core'
 import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../../calendar/common/models'
 import { ViewChangeRequest } from '../../../events/calendar.events';
 import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
-
+import {DayViewComponent} from '../day/day-view.component';
 
 
 @Component({
@@ -22,7 +22,7 @@ import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
     @Input() showAllJobs: Boolean;
     @Output() changeView: EventEmitter<ViewChangeRequest> = new EventEmitter();
 
-    constructor(private router: Router,
+    constructor(private router: Router, 
                 private dialog: MatDialog){
     }
 
@@ -36,6 +36,10 @@ import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
 
     public getOffTooltip(){
       return this.dayView.timeOffWorkers.length.toString() + " Off Workers";
+    }
+
+    public showDayDetails(){
+      this.dialog.open(DayViewComponent, {data: {dayView: this.dayView}})
     }
 
     public goToWeekView(date: Date){

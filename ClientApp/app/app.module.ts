@@ -97,7 +97,8 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AddJobComponent,
     JobNotesComponent,
     AddTimeOffComponent,
-    AddWorkerToComponent
+    AddWorkerToComponent,
+    DayViewComponent
   ],
   imports: [
     HttpClientModule,
