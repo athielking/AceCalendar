@@ -26,7 +26,8 @@
 
         <ac-job-list 
             *ngFor="let dayView of weekData" 
-            [dayView]="dayView" 
+            [dayView]="dayView"
+            [isPast]="dayView.calendarDay.isPast"
             (workerAddedToJob)="onWorkerAddedJob($event)">
         </ac-job-list>
 
@@ -34,6 +35,7 @@
             *ngFor="let dayView of weekData"
             [workers]="dayView.availableWorkers"
             [calendarDay]="dayView.calendarDay"
+            [isPast]="dayView.calendarDay.isPast"
             [headerText]="'Available Workers'"
             (workerAdded)="onWorkerAddedAvailable($event)">
         </ac-worker-list>
@@ -42,6 +44,7 @@
             *ngFor="let dayView of weekData"
             [workers]="dayView.timeOffWorkers"
             [calendarDay]="dayView.calendarDay"
+            [isPast]="dayView.calendarDay.isPast"
             [isAccent]="true"
             [headerText]="'Time Off'"
             (workerAdded)="onWorkerAddedOff($event)">

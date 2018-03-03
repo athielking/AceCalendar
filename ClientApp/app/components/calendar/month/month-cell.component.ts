@@ -1,11 +1,14 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatDialog } from '@angular/material';
 import { TdNotificationCountComponent } from '@covalent/core'
 
 import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../../calendar/common/models'
+import { StorageKeys } from '../common/calendar-tools';
+import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';
-
+import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
+import { DayViewComponent } from '../day/day-view.component';
 
 
 @Component({
@@ -15,12 +18,41 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
                '../common/calendar-card.scss']
   })
   
-  export class MonthCellComponent {
+  export class MonthCellComponent implements OnInit {
 
     @Input() dayView: DayView;
     @Output() changeView: EventEmitter<ViewChangeRequest> = new EventEmitter();
 
-    constructor(private router: Router){
+    showAllJobs: boolean;
+    showAvailableWorkers: boolean;
+    showOffWorkers: boolean;
+
+    constructor(private router: Router, 
+                private dialog: MatDialog,
+                private storageService: StorageService ){
+    }
+
+    public ngOnInit(){
+      this.storageService.watchStorage().subscribe( key => {
+        if(key == StorageKeys.monthViewShowJobs)
+          this.showAllJobs = this.storageService.getItem(key) == 'true';
+
+        if(key == StorageKeys.monthViewShowAvailable)
+          this.showAvailableWorkers = this.storageService.getItem(key) == 'true';
+          
+        if( key == StorageKeys.monthViewShowOff)
+          this.showOffWorkers = this.storageService.getItem(key) == 'true';
+      });
+
+     
+        this.showAllJobs = this.storageService.hasItem(StorageKeys.monthViewShowJobs) && 
+                            this.storageService.getItem(StorageKeys.monthViewShowJobs) == 'true';
+        
+        this.showAvailableWorkers = this.storageService.hasItem(StorageKeys.monthViewShowAvailable) && 
+                                    this.storageService.getItem(StorageKeys.monthViewShowAvailable) == 'true';
+        
+        this.showOffWorkers = this.storageService.hasItem(StorageKeys.monthViewShowOff ) && 
+                              this.storageService.getItem(StorageKeys.monthViewShowOff) == 'true'
     }
 
     public getJobsTooltip(){
@@ -35,14 +67,24 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
       return this.dayView.timeOffWorkers.length.toString() + " Off Workers";
     }
 
+    public showDayDetails(){
+      this.dialog.open(DayViewComponent, {data: {dayView: this.dayView}})
+    }
+
     public goToWeekView(date: Date){
       if( this.changeView )
         this.changeView.emit({viewDate: date, view: CalendarViews.WeekView});
     }
 
-    public goToWorker(worker: Worker){
-      this.router.navigate(['worker', worker.id]);
-      console.log("navigating to worker " + worker.id );
+    public showAddWorkerTo(worker: Worker){
+      
+      var dialogRef = this.dialog.open(AddWorkerToComponent, {
+        data: {
+          workers: this.dayView.availableWorkers, 
+          jobs: this.dayView.jobs,
+          selectedWorker: worker
+        }
+      });
     }
     
     public goToJob( job: CalendarJob ){

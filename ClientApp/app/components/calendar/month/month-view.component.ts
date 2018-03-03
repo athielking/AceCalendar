@@ -1,10 +1,13 @@
 import { Component, Input, Output, OnInit,OnChanges, SimpleChanges, EventEmitter } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
+import { MatDialog } from '@angular/material'
 import { Observable } from 'rxjs/Rx';
 
 import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
 import { MonthView, CalendarDay, DayView, CalendarViews } from '../../calendar/common/models'
-import { CalendarStore } from '../../../stores/calendar.store'
+import { MonthDisplayOptionsComponent } from './month-displayOptions.component';
+import { CalendarStore } from '../../../stores/calendar.store';
+import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';
 
 import * as add_months from 'date-fns/add_months'
@@ -28,12 +31,13 @@ export class MonthViewComponent implements OnInit {
   private header: CalendarDay[];
 
   public showErrorMessage: boolean;
-    
   public errorMessage: string;
 
   constructor(
     public calendarStore: CalendarStore,
-    private loadingService: TdLoadingService) {
+    private loadingService: TdLoadingService,
+    private dialog: MatDialog,
+    private storageService: StorageService ) {
   }
 
   ngOnInit() {   
@@ -70,6 +74,9 @@ export class MonthViewComponent implements OnInit {
     this.changeSelectedView.emit(event.view);
   }
 
+  public showDisplayOptions(){
+    this.dialog.open(MonthDisplayOptionsComponent);
+  }
   private handleDateChanged(date: Date) {
 
     if(is_this_month(date))

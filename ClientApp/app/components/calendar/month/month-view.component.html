@@ -1,5 +1,5 @@
 <mat-toolbar layout-align="center">
-
+    
     <button mat-icon-button (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
     </button>
@@ -10,6 +10,11 @@
         <mat-icon>chevron_right</mat-icon>
     </button>
 
+    <div style="position: absolute; right: 0; margin-right: 30px">            
+        <button mat-icon-button (click)="showDisplayOptions()" matTooltip="Display Options">
+            <mat-icon>settings</mat-icon>
+        </button>
+    </div>
 </mat-toolbar>
 
 <div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
@@ -23,7 +28,9 @@
             </div>
         </div>
 
-        <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" [dayView]="dayView" (changeView)="onChangeView($event)">
+        <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" 
+            [dayView]="dayView" 
+            (changeView)="onChangeView($event)">
         </ac-month-cell>
     </div>
 </div>

@@ -1,0 +1,18 @@
+<h1 class="mat-dialog-title">Month View Display Options</h1>
+
+<div class="mat-dialog-content form-container">
+        
+    <mat-slide-toggle [(ngModel)]="showAllJobs" (change)="toggleJobsChanged($event)">Show All Jobs</mat-slide-toggle>
+
+    <mat-slide-toggle [(ngModel)]="showAvailableWorkers" (change)="toggleAvailableChanged($event)">Show Available Workers</mat-slide-toggle>
+        
+    <mat-slide-toggle [(ngModel)]="showOffWorkers" (change)="toggleOffChanged($event)">Show Time Off Workers </mat-slide-toggle>
+        
+</div>
+
+<div class="mat-dialog-actions" style="display: flex; flex-direction:row">
+    <span flex></span>
+    <button mat-button (click)="onCloseClick()">
+        Close
+    </button>
+</div>

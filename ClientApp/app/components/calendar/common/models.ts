@@ -106,26 +106,30 @@ export class CalendarDay {
     }
 }
 
-export class CalendarJob {
+export class CalendarJob implements IDisplayModel{
     public workers: Worker[] = [];
+    public display: string;
 
     constructor(public id: string,
                 public number: number,
                 public name: string,
                 public type: string,
                 public notes: string){
+        this.display = `${this.number} ${name}`;
     }
 }
 
-export class Worker {
+export class Worker implements IDisplayModel{
     public timeOff: Date[] = [];
     public jobs: CalendarJob[] = [];
     
+    public display: string;
     constructor(public id: string,
                 public firstName: string,
                 public lastName: string,
                 public email: string,
                 public phone: string){
+        this.display = `${this.firstName} ${this.lastName}`;
     }
 }
 
@@ -170,6 +174,10 @@ export class SaveNotesRequestModel {
         public notes: string
     ){
     }
+}
+
+export interface IDisplayModel{
+    display: string;
 }
 
 export enum CalendarViews{

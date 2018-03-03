@@ -32,36 +32,28 @@
         color: mat-color($primary, 800);
     }
 
-    .month-cell-content {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-    }
-
-    .month-cell-item{
-        @extend %month-item-base;
-        padding: 4px;
-        margin: 4px;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .month-cell-item:hover{
-        @extend %month-item-hover-base;
-    }
-
-    .month-cell-item.highlight{
-        background-color: mat-color($accent, 400);
-    }
-
-    .month-cell-item.highlight:hover{
-        background-color: mat-color($accent, 700);
-    }
-
-    a {
-        color: rgb(0,0,0);
+    .month-job-details{
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding-left: 8px;
+        padding-bottom: 8px;
+    
+        a {
+            font-size: 12px;
+            color:mat-color($primary, 800);
+            font-weight: bold;
+        }
     }
 }
+.cal-card.month-card{
+    margin-right: 8px;
+    margin-top: 8px;
+    height: max-content;
+    background: rgba(0,0,0, .2)
+}
+
+
 
 .month-cell.out-month{
     background-color: mat-color($primary,800);
@@ -70,14 +62,4 @@
         font-size: 12px;
         color: white;
     }
-}
-
-.cell-badge{
-    color: #ffffff;
-    
-    background-color: mat-color($accent, 700);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
 }

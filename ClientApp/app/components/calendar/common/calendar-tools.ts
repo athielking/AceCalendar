@@ -37,7 +37,9 @@ export enum DAYS_OF_WEEK {
 export enum StorageKeys{
     viewDate = "VIEW_DATE",
     selectedTab = "SELECTED_TAB",
-
+    monthViewShowJobs = "MONTH_VIEW_SHOW_JOBS",
+    monthViewShowAvailable = "MONTH_VIEW_SHOW_AVAILABLE",
+    monthViewShowOff = "MONTH_VIEW_SHOW_OFF"
 }
 
 const DAYS_IN_WEEK: number = 7;

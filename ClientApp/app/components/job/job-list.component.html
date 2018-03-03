@@ -1,8 +1,7 @@
-<div class="cal-card" 
-    [class.is-past]="dayView.calendarDay && dayView.calendarDay.isPast">
-
+<div class="cal-card"
+    [class.is-past]="isPast">
     <div class="cal-card-content">
-        <div class="cal-card-header" style="padding-left: 0px">
+        <div *ngIf="showHeader" class="cal-card-header" style="padding-top: 0px">
             Jobs
         </div>
         <ac-week-cell-job *ngFor="let job of dayView.jobs" 
@@ -10,7 +9,7 @@
             [calendarDay]="dayView.calendarDay" 
             (workerAdded)="onWorkerAddedToJob($event)">
         </ac-week-cell-job>
-        <div class="add-job-button-container">
+        <div *ngIf="allowAdd" class="add-job-button-container">
             <a mat-mini-fab color="accent" matTooltip="Add Job" matTooltipPosition="before" (click)="showAddJob()">
                 <mat-icon>add</mat-icon>
             </a>

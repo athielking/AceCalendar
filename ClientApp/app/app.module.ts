@@ -29,12 +29,16 @@ import { WorkerCardComponent } from './components/worker/worker-card.component';
 import { JobListComponent } from './components/job/job-list.component';
 import { WorkerDetailComponent } from './components/worker/worker-detail.component';
 import { AddTimeOffComponent } from './components/worker/add-time-off.component';
+import { AddWorkerToComponent } from './components/worker/add-worker-to.component';
+
 import { JobComponent } from './components/job/job.component';
 import { AddJobComponent } from './components/job/addJob.component';
 import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
+import { MonthDisplayOptionsComponent } from './components/calendar/month/month-displayOptions.component';
+
 import { DayViewComponent } from "./components/calendar/day/day-view.component";
 import { WeekViewComponent } from "./components/calendar/week/week-view.component";
 import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
@@ -43,6 +47,7 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 
 import { LoginComponent } from "./components/login/login.component";
 
+import { StorageService } from './services/storage.service';
 import { JobService } from './services/job.service';
 import { CalendarService } from './services/calendar.service';
 import { WorkerService } from './services/worker.service';
@@ -71,6 +76,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     WorkerCardComponent,
     WorkerDetailComponent,
     AddTimeOffComponent,
+    AddWorkerToComponent,
 
     //Job CRUD
     JobComponent,
@@ -81,6 +87,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     //Month View
     MonthViewComponent,
     MonthCellComponent,
+    MonthDisplayOptionsComponent,
 
     //Week View
     WeekViewComponent,
@@ -93,7 +100,10 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AddWorkerComponent,
     AddJobComponent,
     JobNotesComponent,
-    AddTimeOffComponent
+    AddTimeOffComponent,
+    AddWorkerToComponent,
+    DayViewComponent,
+    MonthDisplayOptionsComponent
   ],
   imports: [
     HttpClientModule,
@@ -127,6 +137,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
     WorkerService,
     AuthService,
     CalendarService,
+    StorageService,
     //Stores
     CalendarStore,
     WorkerStore,
