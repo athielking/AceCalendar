@@ -3,7 +3,6 @@ import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { MatSnackBar } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
 
-
 @Component({
     selector: 'ac-week-cell-job',
     templateUrl: './week-cell-job.component.html',
@@ -12,9 +11,11 @@ import { JobNotesComponent } from '../../job/jobNotes.component';
 export class WeekCellJobComponent {
     @Input() calendarJob: CalendarJob;
     @Input() calendarDay: CalendarDay;
-    @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter()
+    @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter();
+    @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
+    @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
 
-    constructor(public snackBar: MatSnackBar) {
+    constructor(private snackBar: MatSnackBar) {
     }
 
     public onWorkerDropped(e: any) {
@@ -31,15 +32,28 @@ export class WeekCellJobComponent {
     }
 
     public editJob(job: CalendarJob) {
-        alert('Edit ' + job.id);
+        this.editJobRequested.emit({
+            job: job
+        });
     } 
 
     public deleteJob(jobId: string) {
-        alert('Delete ' + jobId);
+
+        this.deleteJobRequested.emit({
+            jobId: jobId
+        });
     }
 }
 
 export interface WorkerAddedJobEvent {
     calendarJob: CalendarJob,
     worker: Worker,
+}
+
+export interface EditJobRequestedEvent {
+    job: CalendarJob
+}
+
+export interface DeleteJobRequestedEvent {
+    jobId: string
 }

@@ -39,7 +39,8 @@ export enum StorageKeys{
     selectedTab = "SELECTED_TAB",
     monthViewShowJobs = "MONTH_VIEW_SHOW_JOBS",
     monthViewShowAvailable = "MONTH_VIEW_SHOW_AVAILABLE",
-    monthViewShowOff = "MONTH_VIEW_SHOW_OFF"
+    monthViewShowOff = "MONTH_VIEW_SHOW_OFF",
+    addWorkerOption = "ADD_WORKER_OPTION",
 }
 
 const DAYS_IN_WEEK: number = 7;

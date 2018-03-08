@@ -1,63 +1,115 @@
-import {Component, Input, Inject, ViewChild} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {ITdDataTableColumn} from '@covalent/core';
+import {TdDialogService,TdLoadingService} from '@covalent/core';
 
-import { Worker, AddJobModel } from '../calendar/common/models';
+import { AddJobModel } from '../calendar/common/models';
 import { JobStore } from '../../stores/job.store';
-import {AcErrorStateMatcher} from '../../tools/AcErrorStateMatcher';
-import { AvailableWorkerPickerComponent } from '../worker/availableWorkerPicker.component';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
     selector: 'ac-addJob',
     templateUrl: './addJob.component.html'
 })
-export class AddJobComponent {
+export abstract class AddJobComponent {
     
-    @ViewChild(AvailableWorkerPickerComponent) picker: AvailableWorkerPickerComponent;
+    private isEdit: boolean;
+    private editJobId: string;
 
-    hasError : boolean = false;
-    workersNotAvailable: string = '';
+    public jobNumber: string;
+    public jobName: string;
+    public notes: string;
+    public startDate: Date;
+    public endDate: Date;
 
-    matcher = new AcErrorStateMatcher();
-    jobNumberInput = new FormControl('', [Validators.required]);
-    nameInput = new FormControl('', [Validators.required]);
-    typeInput = new FormControl('', [Validators.required]);
-    startDateInput = new FormControl('', [Validators.required]);
-    endDateInput = new FormControl('');
-    job: AddJobModel;
-
-    constructor(private jobStore: JobStore,
-                private dialogRef: MatDialogRef<AddJobComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: any){ 
-        if(this.data && this.data.model)
-            this.job = <AddJobModel>this.data.model;
-        else
-            this.job = new AddJobModel(0, '', '', new Date());
+    constructor(
+        private dialogRef: MatDialogRef<AddJobComponent>,
+        private dialogService: TdDialogService,
+        private loadingService: TdLoadingService,
+        @Inject(MAT_DIALOG_DATA) public data: any
+    ){ 
+        this.isEdit = data.isEdit,
+        this.editJobId = data.editJobId,
+        this.jobNumber = data.jobNumber,
+        this.jobName = data.jobName,
+        this.notes = data.notes,
+        this.startDate = data.startDate,
+        this.endDate = data.endDate        
     }
 
-    onCancelClick(): void {
+    public onCancelClick() {
         this.dialogRef.close();
     }
 
-    onOkClick(): void {
-
-        console.log(this.picker.selectedRows);
-
-        this.job.workerIds = [];
-        this.picker.selectedRows.forEach(worker => this.job.workerIds.push(worker.id));
-
-        this.jobStore.addJob(this.job).subscribe( obj => {
-             this.dialogRef.close();
-        }, err => {
-            this.hasError = true;
-            this.workersNotAvailable = err["message"];
-        });
-        
+    public onOkClick() {
+        if(this.isEdit)
+            this.editJob();
+    
+        else
+            this.addJob();      
     }
 
-    startDate_DateChange(event: MatDatepickerInputEvent<Date>){
-        console.log("date changed");
+    public endDateIsNotBeforeStartDate() {
+        return this.endDate == null || this.startDate <= this.endDate;
+    }
+
+    private addJob() {
+        this.toggleShowLoading(true);
+
+        var addJobModel = new AddJobModel(
+            this.jobNumber, 
+            this.jobName, 
+            this.notes, 
+            this.startDate,
+            this.endDate
+        );
+
+        this.AddJobThroughStore(addJobModel).subscribe( result => {
+            this.dialogRef.close();
+            this.toggleShowLoading(false);
+        }, error => {
+            this.toggleShowLoading(false);
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Job'
+            });
+        } ); 
+    }
+
+    private editJob() {
+        this.toggleShowLoading(true);
+        
+        var addJobModel = new AddJobModel(
+            this.jobNumber, 
+            this.jobName, 
+            this.notes, 
+            this.startDate,
+            this.endDate
+        );
+
+        this.EditJobThroughStore(this.editJobId, addJobModel).subscribe( result => {
+            this.dialogRef.close();
+            this.toggleShowLoading(false);
+        }, error => {
+            this.toggleShowLoading(false);
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Update Job'
+            });
+        } ); 
+    }
+    
+    protected abstract AddJobThroughStore(addJobModel: AddJobModel) : Observable<object>;
+
+    protected abstract EditJobThroughStore(editJobId: string, addJobModel: AddJobModel) : Observable<object>;
+    
+    private toggleShowLoading(show:boolean) {
+        if (show) {
+            this.loadingService.register('addJobShowLoading');
+        } 
+        else {
+            this.loadingService.resolve('addJobShowLoading');
+        }
     }
 }

@@ -1,79 +1,57 @@
-<td-message #errorMessage label="Error" sublabel="{{ workersNotAvailable }}" color="warn" icon="error" [opened]="hasError">
-        <button td-message-actions mat-icon-button (click)="errorMessage.close()"><mat-icon>cancel</mat-icon></button>
-</td-message>
 <h1 class="mat-dialog-title">Add Job</h1>
 
-<div class="mat-dialog-content form-container">
-    <mat-form-field>
-        <input matInput placeholder="Job Number" [formControl]="jobNumberInput" [errorStateMatcher]='matcher' [(ngModel)]="job.number">
-        <mat-error *ngIf="jobNumberInput.hasError('required')">
-            Job Number is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+<div *tdLoading="'addJobShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
 
-    <mat-form-field>
-        <input matInput placeholder="Job Name" [formControl]="nameInput" [errorStateMatcher]='matcher' [(ngModel)]="job.name">
-        <mat-error *ngIf="nameInput.hasError('required')">
-            Job Name is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+    <form #addJobForm="ngForm">   
+        <div class="mat-dialog-content form-container">
 
-    <mat-form-field>
-        <input matInput placeholder="Type" [formControl]="typeInput" [errorStateMatcher]='matcher' [(ngModel)]="job.type">
-        <mat-error *ngIf="typeInput.hasError('required')">
-            Type is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+            <mat-form-field>
+                <input matInput #jobNameControl="ngModel" placeholder="Job Name" type="text" name="jobName" [(ngModel)]="jobName" required>
+                <mat-error align="start">
+                    <span [hidden]="!jobNameControl.errors?.required || jobNameControl.pristine" class="tc-red-600">Job Name is Required</span>
+                </mat-error>
+            </mat-form-field>
 
-    <mat-form-field>
-        <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="2"
-            matAutosizeMaxRows="5" [(ngModel)]="job.notes">
-        </textarea>
-    </mat-form-field>
+            <mat-form-field>
+                <input matInput #jobNumberControl="ngModel" placeholder="Job Number" type="text" name="jobNumber" [(ngModel)]="jobNumber">
+            </mat-form-field>
+        
+            <div>
+                <mat-form-field>
+                    <input matInput #startDateControl="ngModel" placeholder="Start Date" name="startDate" [matDatepicker]="startPicker" [(ngModel)]="startDate" required>
+                    <mat-error align="start">
+                        <span [hidden]="!startDateControl.errors?.required || startDateControl.pristine" class="tc-red-600">Starte Date is Required</span>
+                    </mat-error>
+                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+            
+                <mat-form-field>
+                    <input matInput #endDateControl="ngModel" placeholder="End Date" name="endDate" [matDatepicker]="endPicker" [(ngModel)]="endDate">
+                    <mat-hint align="start">       
+                        <span [hidden]="endDateIsNotBeforeStartDate()" class="tc-red-600">The End Date Cannot Be Before the Start Date</span>                
+                    </mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+            </div>
 
-    <mat-form-field>
-        <input matInput placeholder="Start Date" 
-            [matDatepicker]="startPicker" 
-            [formControl]="startDateInput" 
-            [errorStateMatcher]="matcher" 
-            [(ngModel)]="job.startDate"
-            (dateChange)="startDate_DateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-        <mat-datepicker #startPicker></mat-datepicker>
-        <mat-error *ngIf="startDateInput.hasError('required')">
-            Start Date is <strong>required</strong>
-        </mat-error>
-    </mat-form-field>
+            <mat-form-field>
+                <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="5" name="notes" [(ngModel)]="notes">
+                </textarea>
+            </mat-form-field>
+        
+        </div>
 
-    <mat-form-field>
-            <input matInput placeholder="End Date" 
-                [matDatepicker]="endPicker" 
-                [formControl]="endDateInput" 
-                [errorStateMatcher]="matcher" 
-                [(ngModel)]="job.endDate"> 
-            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-            <mat-datepicker #endPicker></mat-datepicker>
-        </mat-form-field>
-</div>
-
-<ac-availableWorkers
-    [date]="job.startDate"
-    [endDate]="job.endDate">
-</ac-availableWorkers>
-
-<div class="mat-dialog-actions">
-    <span flex></span>
-    
-    <button class="mat-button" (click)="onCancelClick()">
-        <span class="mat-button-wrapper">Cancel</span>
-        <div class="mat-button-ripple mat-ripple" matripple=""></div>
-        <div class="mat-button-focus-overlay"></div>
-    </button> 
-    
-    <button class="mat-button" (click)="onOkClick()">
-        <span class="mat-button-wrapper">Ok</span>
-        <div class="mat-button-ripple mat-ripple" matripple=""></div>
-        <div class="mat-button-focus-overlay"></div>
-    </button>
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
+            
+            <button mat-button 
+                [disabled]="!addJobForm.form.valid || !endDateIsNotBeforeStartDate()" 
+                (click)="onOkClick()">Ok</button>
+        </div>
+    </form>
 
 </div>

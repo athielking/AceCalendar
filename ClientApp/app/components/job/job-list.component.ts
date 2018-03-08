@@ -2,8 +2,8 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core'
 import { MatDialog } from '@angular/material';
 
 import { DayView, AddJobModel } from '../calendar/common/models'
-import { WorkerAddedJobEvent } from '../calendar/week/week-cell-job.component';
-import { AddJobComponent } from './addJob.component';
+import { WorkerAddedJobEvent, DeleteJobRequestedEvent, EditJobRequestedEvent } from '../calendar/week/week-cell-job.component';
+import { AddJobToWeekViewComponent } from './addJobToWeekViewComponent';
 
 @Component({
     selector: "ac-job-list",
@@ -17,6 +17,8 @@ export class JobListComponent {
     @Input() isPast: boolean = false;
 
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
+    @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
+    @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
 
     constructor(private dialog: MatDialog ){
     }
@@ -30,11 +32,25 @@ export class JobListComponent {
         });
     }
 
+    public onDeleteJobRequested(event: DeleteJobRequestedEvent ) {
+        this.deleteJobRequested.emit(event);
+    }
+
+    public onEditJobRequested(event: EditJobRequestedEvent) {
+        this.editJobRequested.emit(event);
+    }
+
     public showAddJob() {
-        let dialogRef = this.dialog.open(AddJobComponent, {
+        let dialogRef = this.dialog.open(AddJobToWeekViewComponent, {
             disableClose: true,
             data: {
-                model: new AddJobModel(0, '', '', this.dayView.calendarDay.date)
+                isEdit: false,
+                editJobId: '',
+                jobNumber: '',
+                jobName: '',
+                notes: '',
+                startDate: this.dayView.calendarDay.date,
+                endDate: null       
             }
         });
     }

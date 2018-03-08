@@ -10,42 +10,54 @@ import { CalendarDay, CalendarJob, AddJobModel, SaveNotesRequestModel } from '..
 export class JobStore{
     private _jobs : BehaviorSubject<CalendarJob[]> = new BehaviorSubject([]);
 
+    public errorMessage: string;
+
+    public hasError: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    
+    public isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
     public readonly jobs : Observable<CalendarJob[]> = this._jobs.asObservable();
 
     constructor(private jobService: JobService){
     }
 
-    getJobs(){
-        this.jobService.getJobs()
-            .subscribe( result => this._jobs.next(result));
+    public getJobs(){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        this.jobService.getJobs().subscribe( result => {
+            this._jobs.next(result);
+            this.isLoading.next(false);
+        }, error => {
+            this.isLoading.next(false);            
+            this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
+            this.hasError.next(true);
+        });
     }
 
-    addJob(job: AddJobModel){
+    public addJob(addJobModel: AddJobModel){
+        var obs = this.jobService.addJob(addJobModel);
 
-        let obs = this.jobService.addJob(job);
-
-        obs.subscribe(
-            result => {
-                let jobs = this._jobs.getValue();
-                jobs.push(result);
-                
-                this._jobs.next( jobs );
-            });
+        obs.subscribe( response => { 
+            this.getJobs();
+        }, error => {
+        });
 
         return obs;
     }
 
-    deleteWorker(jobId: string){
+    public deleteJob(jobId: string){
         var obs = this.jobService.deleteJob(jobId);
 
         obs.subscribe( response => {
             this.getJobs();
+        }, error => {
         })
         
         return obs;
     }
 
-    saveNotes( jobId: string, notes: string){       
+    public saveNotes( jobId: string, notes: string){       
         return this.jobService.saveNotes(jobId, new SaveNotesRequestModel(notes));
     }
 }

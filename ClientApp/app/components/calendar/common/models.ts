@@ -1,4 +1,5 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import {AddWorkerOption}  from '../../../models/shared/calendar-options';
 
 export class MonthView{
     constructor(public header: CalendarDay[],
@@ -113,9 +114,15 @@ export class CalendarJob implements IDisplayModel{
     constructor(public id: string,
                 public number: number,
                 public name: string,
-                public type: string,
                 public notes: string){
         this.display = `${this.number} ${name}`;
+    }
+}
+
+export class JobStartAndEndDate {
+    constructor(
+       public startDate: Date,
+       public endDate: Date){         
     }
 }
 
@@ -144,27 +151,22 @@ export class AddWorkerModel {
 }
 
 export class AddJobModel {
-
-    public endDate?: Date = null;
-    public durationDays?: Number = null;
-    public durationMonths?: Number = null;
-
-    public workerIds: string[] = [];
-    public notes: string = '';
-    
-    constructor(public number: Number,
-                public name: string,
-                public type: string,
-                public startDate: Date)
-                {
-                }
+    constructor(
+        public number: string,
+        public name: string,
+        public notes: string,        
+        public startDate: Date,
+        public endDate: Date,
+    ){
+    }
 }
 
 export class MoveWorkerRequestModel {
     constructor(
         public idWorker: string,
         public idJob: string,
-        public date: Date
+        public date: Date,
+        public addWorkerOption: AddWorkerOption = AddWorkerOption.SingleDay
     ){
     }
 }

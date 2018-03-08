@@ -62,6 +62,17 @@ export class WorkerComponent implements OnInit {
     }
 
     public editWorker(worker: Worker){
+        this.showAddWorkerForm(
+            true,
+            worker.id,            
+            worker.firstName,
+            worker.lastName,
+            worker.email,
+            worker.phone
+        );
+    }
+
+    public viewWorker(worker: Worker){
         this.router.navigate(['worker', worker.id]);
     }
 

@@ -7,7 +7,9 @@
         <ac-week-cell-job *ngFor="let job of dayView.jobs" 
             [calendarJob]="job" 
             [calendarDay]="dayView.calendarDay" 
-            (workerAdded)="onWorkerAddedToJob($event)">
+            (workerAdded)="onWorkerAddedToJob($event)"
+            (deleteJobRequested)="onDeleteJobRequested($event)"
+            (editJobRequested)="onEditJobRequested($event)">
         </ac-week-cell-job>
         <div *ngIf="allowAdd" class="add-job-button-container">
             <a mat-mini-fab color="accent" matTooltip="Add Job" matTooltipPosition="before" (click)="showAddJob()">

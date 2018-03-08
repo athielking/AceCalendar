@@ -32,7 +32,7 @@ import { AddTimeOffComponent } from './components/worker/add-time-off.component'
 import { AddWorkerToComponent } from './components/worker/add-worker-to.component';
 
 import { JobComponent } from './components/job/job.component';
-import { AddJobComponent } from './components/job/addJob.component';
+import { AddJobToWeekViewComponent } from "./components/job/addJobToWeekViewComponent";
 import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
@@ -80,7 +80,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
 
     //Job CRUD
     JobComponent,
-    AddJobComponent,
+    AddJobToWeekViewComponent,
     JobNotesComponent,
     JobListComponent,
 
@@ -98,7 +98,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
   ],
   entryComponents: [
     AddWorkerComponent,
-    AddJobComponent,
+    AddJobToWeekViewComponent,
     JobNotesComponent,
     AddTimeOffComponent,
     AddWorkerToComponent,

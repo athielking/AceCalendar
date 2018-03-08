@@ -2,6 +2,7 @@ import { Component, Input, Inject } from '@angular/core'
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { TdLoadingService, TdDialogService } from '@covalent/core'
 
+import { AddWorkerOption } from '../../../models/shared/calendar-options';
 import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerListAdded } from '../../../events/worker.events';
@@ -33,7 +34,7 @@ export class DayViewComponent {
     }
 
     public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
-        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob ).subscribe(result => {     
+        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
             this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
         }, error => {
             this.dialogService.openAlert({
@@ -45,7 +46,7 @@ export class DayViewComponent {
 
     public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
 
-        this.calendarStore.moveWorkerToJob( event.worker, this.dayView.calendarDay.date, event.calendarJob ).subscribe(result => {     
+        this.calendarStore.moveWorkerToJob( event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
             this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
         }, error => {
             this.dialogService.openAlert({

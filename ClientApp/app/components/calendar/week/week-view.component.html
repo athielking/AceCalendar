@@ -10,6 +10,16 @@
         <mat-icon>chevron_right</mat-icon>
     </button>
 
+    <div style="position: absolute; right: 0; margin-right: 30px;margin-top:8px; font-size: 14px"> 
+        <mat-form-field> 
+            <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
+                <mat-option value=0>Single Day</mat-option>
+                <mat-option value=1>All Days</mat-option>
+                <mat-option value=2>All Days when available</mat-option>
+            </mat-select>
+        </mat-form-field>           
+    </div>
+
 </mat-toolbar>
 
 <td-message *ngIf="showErrorMessage" label="Error Getting Week of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
@@ -28,7 +38,9 @@
             *ngFor="let dayView of weekData" 
             [dayView]="dayView"
             [isPast]="dayView.calendarDay.isPast"
-            (workerAddedToJob)="onWorkerAddedJob($event)">
+            (workerAddedToJob)="onWorkerAddedJob($event)"            
+            (deleteJobRequested)="onDeleteJobRequested($event)"
+            (editJobRequested)="onEditJobRequested($event)">
         </ac-job-list>
 
         <ac-worker-list

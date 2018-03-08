@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CalendarJob, AddJobModel, MoveWorkerRequestModel, SaveNotesRequestModel } from '../components/calendar/common/models';
+import { CalendarJob, AddJobModel, MoveWorkerRequestModel, SaveNotesRequestModel, JobStartAndEndDate } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
 import * as isSameDay from 'date-fns/is_same_day';
 
@@ -33,7 +33,6 @@ export class JobService {
                         item.id,
                         item.number,
                         item.name,
-                        item.type,
                         item.notes
                     );
                 })
@@ -53,7 +52,6 @@ export class JobService {
                             value.id,
                             value.number,
                             value.name,
-                            item.type,
                             item.notes
                         );
                     })
@@ -73,17 +71,19 @@ export class JobService {
                         item.id,
                         item.number,
                         item.name,
-                        item.type,
                         item.notes
                     );
                 })
             });
     }
 
-    public addJob(job: AddJobModel) {
-        return this.httpClient.post<CalendarJob>(this.serviceUri, job).shareReplay();
+    public addJob(addJobModel: AddJobModel) {
+        return this.httpClient.post(this.serviceUri, addJobModel).shareReplay();
     }
 
+    public editJob( jobId: string, addJobModel: AddJobModel){
+        return this.httpClient.put( this.serviceUri + `/${jobId}`, addJobModel ).shareReplay();
+    }
     public deleteJob( jobId: string ){
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
     }
@@ -102,5 +102,15 @@ export class JobService {
 
     public saveNotes( jobId: string, saveNotesRequestModel: SaveNotesRequestModel){
         return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, saveNotesRequestModel ).shareReplay();
+    }
+
+    public getJobStartAndEndDate(jobId: string) {
+        return this.httpClient.get(this.serviceUri+`/getJobStartAndEndDate?jobId=${jobId}`)
+            .map(response => {
+                return new JobStartAndEndDate(
+                    new Date(response["data"].startDate),
+                    new Date(response["data"].endDate)
+                );
+            });
     }
 }

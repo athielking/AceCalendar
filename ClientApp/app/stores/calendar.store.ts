@@ -5,15 +5,18 @@ import * as startOfWeek from 'date-fns/start_of_week';
 import * as endOfWeek from 'date-fns/end_of_week';
 import * as isSameWeek from 'date-fns/is_same_week';
 
+import { AddWorkerOption } from '../models/shared/calendar-options';
 import { environment } from '../../environments/environment';
 import { CalendarService } from '../services/calendar.service';
-import { CalendarDay, CalendarJob, DayView, Worker, MoveWorkerRequestModel } from '../components/calendar/common/models';
+import { CalendarDay, CalendarJob, DayView, Worker, MoveWorkerRequestModel, AddJobModel } from '../components/calendar/common/models';
 import { isSameDay, subDays } from 'date-fns';
 import { JobService } from '../services/job.service';
 
 @Injectable()
 export class CalendarStore {
     
+    private _lastViewDate: Date;
+
     private _monthData: BehaviorSubject<List<DayView>> = new BehaviorSubject(List([]));
     
     private _weekData: BehaviorSubject<List<DayView>> = new BehaviorSubject(List([]));
@@ -38,8 +41,47 @@ export class CalendarStore {
 
     public readonly dayData: Observable<Observable<DayView>> = this._dayData.asObservable();
 
-    constructor(private calendarService: CalendarService,
-                private jobService: JobService) {
+    constructor(
+        private calendarService: CalendarService,
+        private jobService: JobService
+    ) {
+    }
+
+    public addJobToWeekView(addJobModel: AddJobModel){
+        var obs = this.jobService.addJob(addJobModel);
+
+        obs.subscribe( response => { 
+            this.getDataForWeek(this._lastViewDate);
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public editJob(jobId: string, addJobModel: AddJobModel){
+        var obs = this.jobService.editJob(jobId, addJobModel);
+
+        obs.subscribe( response => { 
+            this.getDataForWeek(this._lastViewDate);
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public deleteJob(jobId: string){
+        var obs = this.jobService.deleteJob(jobId);
+
+        obs.subscribe( response => {
+            this.getDataForWeek(this._lastViewDate);
+        }, error => {
+        })
+        
+        return obs;
+    }
+
+    public getJobStartAndEndDate(jobId: string){
+        return this.jobService.getJobStartAndEndDate(jobId);
     }
 
     public getDataForMonth(date: Date) {
@@ -57,6 +99,8 @@ export class CalendarStore {
     }
 
     public getDataForWeek(date: Date) {
+        this._lastViewDate = date;
+
         this.isWeekLoading.next(true);
         this.hasWeekError.next(false);
 
@@ -71,11 +115,19 @@ export class CalendarStore {
     }
 
     public getDataForDay(date: Date) {
-
     }
 
-    public moveWorkerToJob(worker: Worker, date: Date, toJob: CalendarJob ){
-        return this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date));
+    public moveWorkerToJob(worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
+        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date, workerAddOption));
+
+        if( workerAddOption != AddWorkerOption.SingleDay ) {
+            obs.subscribe( response => {
+                this.getDataForWeek(this._lastViewDate);
+            }, error => {
+            })
+        }
+
+        return obs;
     }
 
     public moveWorkerToAvailable(worker: Worker, date: Date  ){

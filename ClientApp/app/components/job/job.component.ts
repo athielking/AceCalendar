@@ -45,17 +45,17 @@ export class JobComponent implements OnInit{
       }
     
     showAddJobForm(): void {
-        let dialogRef = this.dialog.open(AddJobComponent, {
-            disableClose: true
-          });
+        // let dialogRef = this.dialog.open(AddJobComponent, {
+        //     disableClose: true
+        //   });
       
-          dialogRef.afterClosed().subscribe(result => {
-            //this.load();
-          });
+        //   dialogRef.afterClosed().subscribe(result => {
+        //     //this.load();
+        //   });
     }
 
     delete(jobId: string){
-        this.jobStore.deleteWorker(jobId)
+        this.jobStore.deleteJob(jobId)
             .subscribe(result => {
                 console.log(`Job Deleted: ${jobId}`)
             });

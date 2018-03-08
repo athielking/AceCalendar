@@ -1,0 +1,37 @@
+import { Component, Inject } from '@angular/core';
+import { AddJobComponent } from './addJob.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { TdDialogService } from '@covalent/core';
+import { TdLoadingService } from '@covalent/core';
+import { CalendarStore } from '../../stores/calendar.store';
+import { Observable } from 'rxjs/Observable';
+import { AddJobModel } from '../calendar/common/models';
+
+@Component({
+    selector: 'ac-addJobToWeekView',
+    templateUrl: './addJob.component.html'
+})
+export class AddJobToWeekViewComponent extends AddJobComponent {
+    constructor(
+        private calendarStore: CalendarStore,
+        dialogRef: MatDialogRef<AddJobComponent>,
+        dialogService: TdDialogService,
+        loadingService: TdLoadingService,
+        @Inject(MAT_DIALOG_DATA) data: any
+    ){ 
+        super(
+            dialogRef,
+            dialogService,
+            loadingService,
+            data
+        );
+    }
+
+    protected AddJobThroughStore(addJobModel: AddJobModel): Observable<object> {
+        return this.calendarStore.addJobToWeekView(addJobModel);
+    }
+
+    protected EditJobThroughStore(editJobId: string, addJobModel: AddJobModel): Observable<object> {
+        return this.calendarStore.editJob(editJobId, addJobModel);
+    }
+}
