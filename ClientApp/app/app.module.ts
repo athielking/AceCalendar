@@ -47,6 +47,7 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 
 import { LoginComponent } from "./components/login/login.component";
 
+import { JwtHelper } from './services/jwtHelper.service';
 import { StorageService } from './services/storage.service';
 import { JobService } from './services/job.service';
 import { CalendarService } from './services/calendar.service';
@@ -59,8 +60,7 @@ import { JobStore } from './stores/job.store';
 
 
 import { AuthInterceptor } from './tools/authInterceptor';
-
-
+import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 
 @NgModule({
   declarations: [
@@ -125,9 +125,9 @@ import { AuthInterceptor } from './tools/authInterceptor';
     RouterModule.forRoot([
       { path: '', redirectTo: 'calendar', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent },
-      { path: 'worker', component: WorkerComponent }, 
-      { path: 'worker/:id', component: WorkerDetailComponent},    
-      { path: 'job', component: JobComponent }, 
+      { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor] }, 
+      { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor]},    
+      { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor] }, 
       { path: "**", redirectTo: 'calendar' }
     ])
   ],
@@ -138,6 +138,9 @@ import { AuthInterceptor } from './tools/authInterceptor';
     AuthService,
     CalendarService,
     StorageService,
+    JwtHelper,
+    AuthGuardEditor,
+    AuthGuardAdmin,
     //Stores
     CalendarStore,
     WorkerStore,

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { LoginModel } from '../components/login/loginModel';
+import { JwtHelper } from './jwtHelper.service';
+import { IdentityClaimTypes } from '../tools/identityClaimTypes';
 
 export const TOKEN_NAME: string = 'jwt_token';
 export const TOKEN_EXPIRATION: string = 'jwt_token_expiration';
@@ -13,7 +15,8 @@ export class AuthService {
      
     private serviceUri: string;
     
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient,
+                private jwtHelper: JwtHelper) {
         this.serviceUri = `${environment.webServiceUrl}/api/auth`
     }
 
@@ -66,6 +69,21 @@ export class AuthService {
                     onFailure();
                 }
             );
+    }
+
+    public isReadonly(){
+        let token = this.jwtHelper.decode();
+        return token[IdentityClaimTypes.Role] == 'Readonly';
+    }
+
+    public isEditor(){
+        let token = this.jwtHelper.decode();
+        return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User';
+    }
+
+    public isAdmin(){
+        let token = this.jwtHelper.decode();
+        return token[IdentityClaimTypes.Role] == 'Admin';
     }
 
     private clearToken(): void {

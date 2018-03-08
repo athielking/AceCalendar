@@ -4,7 +4,8 @@ import { StorageKeys } from './common/calendar-tools';
 import { equalSegments } from '@angular/router/src/url_tree';
 import { MatTabChangeEvent } from '@angular/material';
 import { WeekViewComponent } from './week/week-view.component';
-import {CalendarViews} from '../calendar/common/models';
+import { CalendarViews } from '../calendar/common/models';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -15,9 +16,12 @@ export class CalendarComponent implements OnInit {
     @ViewChild(WeekViewComponent) weekView: WeekViewComponent;
     @ViewChild(MonthViewComponent) monthView: MonthViewComponent;
 
-    public viewDate : Date;
-    
+    public viewDate : Date;    
     public selectedIndex: number = 0;
+
+    constructor(private authService: AuthService){
+
+    }
 
     public onChangeViewDate( newDate: Date ){
         this.viewDate = newDate;

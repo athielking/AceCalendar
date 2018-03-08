@@ -8,7 +8,7 @@
 
             <!-- Main Toolbar -->
             <div td-toolbar-content layout="row" layout-align="start center" flex>
-                <button mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
+                <button *ngIf="authService.isEditor()" mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
                     <mat-icon>menu</mat-icon>
                 </button>
                 <mat-icon class="mat-icon-logo"></mat-icon>
@@ -22,7 +22,7 @@
                     </button>
                 </mat-menu>               
             </div>       
-            <td-layout-manage-list [opened]="menuOpen" mode="side">
+            <td-layout-manage-list [opened]="menuOpen && authService.isEditor()" mode="side">
                 <!-- Side Nav -->
                 <mat-nav-list td-sidenav-content>
                     <a mat-list-item routerLink="/calendar">
@@ -36,11 +36,12 @@
                 <!-- View Outlet -->
                 <router-outlet></router-outlet>
             </td-layout-manage-list>
-        </td-layout-nav>
-        <!-- <td-layout-footer>
+             <td-layout-footer>
             <div layout="row" layout-align="start center">
                 <span class="mat-caption">Copyright &copy; 2017 501 Software. All rights reserved</span>
             </div>
-        </td-layout-footer> -->
+        </td-layout-footer>
+        </td-layout-nav>
+        
     </td-layout>
 </ng-template>
