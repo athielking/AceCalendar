@@ -197,7 +197,7 @@ export class WeekViewComponent implements OnInit {
         this.changeViewDate.emit(date);
     }
 
-    private toggleShowLoading(show:boolean) {
+    protected toggleShowLoading(show:boolean) {
         if (show) {
             this.loadingService.register('showWeekViewLoading');
         } 

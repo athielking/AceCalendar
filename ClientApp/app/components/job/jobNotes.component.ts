@@ -13,6 +13,7 @@ import { JobStore } from '../../stores/job.store';
 export class JobNotesComponent {
 
     editing : boolean = false;
+    allowEdit: boolean = true;
     job: CalendarJob;
 
     constructor(
@@ -22,6 +23,7 @@ export class JobNotesComponent {
         private dialogService: TdDialogService 
     ){ 
         this.job = <CalendarJob>data.model;
+        this.allowEdit = data.allowEdit;
 
         window.setTimeout(()=>{
             if(!this.editing)

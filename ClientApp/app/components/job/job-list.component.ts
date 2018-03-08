@@ -15,6 +15,7 @@ export class JobListComponent {
     @Input() allowAdd: boolean = true;
     @Input() showHeader: boolean = true;
     @Input() isPast: boolean = false;
+    @Input() isReadonly: boolean = false;
 
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();

@@ -2,7 +2,7 @@
     <div flex>
         <h1 class="mat-dialog-title">Notes</h1>
     </div>
-    <button mat-icon-button matTooltip="Edit Notes" (click)="toggleEdit()" style="margin-top:8px">
+    <button *ngIf="allowEdit" mat-icon-button matTooltip="Edit Notes" (click)="toggleEdit()" style="margin-top:8px">
         <mat-icon>create</mat-icon>
     </button>
 </div>

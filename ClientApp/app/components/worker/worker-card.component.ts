@@ -10,4 +10,5 @@ import {Worker} from '../calendar/common/models'
 export class WorkerCardComponent{
     @Input() worker: Worker;
     @Input() scope: string;
+    @Input() isReadonly: boolean = false;
 }

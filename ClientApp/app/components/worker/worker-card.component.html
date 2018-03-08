@@ -1,3 +1,9 @@
-<div class="worker-card" draggable [dragData]="worker" [dragScope]="scope">
+<div *ngIf="!isReadonly" class="worker-card" draggable [dragData]="worker" [dragScope]="scope">
+    <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
+</div>
+
+<!-- READONLY TEMPLATE -->
+
+<div *ngIf="isReadonly" class="worker-card">
     <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
 </div>

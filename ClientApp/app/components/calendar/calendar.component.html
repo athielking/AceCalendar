@@ -10,4 +10,8 @@
         </ac-week-view>
     </mat-tab>
 
+    <mat-tab label="Week View (Readonly)">
+        <ac-week-view-readonly (changeViewDate)="onChangeViewDate($event)">
+        </ac-week-view-readonly>
+    </mat-tab>
 </mat-tab-group>

@@ -1,4 +1,4 @@
-<div class="cal-card"
+<div *ngIf="!isReadonly" class="cal-card"
     [class.is-past]="isPast">
     <div class="cal-card-content">
         <div *ngIf="showHeader" class="cal-card-header" style="padding-top: 0px">
@@ -17,5 +17,21 @@
             </a>
         </div>
     </div>
+</div>
 
+<!-- READONLY TEMPLATE -->
+
+<div *ngIf="isReadonly" class="cal-card"
+    [class.is-past]="isPast">
+    <div class="cal-card-content">
+        <div *ngIf="showHeader" class="cal-card-header" style="padding-top: 0px">
+            Jobs
+        </div>
+        <ac-week-cell-job *ngFor="let job of dayView.jobs" 
+            [calendarJob]="job" 
+            [calendarDay]="dayView.calendarDay" 
+            [isReadonly]="isReadonly"
+            (workerAdded)="onWorkerAddedToJob($event)">
+        </ac-week-cell-job>
+    </div>
 </div>

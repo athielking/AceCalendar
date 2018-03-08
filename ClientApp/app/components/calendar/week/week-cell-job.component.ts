@@ -11,6 +11,7 @@ import { JobNotesComponent } from '../../job/jobNotes.component';
 export class WeekCellJobComponent {
     @Input() calendarJob: CalendarJob;
     @Input() calendarDay: CalendarDay;
+    @Input() isReadonly: boolean = false;
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
@@ -28,7 +29,13 @@ export class WeekCellJobComponent {
     }
 
     public showNotes() {
-        var ref = this.snackBar.openFromComponent(JobNotesComponent, { data: { model: this.calendarJob } });
+        var ref = this.snackBar.openFromComponent(JobNotesComponent, 
+            { 
+                data: { 
+                    model: this.calendarJob, 
+                    allowEdit: !this.isReadonly 
+                } 
+        });
     }
 
     public editJob(job: CalendarJob) {

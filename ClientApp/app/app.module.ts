@@ -41,6 +41,7 @@ import { MonthDisplayOptionsComponent } from './components/calendar/month/month-
 
 import { DayViewComponent } from "./components/calendar/day/day-view.component";
 import { WeekViewComponent } from "./components/calendar/week/week-view.component";
+import { WeekViewReadonlyComponent } from "./components/calendar/week/readonly/week-view-readonly.component";
 import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
 import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.component";
 
@@ -91,6 +92,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 
     //Week View
     WeekViewComponent,
+    WeekViewReadonlyComponent,
     WeekCellComponent,
     WeekCellJobComponent,
     DayViewComponent,
