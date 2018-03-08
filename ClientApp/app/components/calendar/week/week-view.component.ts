@@ -44,7 +44,7 @@ export class WeekViewComponent implements OnInit {
     constructor(
         public calendarStore: CalendarStore,
         private storageService: StorageService,
-        private loadingService: TdLoadingService,
+        protected loadingService: TdLoadingService,
         private dialogService: TdDialogService,
         private dialog: MatDialog ) {
     }

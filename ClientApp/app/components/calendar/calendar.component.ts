@@ -55,20 +55,24 @@ export class CalendarComponent implements OnInit {
     }
 
     private updateCurrentTab(){
-        switch(this.selectedIndex) {
-            case 0: {
-                this.monthView.updateViewDate(this.viewDate);
-                break;
-            } 
-            case 1: {
-                this.weekView.updateViewDate(this.viewDate);
-                break;
+        
+            switch(this.selectedIndex) {
+                case 0: {
+                    this.monthView.updateViewDate(this.viewDate);
+                    break;
+                } 
+                case 1: {
+                    if(this.weekView)
+                        this.weekView.updateViewDate(this.viewDate);
+                    else if( this.weekViewReadonly )
+                        this.weekViewReadonly.updateViewDate(this.viewDate);
+                    break;
+                }
+                case 2: {
+                    this.weekViewReadonly.updateViewDate(this.viewDate);
+                    break;
+                }
             }
-            case 2: {
-                this.weekViewReadonly.updateViewDate(this.viewDate);
-                break;
-            }
-        }
 
         this.storeSelectedTab();
     }
