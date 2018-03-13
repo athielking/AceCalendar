@@ -1,51 +1,65 @@
-<div layout="row">
-    <div class="day-title">{{dayView.calendarDay.date | date: 'EEEE'}}</div>
-    <div class="day-subtitle">{{dayView.calendarDay.date | date: 'MM/dd/yyyy'}}</div>
-</div>
-<div class="day-content">
-    <ac-worker-list 
-        style="grid-column: 1; grid-row: 2"
-        [headerText]="'Time Off'"
-        [workers]="dayView.timeOffWorkers" 
-        [calendarDay]="dayView.calendarDay"
-        [isPast]="true"
-        (workerAdded)="onWorkerAddedOff($event)">
-    </ac-worker-list>
 
-    <ac-worker-list 
-        style="grid-column: 1; grid-row: 1"
-        [headerText]="'Available Workers'"
-        [workers]="dayView.availableWorkers"
-        [calendarDay]="dayView.calendarDay"
-        [isPast]="true"
-        (workerAdded)="onWorkerAddedAvailable($event)">
-    </ac-worker-list>
-
-    <div class="day-jobs-container">
-        <div class="cal-card is-past">
-            <div class="cal-card-header" style="padding-top: 8px; text-align: center;">
-                Jobs
-            </div>
-            <div class="day-jobs-grid">
-                <ac-week-cell-job *ngFor="let job of dayView.jobs"
-                    [calendarJob]="job" 
-                    [calendarDay]="dayView.calendarDay" 
-                    (workerAdded)="onWorkerAddedToJob($event)">
-                </ac-week-cell-job>
+    <div class="day-view-container">
+        <div layout="row">
+            <div class="day-title">{{dayView.calendarDay.date | date: 'EEEE'}}</div>
+            <div class="day-subtitle">{{dayView.calendarDay.date | date: 'MM/dd/yyyy'}}</div>
+        </div>
+        
+        <div *ngIf="isLoading">
+            <div *tdLoading="'showDayViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';" style="height:500px">     
             </div>
         </div>
-        <!-- <ac-job-list 
-            [dayView]="dayView" 
-            [allowAdd]="false"
-            [showHeader]="false" 
-            [isPast]="true" 
-            (workerAddedToJob)="onWorkerAddedJob($event)">
-        </ac-job-list> -->
-    </div>
-</div>
-<div class="mat-dialog-actions">
-    <span flex></span>
-    <button mat-button (click)="onCloseClick()">
-        Close
-    </button>
+
+        <td-message *ngIf="showErrorMessage" label="Error Getting Day Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+
+        <div class="day-content" *ngIf="!isLoading">
+        
+            <ac-worker-list 
+                style="grid-column: 1; grid-row: 2"
+                [headerText]="'Time Off'"
+                [workers]="dayView.timeOffWorkers" 
+                [calendarDay]="dayView.calendarDay"
+                [isPast]="true"
+                (workerAdded)="onWorkerAddedOff($event)">
+            </ac-worker-list>
+
+            <ac-worker-list 
+                style="grid-column: 1; grid-row: 1"
+                [headerText]="'Available Workers'"
+                [workers]="dayView.availableWorkers"
+                [calendarDay]="dayView.calendarDay"
+                [isPast]="true"
+                (workerAdded)="onWorkerAddedAvailable($event)">
+            </ac-worker-list>
+
+            <div class="day-jobs-container">
+                <div class="cal-card is-past">
+                    <div class="cal-card-header" style="padding-top: 8px; text-align: center;">
+                        Jobs
+                    </div>
+                    <div class="day-jobs-grid">
+                        <ac-week-cell-job *ngFor="let job of dayView.jobs"
+                            [calendarJob]="job" 
+                            [calendarDay]="dayView.calendarDay" 
+                            (workerAdded)="onWorkerAddedToJob($event)"
+                            (deleteJobRequested)="onDeleteJobRequested($event)"
+                            (editJobRequested)="onEditJobRequested($event)">
+                        </ac-week-cell-job>
+                    </div>
+                    <div class="add-job-button-container">
+                        <a mat-mini-fab color="accent" matTooltip="Add Job" matTooltipPosition="before" (click)="showAddJob()">
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>             
+
+        <div class="mat-dialog-actions" style="margin-bottom: -12px">
+            <span flex></span>
+            <button mat-button (click)="onCloseClick()">
+                Close
+            </button>
+        </div>
+    
 </div>

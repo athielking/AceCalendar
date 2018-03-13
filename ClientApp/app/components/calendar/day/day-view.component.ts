@@ -1,5 +1,5 @@
-import { Component, Input, Inject } from '@angular/core'
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core'
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import { TdLoadingService, TdDialogService } from '@covalent/core'
 
 import { AddWorkerOption } from '../../../models/shared/calendar-options';
@@ -7,44 +7,74 @@ import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
-import { WorkerAddedJobEvent } from '../../calendar/week/week-cell-job.component';
+import { WorkerAddedJobEvent, EditJobRequestedEvent, DeleteJobRequestedEvent } from '../../calendar/week/week-cell-job.component';
+import { AddJobToDayViewComponent } from '../../job/addJobToDayViewComponent';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: "ac-day-view",
     templateUrl: "./day-view.component.html",
     styleUrls: ["./day-view.component.scss", "../common/calendar-card.scss"]
 })
-export class DayViewComponent {
-    dayView: DayView;
+export class DayViewComponent implements OnInit, OnDestroy {
+    
+    private viewDate: Date;
+    
+    private isDayLoadingSubscription: Subscription;
 
-    constructor(private calendarStore: CalendarStore,
-                private dialogRef: MatDialogRef<DayViewComponent>,
-                private dialogService: TdDialogService,
-                @Inject(MAT_DIALOG_DATA) public data: any ){
+    private hasDayErrorSubscription: Subscription;
 
-        this.dayView = data.dayView;
+    private dayDataSubscription: Subscription;
+    
+    private dataUpdated: Boolean;
+
+    public dayView: DayView;
+    
+    public showErrorMessage: boolean;
+    
+    public isLoading: boolean;
+    
+    public errorMessage: string;
+
+    constructor(
+        private calendarStore: CalendarStore,
+        private dialogRef: MatDialogRef<DayViewComponent>,
+        private dialogService: TdDialogService,
+        private dialog: MatDialog,
+        private loadingService: TdLoadingService,
+        @Inject(MAT_DIALOG_DATA) public data: any ){
+
+        this.viewDate = data.viewDate;
+
+        this.calendarStore.getDataForDay(this.viewDate);
     }
 
-    ngOnInit(){
-        // this.calendarStore.calendarData.subscribe( result => {
-        //     this._dayView = result.get(this.viewDate);
-        // })
-
-        // this.calendarStore.getDataForDay(this.viewDate);
-    }
-
-    public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
-        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
-            this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
-        }, error => {
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Worker to Job'
-            });
+    public ngOnInit() {
+        this.isDayLoadingSubscription = this.calendarStore.isDayLoading.subscribe( result => {
+            this.isLoading = result;
+            this.toggleShowLoading(result); 
         });
+
+        this.hasDayErrorSubscription = this.calendarStore.hasDayError.subscribe( result => {
+            this.showErrorMessage = result;
+            this.errorMessage = this.calendarStore.dayErrorMessage;
+        });
+
+        this.dayDataSubscription = this.calendarStore.dayData.subscribe( result => {
+            this.dayView = result;
+        })
+    }
+
+    public ngOnDestroy() {
+        this.isDayLoadingSubscription.unsubscribe();
+
+        this.hasDayErrorSubscription.unsubscribe();
+
+        this.dayDataSubscription.unsubscribe();
     }
 
     public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
+        this.dataUpdated = true;
 
         this.calendarStore.moveWorkerToJob( event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
             this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
@@ -57,6 +87,8 @@ export class DayViewComponent {
     }
 
     public onWorkerAddedAvailable(event: WorkerListAdded){
+        this.dataUpdated = true;
+        
         this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result => {      
             this.dayView.makeWorkerAvailable(event.worker)                  
         }, error => {
@@ -68,6 +100,8 @@ export class DayViewComponent {
     }
 
     public onWorkerAddedOff(event: WorkerListAdded){
+        this.dataUpdated = true;
+        
         this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result => {      
            this.dayView.makeWorkerOff(event.worker);            
         }, error => {
@@ -78,11 +112,81 @@ export class DayViewComponent {
         });
     }
 
-    public onCancelClick(){
-        this.dialogRef.close();
+    public onCloseClick(){
+        this.dialogRef.close( this.dataUpdated );
     }
 
-    public onCloseClick(){
-        this.dialogRef.close();
+    public showAddJob() {
+        this.dataUpdated = true;
+
+        let dialogRef = this.dialog.open(AddJobToDayViewComponent, {
+            disableClose: true,
+            data: {
+                isEdit: false,
+                editJobId: '',
+                jobNumber: '',
+                jobName: '',
+                notes: '',
+                startDate: this.dayView.calendarDay.date,
+                endDate: null       
+            }
+        });
     }
+
+    public onDeleteJobRequested(event: DeleteJobRequestedEvent ) {
+        this.dataUpdated = true;
+        
+        this.dialogService.openConfirm({
+            message: 'Are you sure you wish to delete this Job?',
+            title: 'Confirm Delete'
+        }).afterClosed().subscribe((accept: boolean) => {
+            if (accept) {
+                this.toggleShowLoading(true);
+
+                this.calendarStore.deleteJobFromDayView(event.jobId)
+                    .subscribe(result => {
+                        this.toggleShowLoading(false);                        
+                    }, error => {
+                        this.toggleShowLoading(false);
+                        this.dialogService.openAlert({
+                            message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                            title: 'Unable to Delete Job'
+                        });
+                    });
+            }
+        });
+    }
+    
+    public onEditJobRequested(event: EditJobRequestedEvent) {
+        this.dataUpdated = true;
+
+        this.calendarStore.getJobStartAndEndDate( event.job.id).subscribe(result => { 
+            let dialogRef = this.dialog.open(AddJobToDayViewComponent, {
+                disableClose: true,
+                data: {
+                    isEdit: true,
+                    editJobId: event.job.id,
+                    jobNumber: event.job.number,
+                    jobName: event.job.name,
+                    notes: event.job.notes,
+                    startDate: result.startDate,
+                    endDate: result.endDate       
+                }
+            });
+        }, error => {
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Get Job Start and End Date'
+            });
+        });
+    }
+    
+    private toggleShowLoading(show:boolean) {
+        if (show) {
+            this.loadingService.register('showDayViewLoading');
+        } 
+        else {
+            this.loadingService.resolve('showDayViewLoading');
+        }
+      }
 }

@@ -21,7 +21,7 @@ export class CalendarStore {
     
     private _weekData: BehaviorSubject<List<DayView>> = new BehaviorSubject(List([]));
 
-    private _dayData: BehaviorSubject<Observable<DayView>> = new BehaviorSubject(new Observable<DayView>());
+    private _dayData: BehaviorSubject<DayView> = new BehaviorSubject(new DayView(new CalendarDay(new Date(), false, false, false, false, false), [], [], []));
 
     public monthErrorMessage: string;
 
@@ -35,11 +35,17 @@ export class CalendarStore {
     
     public isWeekLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+    public dayErrorMessage: string;
+
+    public hasDayError: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    
+    public isDayLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
     public readonly monthData: Observable<List<DayView>> = this._monthData.asObservable();
 
     public readonly weekData: Observable<List<DayView>> = this._weekData.asObservable();
 
-    public readonly dayData: Observable<Observable<DayView>> = this._dayData.asObservable();
+    public readonly dayData: Observable<DayView> = this._dayData.asObservable();
 
     constructor(
         private calendarService: CalendarService,
@@ -58,22 +64,55 @@ export class CalendarStore {
         return obs;
     }
 
-    public editJob(jobId: string, addJobModel: AddJobModel){
-        var obs = this.jobService.editJob(jobId, addJobModel);
+    public addJobToDayView(addJobModel: AddJobModel){
+        var obs = this.jobService.addJob(addJobModel);
 
         obs.subscribe( response => { 
-            this.getDataForWeek(this._lastViewDate);
+            this.getDataForDay(this._lastViewDate);
         }, error => {
         });
 
         return obs;
     }
 
-    public deleteJob(jobId: string){
+    public editJobFromWeekView(jobId: string, addJobModel: AddJobModel){
+        var obs = this.jobService.editJob(jobId, addJobModel);
+
+        obs.subscribe( response => { 
+            this.getDataForWeek(this._lastViewDate);                    
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public editJobFromDayView(jobId: string, addJobModel: AddJobModel){
+        var obs = this.jobService.editJob(jobId, addJobModel);
+
+        obs.subscribe( response => { 
+            this.getDataForDay(this._lastViewDate);                    
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public deleteJobFromWeekView(jobId: string){
         var obs = this.jobService.deleteJob(jobId);
 
         obs.subscribe( response => {
             this.getDataForWeek(this._lastViewDate);
+        }, error => {
+        })
+        
+        return obs;
+    }
+
+    public deleteJobFromDayView(jobId: string){
+        var obs = this.jobService.deleteJob(jobId);
+
+        obs.subscribe( response => {
+            this.getDataForDay(this._lastViewDate);
         }, error => {
         })
         
@@ -85,6 +124,8 @@ export class CalendarStore {
     }
 
     public getDataForMonth(date: Date) {
+        this._lastViewDate = date;
+
         this.isMonthLoading.next(true);
         this.hasMonthError.next(false);
 
@@ -115,6 +156,19 @@ export class CalendarStore {
     }
 
     public getDataForDay(date: Date) {
+        this._lastViewDate = date;
+
+        this.isDayLoading.next(true);
+        this.hasWeekError.next(false);
+
+        this.calendarService.getDayData(date).subscribe(result => {
+            this._dayData.next(result[0]);
+            this.isDayLoading.next(false);
+        }, error => {
+            this.isDayLoading.next(false);            
+            this.dayErrorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
+            this.hasDayError.next(true);
+        });
     }
 
     public moveWorkerToJob(worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){

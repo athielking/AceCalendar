@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { TOKEN_NAME } from './auth.service';
+//import { TOKEN_NAME } from './auth.service';
 
 @Injectable()
 export class JwtHelper {
 
-    public getToken(){
-        return localStorage.getItem(TOKEN_NAME);
-    }
+    // public getToken(){
+    //     return localStorage.getItem(TOKEN_NAME);
+    // }
 
-    public decode( token: string = this.getToken() ): any{
+    public decode( token: string ): any{
         let split = token.split('.');
 
         if( split.length != 3 )

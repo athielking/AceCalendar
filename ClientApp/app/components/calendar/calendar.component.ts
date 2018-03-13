@@ -1,13 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { MonthViewComponent } from '../calendar/month/month-view.component'
 import { StorageKeys } from './common/calendar-tools';
-import { equalSegments } from '@angular/router/src/url_tree';
 import { MatTabChangeEvent } from '@angular/material';
 import { WeekViewComponent } from './week/week-view.component';
-import { WeekViewReadonlyComponent } from './week/readonly/week-view-readonly.component';
 import { CalendarViews } from '../calendar/common/models';
 import { AuthService } from '../../services/auth.service';
-
 
 @Component({
     selector: 'ac-calendar',
@@ -16,7 +13,6 @@ import { AuthService } from '../../services/auth.service';
 export class CalendarComponent implements OnInit {
     @ViewChild(WeekViewComponent) weekView: WeekViewComponent;
     @ViewChild(MonthViewComponent) monthView: MonthViewComponent;
-    @ViewChild(WeekViewReadonlyComponent) weekViewReadonly: WeekViewReadonlyComponent;
     
     public viewDate : Date;
     
@@ -62,14 +58,7 @@ export class CalendarComponent implements OnInit {
                     break;
                 } 
                 case 1: {
-                    if(this.weekView)
-                        this.weekView.updateViewDate(this.viewDate);
-                    else if( this.weekViewReadonly )
-                        this.weekViewReadonly.updateViewDate(this.viewDate);
-                    break;
-                }
-                case 2: {
-                    this.weekViewReadonly.updateViewDate(this.viewDate);
+                    this.weekView.updateViewDate(this.viewDate);
                     break;
                 }
             }

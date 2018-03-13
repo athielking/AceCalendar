@@ -101,7 +101,7 @@ export class WeekViewComponent implements OnInit {
             if (accept) {
                 this.toggleShowLoading(true);
 
-                this.calendarStore.deleteJob(event.jobId)
+                this.calendarStore.deleteJobFromWeekView(event.jobId)
                     .subscribe(result => {
                         this.toggleShowLoading(false);                        
                     }, error => {

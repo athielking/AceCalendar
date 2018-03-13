@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { AddJobModel } from '../calendar/common/models';
 
 @Component({
-    selector: 'ac-addJobToWeekView',
+    selector: 'ac-addJobToDayView',
     templateUrl: './addJob.component.html'
 })
-export class AddJobToWeekViewComponent extends AddJobComponent {
+export class AddJobToDayViewComponent extends AddJobComponent {
     constructor(
         private calendarStore: CalendarStore,
         dialogRef: MatDialogRef<AddJobComponent>,
@@ -28,10 +28,10 @@ export class AddJobToWeekViewComponent extends AddJobComponent {
     }
 
     protected AddJobThroughStore(addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.addJobToWeekView(addJobModel);
+        return this.calendarStore.addJobToDayView(addJobModel);
     }
 
     protected EditJobThroughStore(editJobId: string, addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.editJobFromWeekView(editJobId, addJobModel);
+        return this.calendarStore.editJobFromDayView(editJobId, addJobModel);
     }
 }

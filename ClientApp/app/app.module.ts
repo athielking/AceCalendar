@@ -21,6 +21,7 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
 
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { CalendarReadonlyComponent } from "./components/calendar/calendar-readonly.component";
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
@@ -33,6 +34,7 @@ import { AddWorkerToComponent } from './components/worker/add-worker-to.componen
 
 import { JobComponent } from './components/job/job.component';
 import { AddJobToWeekViewComponent } from "./components/job/addJobToWeekViewComponent";
+import { AddJobToDayViewComponent } from "./components/job/addJobToDayViewComponent";
 import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
@@ -68,6 +70,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AppComponent,
     NavMenuComponent,
     CalendarComponent,
+    CalendarReadonlyComponent,
     
     //Worker CRUD
     WorkerComponent,
@@ -82,6 +85,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     //Job CRUD
     JobComponent,
     AddJobToWeekViewComponent,
+    AddJobToDayViewComponent,    
     JobNotesComponent,
     JobListComponent,
 
@@ -101,6 +105,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
   entryComponents: [
     AddWorkerComponent,
     AddJobToWeekViewComponent,
+    AddJobToDayViewComponent,
     JobNotesComponent,
     AddTimeOffComponent,
     AddWorkerToComponent,
@@ -126,7 +131,8 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, CovalentChipsModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'calendar', pathMatch: 'full'},
-      { path: 'calendar', component: CalendarComponent },
+      { path: 'calendar', component: CalendarComponent, canActivate: [AuthGuardEditor] },
+      { path: 'calendar-readonly', component: CalendarReadonlyComponent },      
       { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor] }, 
       { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor]},    
       { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor] }, 

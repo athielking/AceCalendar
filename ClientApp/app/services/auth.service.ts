@@ -72,17 +72,17 @@ export class AuthService {
     }
 
     public isReadonly(){
-        let token = this.jwtHelper.decode();
+        let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Readonly';
     }
 
     public isEditor(){
-        let token = this.jwtHelper.decode();
+        let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User';
     }
 
     public isAdmin(){
-        let token = this.jwtHelper.decode();
+        let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin';
     }
 

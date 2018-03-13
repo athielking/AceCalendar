@@ -4,7 +4,7 @@
         <mat-icon>chevron_left</mat-icon>
     </button>
         
-    <span>{{viewDate | date: 'MMMM'}}</span>
+    <span>{{viewDate | date: 'MMMM y'}}</span>
     
     <button mat-icon-button (click)="viewDateForward()">
         <mat-icon>chevron_right</mat-icon>
@@ -17,7 +17,7 @@
     </div>
 </mat-toolbar>
 
-<div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+<div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';" style="min-height:300px">
     <td-message *ngIf="showErrorMessage" label="Error Getting Month of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
     
     <div class="month-grid" *ngIf="!showErrorMessage">

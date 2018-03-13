@@ -9,6 +9,7 @@ import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';
 import { AddWorkerToComponent } from '../../worker/add-worker-to.component';
 import { DayViewComponent } from '../day/day-view.component';
+import { CalendarStore } from '../../../stores/calendar.store';
 
 
 @Component({
@@ -27,9 +28,11 @@ import { DayViewComponent } from '../day/day-view.component';
     showAvailableWorkers: boolean;
     showOffWorkers: boolean;
 
-    constructor(private router: Router, 
-                private dialog: MatDialog,
-                private storageService: StorageService ){
+    constructor(
+      private router: Router, 
+      private dialog: MatDialog,
+      private storageService: StorageService,
+      private calendarStore: CalendarStore){
     }
 
     public ngOnInit(){
@@ -68,27 +71,20 @@ import { DayViewComponent } from '../day/day-view.component';
     }
 
     public showDayDetails(){
-      this.dialog.open(DayViewComponent, {data: {dayView: this.dayView}})
-    }
+      let dialogRef = this.dialog.open(DayViewComponent, {
+        width: '700px',
+        height: '600px',       
+        data: {viewDate: this.dayView.calendarDay.date}
+      })
 
-    public goToWeekView(date: Date){
-      if( this.changeView )
-        this.changeView.emit({viewDate: date, view: CalendarViews.WeekView});
-    }
-
-    public showAddWorkerTo(worker: Worker){
-      
-      var dialogRef = this.dialog.open(AddWorkerToComponent, {
-        data: {
-          workers: this.dayView.availableWorkers, 
-          jobs: this.dayView.jobs,
-          selectedWorker: worker
-        }
+      dialogRef.afterClosed().subscribe(dataUpdated => {
+        if(dataUpdated)
+          this.calendarStore.getDataForMonth(this.dayView.calendarDay.date);
       });
     }
-    
-    public goToJob( job: CalendarJob ){
-      this.router.navigate(['job', job.id]);
-      console.log("navigating to job " + job.id);
+
+    public goToWeekView(){
+      if( this.changeView )
+        this.changeView.emit({viewDate: this.dayView.calendarDay.date, view: CalendarViews.WeekView});
     }
   }

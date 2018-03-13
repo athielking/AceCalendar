@@ -41,6 +41,8 @@ export enum StorageKeys{
     monthViewShowAvailable = "MONTH_VIEW_SHOW_AVAILABLE",
     monthViewShowOff = "MONTH_VIEW_SHOW_OFF",
     addWorkerOption = "ADD_WORKER_OPTION",
+    readonlyViewDate = "READONLY_VIEW_DATE",
+    readonlySelectedTab = "READONLY_SELECTED_TAB",
 }
 
 const DAYS_IN_WEEK: number = 7;

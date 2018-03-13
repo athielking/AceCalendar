@@ -13,7 +13,7 @@ export class AuthGuardEditor implements CanActivate{
         if( this.authService.isEditor() )
             return true;
         else{
-            this.router.navigate(['calendar']);
+            this.router.navigate(['calendar-readonly']);
             return false;
         }
     }
@@ -29,7 +29,7 @@ export class AuthGuardAdmin implements CanActivate{
         if( this.authService.isAdmin())
             return true;
         else{
-            this.router.navigate(['calendar']);
+            this.router.navigate(['calendar-readonly']);
             return false;
         }
     }

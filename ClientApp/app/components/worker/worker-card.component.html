@@ -1,9 +1,20 @@
 <div *ngIf="!isReadonly" class="worker-card" draggable [dragData]="worker" [dragScope]="scope">
     <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
+
+    <div class="worker-card-button-container">
+        <button mat-icon-button [mat-menu-trigger-for]="menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu x-position="before" #menu="matMenu">
+            <button mat-menu-item (click)="viewWorker(worker)">
+                <mat-icon>account_box</mat-icon> View Worker
+            </button>
+        </mat-menu>
+    </div>
 </div>
 
 <!-- READONLY TEMPLATE -->
 
-<div *ngIf="isReadonly" class="worker-card">
+<div *ngIf="isReadonly" class="worker-card worker-card-readonly">
     <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
 </div>
