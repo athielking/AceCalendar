@@ -7,13 +7,14 @@ import { MatDialog } from '@angular/material';
 
 import { TagStore } from '../../stores/tag.store';
 import { Tag } from '../../models/tag/tag.model';
+import { AddTagComponent } from '../../components/tag/add-tag.component';
 
 
 @Component({
-    selector: 'worker',
-    templateUrl: './worker.component.html'
+    selector: 'ac-tag-list',
+    templateUrl: './tag-list.component.html'
 })
-export class WorkerComponent implements OnInit {
+export class TagListComponent implements OnInit {
     
     private tags: Tag[];
 
@@ -61,15 +62,14 @@ export class WorkerComponent implements OnInit {
         this.showAddTagForm();
     }
 
-    public editWorker(worker: Worker){
-        // this.showAddWorkerForm(
-        //     true,
-        //     worker.id,            
-        //     worker.firstName,
-        //     worker.lastName,
-        //     worker.email,
-        //     worker.phone
-        // );
+    public editTag(tag: Tag){
+        this.showAddTagForm(
+            true,
+            tag.id,            
+            tag.icon, 
+            tag.description, 
+            tag.color
+        );
     }
 
     public deleteTag(tagId: string){
@@ -96,23 +96,21 @@ export class WorkerComponent implements OnInit {
 
     private showAddTagForm(
         isEdit: boolean = false,
-        editWorkerId: string = '',
-        firstName: string = '',
-        lastName: string = '',
-        email: string = '',
-        phone: string = ''
+        editId: string = '',
+        icon: string = '',
+        description: string = '',
+        color: string = ''
     ) {
-        // let dialogRef = this.dialog.open(AddTagComponent, {
-        //     disableClose: true,
-        //     data: { 
-        //         isEdit: isEdit,
-        //         editWorkerId: editWorkerId,
-        //         firstName: firstName,
-        //         lastName: lastName,
-        //         email: email,
-        //         phone: phone
-        //     }
-        // });
+        let dialogRef = this.dialog.open(AddTagComponent, {
+            disableClose: true,
+            data: { 
+                isEdit: isEdit,
+                editId: editId,
+                icon: icon,
+                description: description,
+                color: color,
+            }
+        });
     }
 
     private toggleShowLoading(show:boolean) {

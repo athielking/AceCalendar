@@ -16,6 +16,9 @@ export class TagService{
     }
 
     public addTag( tag: Tag){
+        if(tag.id == '')
+            delete tag.id;
+            
         return this.httpClient.post( this.serviceUri, tag ).shareReplay();
     }
 
