@@ -17,9 +17,13 @@
             <ac-worker-list 
                 style="grid-column: 1; grid-row: 2"
                 [headerText]="'Time Off'"
-                [workers]="dayView.timeOffWorkers" 
+                [workers]="dayView.timeOffWorkers"
+                [jobs]="dayView.jobs" 
                 [calendarDay]="dayView.calendarDay"
                 [isPast]="true"
+                [showMoveToAvailable]="true"
+                (addToAvailableRequested)="onWorkerAddedAvailable($event)" 
+                (addToJobRequested)="onWorkerAddedToJob($event)"
                 (workerAdded)="onWorkerAddedOff($event)">
             </ac-worker-list>
 
@@ -27,8 +31,12 @@
                 style="grid-column: 1; grid-row: 1"
                 [headerText]="'Available Workers'"
                 [workers]="dayView.availableWorkers"
+                [jobs]="dayView.jobs"
                 [calendarDay]="dayView.calendarDay"
                 [isPast]="true"
+                [showMoveToTimeOff]="true"         
+                (addToTimeOffRequested)="onWorkerAddedOff($event)"      
+                (addToJobRequested)="onWorkerAddedToJob($event)"
                 (workerAdded)="onWorkerAddedAvailable($event)">
             </ac-worker-list>
 
@@ -42,6 +50,8 @@
                             [calendarJob]="job" 
                             [calendarDay]="dayView.calendarDay" 
                             (workerAdded)="onWorkerAddedToJob($event)"
+                            (addToAvailableRequested)="onWorkerAddedAvailable($event)" 
+                            (addToTimeOffRequested)="onWorkerAddedOff($event)"                               
                             (deleteJobRequested)="onDeleteJobRequested($event)"
                             (editJobRequested)="onEditJobRequested($event)">
                         </ac-week-cell-job>

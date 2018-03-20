@@ -11,7 +11,7 @@
             <div *ngIf="showAllJobs && dayView.calendarDay.inMonth" class="cal-card month-card">
                 <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
                 <div class="cal-card-content">
-                    <span *ngFor="let job of dayView.jobs">{{ job.number }} - {{ job.name }}</span>
+                    <span *ngFor="let job of dayView.jobs">{{job.getDisplayString()}}</span>
                 </div>
             </div>
 
@@ -73,7 +73,7 @@
 
     <mat-menu #jobsMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
         <button mat-menu-item *ngIf="dayView.jobs.length === 0">None</button>               
-        <button mat-menu-item *ngFor="let job of dayView.jobs" (click)="showDayDetails()">{{job.number}} - {{ job.name }}</button>
+        <button mat-menu-item *ngFor="let job of dayView.jobs" (click)="showDayDetails()">{{job.getDisplayString()}}</button>
     </mat-menu>
 
     <mat-menu #detailsMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">

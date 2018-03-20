@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { DayView, AddJobModel } from '../calendar/common/models'
 import { WorkerAddedJobEvent, DeleteJobRequestedEvent, EditJobRequestedEvent } from '../calendar/week/week-cell-job.component';
 import { AddJobToWeekViewComponent } from './addJobToWeekViewComponent';
+import { WorkerMovedWithDateEvent } from '../worker/worker-list.component';
 
 @Component({
     selector: "ac-job-list",
@@ -20,6 +21,8 @@ export class JobListComponent {
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
+    @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
+    @Output() addToTimeOffRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
 
     constructor(private dialog: MatDialog ){
     }
@@ -54,6 +57,14 @@ export class JobListComponent {
                 endDate: null       
             }
         });
+    }
+
+    public onAddToAvailableRequested(event: WorkerMovedWithDateEvent) {
+        this.addToAvailableRequested.emit(event);
+    }
+
+    public onAddToTimeOffRequested(event: WorkerMovedWithDateEvent) {
+        this.addToTimeOffRequested.emit(event);
     }
 }
 

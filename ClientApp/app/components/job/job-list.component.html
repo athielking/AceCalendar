@@ -8,6 +8,8 @@
             [calendarJob]="job" 
             [calendarDay]="dayView.calendarDay" 
             (workerAdded)="onWorkerAddedToJob($event)"
+            (addToTimeOffRequested)="onAddToTimeOffRequested($event)"    
+            (addToAvailableRequested)="onAddToAvailableRequested($event)"     
             (deleteJobRequested)="onDeleteJobRequested($event)"
             (editJobRequested)="onEditJobRequested($event)">
         </ac-week-cell-job>
@@ -30,8 +32,7 @@
         <ac-week-cell-job *ngFor="let job of dayView.jobs" 
             [calendarJob]="job" 
             [calendarDay]="dayView.calendarDay" 
-            [isReadonly]="isReadonly"
-            (workerAdded)="onWorkerAddedToJob($event)">
+            [isReadonly]="true">
         </ac-week-cell-job>
     </div>
 </div>
