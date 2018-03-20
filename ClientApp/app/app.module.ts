@@ -49,6 +49,7 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 import { AddTagComponent } from "./components/tag/add-tag.component";
 import { TagComponent } from "./components/tag/tag.component";
 import { TagListComponent } from "./components/tag/tag-list.component";
+import { SelectTagComponent } from "./components/tag/select-tag.component";
 
 import { LoginComponent } from "./components/login/login.component";
 
@@ -68,6 +69,7 @@ import { TagStore } from "./stores/tag.store";
 import { AuthInterceptor } from './tools/authInterceptor';
 import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +81,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AddTagComponent,
     TagComponent,
     TagListComponent,
-
+    SelectTagComponent,
 
     //Worker CRUD
     WorkerComponent,
@@ -120,7 +122,8 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AddWorkerToComponent,
     DayViewComponent,
     MonthDisplayOptionsComponent,
-    AddTagComponent
+    AddTagComponent,
+    SelectTagComponent
   ],
   imports: [
     HttpClientModule,

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { AddJobComponent } from './addJob.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
 import { TdDialogService } from '@covalent/core';
 import { TdLoadingService } from '@covalent/core';
 import { CalendarStore } from '../../stores/calendar.store';
@@ -14,12 +14,14 @@ import { AddJobModel } from '../calendar/common/models';
 export class AddJobToDayViewComponent extends AddJobComponent {
     constructor(
         private calendarStore: CalendarStore,
+        dialog: MatDialog,
         dialogRef: MatDialogRef<AddJobComponent>,
         dialogService: TdDialogService,
         loadingService: TdLoadingService,
         @Inject(MAT_DIALOG_DATA) data: any
     ){ 
         super(
+            dialog,
             dialogRef,
             dialogService,
             loadingService,

@@ -1,12 +1,14 @@
 import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {TdDialogService,TdLoadingService} from '@covalent/core';
 
 import { AddJobModel } from '../calendar/common/models';
 import { JobStore } from '../../stores/job.store';
 import { Observable } from 'rxjs/Rx';
+import { SelectTagComponent } from '../tag/select-tag.component';
+import { Tag } from '../../models/tag/tag.model';
 
 @Component({
     selector: 'ac-addJob',
@@ -17,6 +19,7 @@ export abstract class AddJobComponent {
     private isEdit: boolean;
     private editJobId: string;
 
+    public selectedTags: Tag[];
     public jobNumber: string;
     public jobName: string;
     public notes: string;
@@ -24,6 +27,7 @@ export abstract class AddJobComponent {
     public endDate: Date;
 
     constructor(
+        private dialog: MatDialog,
         private dialogRef: MatDialogRef<AddJobComponent>,
         private dialogService: TdDialogService,
         private loadingService: TdLoadingService,
@@ -54,6 +58,11 @@ export abstract class AddJobComponent {
         return this.endDate == null || this.startDate <= this.endDate;
     }
 
+    public selectTags(){
+        var selectTagsRef = this.dialog.open(SelectTagComponent);
+        this.selectedTags = selectTagsRef.componentInstance.selected;
+    }
+
     private addJob() {
         this.toggleShowLoading(true);
 
@@ -62,7 +71,8 @@ export abstract class AddJobComponent {
             this.jobName, 
             this.notes, 
             this.startDate,
-            this.endDate
+            this.endDate,
+            this.selectedTags
         );
 
         this.AddJobThroughStore(addJobModel).subscribe( result => {
@@ -85,7 +95,8 @@ export abstract class AddJobComponent {
             this.jobName, 
             this.notes, 
             this.startDate,
-            this.endDate
+            this.endDate,
+            this.selectedTags
         );
 
         this.EditJobThroughStore(this.editJobId, addJobModel).subscribe( result => {

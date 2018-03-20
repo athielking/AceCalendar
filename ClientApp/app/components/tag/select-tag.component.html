@@ -1,0 +1,32 @@
+<h1 class="mat-dialog-title">Select Tags</h1>
+
+<div *tdLoading="'selectTagShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <form #selectTagForm="ngForm">   
+        <div class="mat-dialog-content form-container">
+            
+            <mat-form-field>
+                <mat-select #iconControl="ngModel" [(ngModel)]="selected" placeholder="Icon" name="icon" multiple>
+                    
+                    <mat-select-trigger>
+                        {{ iconControl.value ? iconControl.value.length : '0' }} Tags Selected
+                    </mat-select-trigger>
+
+                    <mat-option *ngFor="let tag of tags" [value]="tag">
+                        <mat-icon [style.color]="tag.color">{{ tag.icon }}</mat-icon>{{tag.description}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
+            
+            <button mat-button  
+                (click)="onOkClick()">Ok</button>
+        </div>
+    </form>
+</div>

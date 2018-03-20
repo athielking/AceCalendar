@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
+import {Tag} from '../../../models/tag/tag.model';
 
 export class MonthView{
     constructor(public header: CalendarDay[],
@@ -157,6 +158,7 @@ export class AddJobModel {
         public notes: string,        
         public startDate: Date,
         public endDate: Date,
+        public tags: Tag[]
     ){
     }
 }
