@@ -11,7 +11,12 @@
             <div *ngIf="showAllJobs && dayView.calendarDay.inMonth" class="cal-card month-card">
                 <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
                 <div class="cal-card-content">
-                    <span *ngFor="let job of dayView.jobs">{{job.getDisplayString()}}</span>
+                    <div *ngFor="let job of dayView.jobs">
+                        <strong>{{job.getDisplayString()}}</strong>
+                        <div style="margin-left: 16px" *ngFor="let worker of job.workers">
+                            {{worker.firstName}} {{worker.lastName}}
+                        </div>
+                    </div>
                 </div>
             </div>
 
