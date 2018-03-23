@@ -8,7 +8,7 @@ import { Tag } from '../models/tag/tag.model';
 @Injectable()
 export class TagStore{
     private _tags : BehaviorSubject<Tag[]> = new BehaviorSubject([]);
-    private _tag: BehaviorSubject<Tag> = new BehaviorSubject(new Tag('','', '', ''));
+    private _tag: BehaviorSubject<Tag> = new BehaviorSubject(new Tag('','', '', '', false));
 
     public errorMessage: string;
 

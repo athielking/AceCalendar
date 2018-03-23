@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
 import { getCalendarDay } from '../components/calendar/common/calendar-tools';
-//import { Map } from 'immutable';
+import {Tag} from '../models/tag/tag.model';
 
 enum ApiMethod{
     Month = "getMonth",
@@ -49,20 +49,31 @@ export class CalendarService{
                     let d: Date = new Date(key);
 
                     let workersByJob: Map<string, Worker[]> = new Map<string, Worker[]>();
+                    let tagsByJob: Map<string, Tag[]> = new Map<string, Tag[]>();
 
-                    let guids = Object.keys(obj[key].workersByJob);
+                    let guids = Object.keys(obj[key].workersByJob)
                     guids.forEach(g => {
 
                         if(!obj[key].workersByJob[g])
                             return;
 
                         workersByJob.set(g, obj[key].workersByJob[g].map( item => {
-                                return new Worker( 
-                                    item.id, 
-                                    item.firstName, 
-                                    item.lastName, 
-                                    item.email, 
-                                    item.phone);
+                            return new Worker( 
+                                item.id, 
+                                item.firstName, 
+                                item.lastName, 
+                                item.email, 
+                                item.phone);
+                        }));
+                    });
+
+                    guids = Object.keys(obj[key].tagsByJob);
+                    guids.forEach( g=> {
+                        if(!obj[key].tagsByJob[g])
+                            return;
+                        
+                        tagsByJob.set( g, obj[key].tagsByJob[g].map( item => {
+                            return new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay == 1 ? true : false);
                         }));
                     });
 
@@ -76,6 +87,9 @@ export class CalendarService{
                     
                         if( workersByJob.has(item.id))
                             cj.workers = workersByJob.get(item.id);
+
+                        if( tagsByJob.has(item.id))
+                            cj.jobTags = tagsByJob.get(item.id);
 
                         return cj;
                     });
@@ -102,6 +116,7 @@ export class CalendarService{
 
                     let dv = new DayView(getCalendarDay( d, date ), jobs, workers, offWorkers );
                     dv.workersByJob = workersByJob;
+                    dv.tagsByJob = tagsByJob;
 
                     dayViews.push(dv);
                     daymap.set(d, dv);

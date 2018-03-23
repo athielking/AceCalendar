@@ -40,7 +40,8 @@
             [isPast]="dayView.calendarDay.isPast"
             (workerAddedToJob)="onWorkerAddedJob($event)"            
             (deleteJobRequested)="onDeleteJobRequested($event)"
-            (editJobRequested)="onEditJobRequested($event)">
+            (editJobRequested)="onEditJobRequested($event)"
+            (dayJobTagRequested)="onDayJobTagRequested($event)">
         </ac-job-list>
 
         <ac-worker-list

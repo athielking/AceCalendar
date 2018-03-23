@@ -59,6 +59,7 @@ export class CalendarStore {
         obs.subscribe( response => { 
             this.getDataForWeek(this._lastViewDate);
         }, error => {
+            console.log(error);
         });
 
         return obs;

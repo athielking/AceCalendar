@@ -4,7 +4,8 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { JobService } from '../services/job.service';
-import { CalendarDay, CalendarJob, AddJobModel, SaveNotesRequestModel } from '../components/calendar/common/models';
+import { CalendarDay, CalendarJob, AddJobModel, SaveNotesRequestModel, SaveTagsRequestModel } from '../components/calendar/common/models';
+import {Tag} from '../models/tag/tag.model';
 
 @Injectable()
 export class JobStore{
@@ -59,5 +60,9 @@ export class JobStore{
 
     public saveNotes( jobId: string, notes: string){       
         return this.jobService.saveNotes(jobId, new SaveNotesRequestModel(notes));
+    }
+
+    public saveTags( jobId: string, tags: Tag[], date?: Date){
+        return this.jobService.saveTags( jobId, new SaveTagsRequestModel(jobId, tags, date));
     }
 }

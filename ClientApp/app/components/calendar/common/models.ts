@@ -11,7 +11,8 @@ export class MonthView{
 export class DayView{
 
     public workersByJob : Map<string, Worker[]>;
-    
+    public tagsByJob: Map<string, Tag[]>;
+
     constructor(public calendarDay: CalendarDay, 
                 public jobs: CalendarJob[],
                 public availableWorkers: Worker[],
@@ -110,6 +111,8 @@ export class CalendarDay {
 
 export class CalendarJob implements IDisplayModel{
     public workers: Worker[] = [];
+    public jobTags: Tag[] = [];
+    
     public display: string;
 
     constructor(public id: string,
@@ -178,6 +181,14 @@ export class SaveNotesRequestModel {
         public notes: string
     ){
     }
+}
+
+export class SaveTagsRequestModel{
+    constructor(public idJob: string,
+                public tags: Tag[],
+                public date?: Date){
+                    
+                }
 }
 
 export interface IDisplayModel{

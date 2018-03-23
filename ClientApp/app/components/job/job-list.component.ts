@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core'
 import { MatDialog } from '@angular/material';
 
 import { DayView, AddJobModel } from '../calendar/common/models'
-import { WorkerAddedJobEvent, DeleteJobRequestedEvent, EditJobRequestedEvent } from '../calendar/week/week-cell-job.component';
+import { WorkerAddedJobEvent, DeleteJobRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from '../calendar/week/week-cell-job.component';
 import { AddJobToWeekViewComponent } from './addJobToWeekViewComponent';
 
 @Component({
@@ -20,6 +20,7 @@ export class JobListComponent {
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
+    @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
 
     constructor(private dialog: MatDialog ){
     }
@@ -41,6 +42,10 @@ export class JobListComponent {
         this.editJobRequested.emit(event);
     }
 
+    public onDayJobTagRequested(event: DayJobTagRequestedEvent){
+        this.dayJobTagRequested.emit(event);
+    }
+    
     public showAddJob() {
         let dialogRef = this.dialog.open(AddJobToWeekViewComponent, {
             disableClose: true,

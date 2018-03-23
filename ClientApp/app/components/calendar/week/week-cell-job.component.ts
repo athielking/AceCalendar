@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { MatSnackBar } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
+import {Tag} from '../../../models/tag/tag.model';
 
 @Component({
     selector: 'ac-week-cell-job',
@@ -15,6 +16,7 @@ export class WeekCellJobComponent {
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
+    @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
 
     constructor(private snackBar: MatSnackBar) {
     }
@@ -50,6 +52,14 @@ export class WeekCellJobComponent {
             jobId: jobId
         });
     }
+
+    public addDayJobTag(job: CalendarJob){
+        
+        this.dayJobTagRequested.emit({
+            job: job,
+            date: this.calendarDay.date
+        });
+    }
 }
 
 export interface WorkerAddedJobEvent {
@@ -59,6 +69,11 @@ export interface WorkerAddedJobEvent {
 
 export interface EditJobRequestedEvent {
     job: CalendarJob
+}
+
+export interface DayJobTagRequestedEvent {
+    job: CalendarJob,
+    date: Date
 }
 
 export interface DeleteJobRequestedEvent {

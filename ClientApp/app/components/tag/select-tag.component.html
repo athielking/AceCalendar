@@ -5,8 +5,19 @@
     <form #selectTagForm="ngForm">   
         <div class="mat-dialog-content form-container">
             
+            <div layout="column" >
+                <span>Selected:</span>
+                <div *ngIf="selected" layout="row">
+                    <ac-tag *ngFor="let tag of selected" [model]="tag"></ac-tag>
+                </div>
+            </div>
             <mat-form-field>
-                <mat-select #iconControl="ngModel" [(ngModel)]="selected" placeholder="Icon" name="icon" multiple>
+                <mat-select #iconControl="ngModel" 
+                    [(ngModel)]="selected" 
+                    [value]="selected"
+                    [compareWith]="compareTags"
+                    placeholder="Select Tags" 
+                    name="tags" multiple>
                     
                     <mat-select-trigger>
                         {{ iconControl.value ? iconControl.value.length : '0' }} Tags Selected

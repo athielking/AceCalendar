@@ -20,6 +20,8 @@ export abstract class AddJobComponent {
     private editJobId: string;
 
     public selectedTags: Tag[];
+    public jobDayTags: Tag[];
+
     public jobNumber: string;
     public jobName: string;
     public notes: string;
@@ -39,7 +41,9 @@ export abstract class AddJobComponent {
         this.jobName = data.jobName,
         this.notes = data.notes,
         this.startDate = data.startDate,
-        this.endDate = data.endDate        
+        this.endDate = data.endDate,
+        this.selectedTags = data.selectedTags ? data.selectedTags.filter( value => !value.fromJobDay) : [];
+        this.jobDayTags = data.selectedTags ? data.selectedTags.filter( value => value.fromJobDay) : [];        
     }
 
     public onCancelClick() {
@@ -49,7 +53,6 @@ export abstract class AddJobComponent {
     public onOkClick() {
         if(this.isEdit)
             this.editJob();
-    
         else
             this.addJob();      
     }
@@ -59,8 +62,17 @@ export abstract class AddJobComponent {
     }
 
     public selectTags(){
-        var selectTagsRef = this.dialog.open(SelectTagComponent);
-        this.selectedTags = selectTagsRef.componentInstance.selected;
+
+        var selectTagsRef = this.dialog.open(SelectTagComponent, {
+            data: {
+                selected: this.selectedTags
+            }
+        });
+
+        selectTagsRef.afterClosed().subscribe( result => {
+            if(result)
+                this.selectedTags = selectTagsRef.componentInstance.selected;
+        });
     }
 
     private addJob() {
