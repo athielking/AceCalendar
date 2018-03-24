@@ -1,7 +1,7 @@
-<div *ngIf="!isReadonly" class="worker-card" draggable [dragData]="worker" [dragScope]="scope">
-    <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
+<div *ngIf="!isReadonly" class="worker-card" draggable [dragData]="worker" [dragScope]="scope" (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)">
+    <span [class.worker-name-span-with-button]="!dragging" class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
 
-    <div class="worker-card-button-container">
+    <div *ngIf="!dragging" class="worker-card-button-container">
         <button mat-icon-button [mat-menu-trigger-for]="menu">
             <mat-icon>more_vert</mat-icon>
         </button>
@@ -9,6 +9,18 @@
             <button mat-menu-item (click)="viewWorker(worker)">
                 <mat-icon>account_box</mat-icon> View Worker
             </button>
+            <button *ngIf="jobs && jobs.length > 0" mat-menu-item [mat-menu-trigger-for]="jobMenu">
+                <mat-icon>business</mat-icon> Add to Job
+            </button>
+            <button *ngIf="showMoveToAvailable" mat-menu-item (click)="addToAvailable(worker)">
+                <mat-icon>people</mat-icon> Move to Available
+            </button>
+            <button *ngIf="showMoveToTimeOff" mat-menu-item (click)="addToTimeOff(worker)">
+                <mat-icon>perm_contact_calendar</mat-icon> Move to Time Off
+            </button>
+        </mat-menu>
+        <mat-menu #jobMenu="matMenu">
+            <button mat-menu-item *ngFor="let job of jobs" (click)="addWorkerToJob(worker, job)">{{job.getDisplayString()}}</button>
         </mat-menu>
     </div>
 </div>

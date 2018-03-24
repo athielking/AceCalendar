@@ -1,6 +1,7 @@
 import { Injectable, keyframes } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { HttpClient } from '@angular/common/http';
+import * as ParseDate from 'date-fns/parse';
 
 import { environment } from '../../environments/environment';
 import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
@@ -46,8 +47,9 @@ export class CalendarService{
 
                 keys.forEach(key => {
 
-                    let d: Date = new Date(key);
-
+                    var ymd = key.substr(0, key.indexOf("T")).split("-");
+                    let d: Date = new Date(+ymd[0], (+ymd[1])-1, +ymd[2]);
+                
                     let workersByJob: Map<string, Worker[]> = new Map<string, Worker[]>();
                     let tagsByJob: Map<string, Tag[]> = new Map<string, Tag[]>();
 

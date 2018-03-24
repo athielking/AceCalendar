@@ -33,7 +33,11 @@
     </div>
     <div class="week-cell-job-workers">
         <ac-worker-card *ngFor="let worker of calendarJob.workers" 
-            [worker]="worker" 
+            [worker]="worker"
+            [showMoveToAvailable]="true"
+            [showMoveToTimeOff]="true"
+            (addToAvailableRequested)="onAddToAvailableRequested($event)" 
+            (addToTimeOffRequested)="onAddToTimeOffRequested($event)"
             [scope]="calendarDay.date.toString()">
         </ac-worker-card>
     </div>

@@ -121,6 +121,14 @@ export class CalendarJob implements IDisplayModel{
                 public notes: string){
         this.display = `${this.number} ${name}`;
     }
+
+    public getDisplayString() : string {
+        if(!this.number) {
+            return this.name;
+        }
+        
+        return `${this.number} - ${this.name}`;
+    }
 }
 
 export class JobStartAndEndDate {

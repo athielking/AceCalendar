@@ -3,6 +3,7 @@ import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { MatSnackBar } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
 import {Tag} from '../../../models/tag/tag.model';
+import { WorkerMovedWithDateEvent } from '../../worker/worker-list.component';
 
 @Component({
     selector: 'ac-week-cell-job',
@@ -18,6 +19,9 @@ export class WeekCellJobComponent {
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
     @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
 
+    @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
+    @Output() addToTimeOffRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
+    
     constructor(private snackBar: MatSnackBar) {
     }
 
@@ -57,6 +61,20 @@ export class WeekCellJobComponent {
         
         this.dayJobTagRequested.emit({
             job: job,
+            date: this.calendarDay.date
+        });
+    }
+    
+    public onAddToAvailableRequested(event: WorkerMovedWithDateEvent) {
+        this.addToAvailableRequested.emit({
+            worker: event.worker,
+            date: this.calendarDay.date
+        });
+    }
+
+    public onAddToTimeOffRequested(event: WorkerMovedWithDateEvent) {
+        this.addToTimeOffRequested.emit({
+            worker: event.worker,
             date: this.calendarDay.date
         });
     }

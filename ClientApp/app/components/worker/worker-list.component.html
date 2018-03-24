@@ -9,7 +9,15 @@
             {{ headerText }}
         </div>
         <div class="worker-list-container">
-            <ac-worker-card *ngFor="let worker of workers" [worker]="worker" [scope]="calendarDay.date.toString()" >
+            <ac-worker-card *ngFor="let worker of workers" 
+                [worker]="worker" 
+                [jobs]="jobs" 
+                [showMoveToAvailable]="showMoveToAvailable"
+                [showMoveToTimeOff]="showMoveToTimeOff"
+                (addToJobRequested)="onAddToJobRequested($event)" 
+                (addToAvailableRequested)="onAddToAvailableRequested($event)" 
+                (addToTimeOffRequested)="onAddToTimeOffRequested($event)"                 
+                [scope]="calendarDay.date.toString()" >
             </ac-worker-card>
         </div>
     </div>
