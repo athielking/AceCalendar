@@ -22,8 +22,14 @@
                 <button mat-menu-item (click)="deleteJob(calendarJob.id)">
                     <mat-icon>delete</mat-icon> Delete
                 </button>
+                <button mat-menu-item (click)="addDayJobTag(calendarJob)">
+                    <mat-icon>flag</mat-icon> Tags
+                </button>
             </mat-menu>
         </div>
+    </div>
+    <div *ngIf="calendarJob.jobTags?.length > 0" class="week-cell-job-tags">
+        <ac-tag *ngFor="let tag of calendarJob.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
     </div>
     <div class="week-cell-job-workers">
         <ac-worker-card *ngFor="let worker of calendarJob.workers" 

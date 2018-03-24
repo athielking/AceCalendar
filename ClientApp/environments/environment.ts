@@ -6,4 +6,5 @@
 export const environment = {
   production: false,
   webServiceUrl: `http://localhost:3000`
+  //webServiceUrl: `https://acecalendarapi.azurewebsites.net`
 };

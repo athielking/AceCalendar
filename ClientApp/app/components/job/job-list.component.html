@@ -11,7 +11,8 @@
             (addToTimeOffRequested)="onAddToTimeOffRequested($event)"    
             (addToAvailableRequested)="onAddToAvailableRequested($event)"     
             (deleteJobRequested)="onDeleteJobRequested($event)"
-            (editJobRequested)="onEditJobRequested($event)">
+            (editJobRequested)="onEditJobRequested($event)"
+            (dayJobTagRequested)="onDayJobTagRequested($event)">
         </ac-week-cell-job>
         <div *ngIf="allowAdd" class="add-job-button-container">
             <a mat-mini-fab color="accent" matTooltip="Add Job" matTooltipPosition="before" (click)="showAddJob()">

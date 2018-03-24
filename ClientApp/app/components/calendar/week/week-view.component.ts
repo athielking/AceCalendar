@@ -12,12 +12,14 @@ import { AddWorkerOption } from '../../../models/shared/calendar-options';
 import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { StorageService} from '../../../services/storage.service';
-import { WeekCellJobComponent, DeleteJobRequestedEvent, EditJobRequestedEvent } from './week-cell-job.component';
+import { WeekCellJobComponent, DeleteJobRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
 import { MatDialog } from '@angular/material';
 import { AddJobToWeekViewComponent } from '../../job/addJobToWeekViewComponent';
 import { StorageKeys } from '../common/calendar-tools';
+import { SelectTagComponent } from '../../tag/select-tag.component';
+import { JobStore } from '../../../stores/job.store';
 
 @Component({
     selector: 'ac-week-view',
@@ -43,6 +45,7 @@ export class WeekViewComponent implements OnInit {
 
     constructor(
         public calendarStore: CalendarStore,
+        public jobStore: JobStore,
         private storageService: StorageService,
         protected loadingService: TdLoadingService,
         private dialogService: TdDialogService,
@@ -126,7 +129,8 @@ export class WeekViewComponent implements OnInit {
                     jobName: event.job.name,
                     notes: event.job.notes,
                     startDate: result.startDate,
-                    endDate: result.endDate       
+                    endDate: result.endDate,
+                    selectedTags: event.job.jobTags     
                 }
             });
         }, error => {
@@ -189,6 +193,36 @@ export class WeekViewComponent implements OnInit {
                 message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
                 title: 'Unable to Add Worker to Time Off'
             });
+        });
+    }
+
+    public onDayJobTagRequested( event: DayJobTagRequestedEvent ){
+
+        var jobTags = event.job.jobTags.filter( value => {
+            return !value.fromJobDay
+        });
+
+        var jobDayTags = event.job.jobTags.filter( value => {
+            return value.fromJobDay
+        });
+
+        var dialogRef = this.dialog.open(SelectTagComponent, {
+            data: {
+                selected: jobDayTags,
+                excluded: jobTags
+            }
+        });
+        
+        dialogRef.afterClosed().subscribe( result => {
+            if(!result)
+                return;
+            
+            this.toggleShowLoading(true);
+            this.jobStore.saveTags( event.job.id, dialogRef.componentInstance.selected, event.date )
+                .subscribe( result => {
+                    this.calendarStore.getDataForWeek(this.viewDate);
+                    this.toggleShowLoading(false);
+                });
         });
     }
 

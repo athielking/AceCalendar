@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CalendarJob, AddJobModel, MoveWorkerRequestModel, SaveNotesRequestModel, JobStartAndEndDate } from '../components/calendar/common/models';
+import { CalendarJob, AddJobModel, MoveWorkerRequestModel, SaveNotesRequestModel, JobStartAndEndDate, SaveTagsRequestModel } from '../components/calendar/common/models';
 import { Observable } from 'rxjs/Rx';
 import * as isSameDay from 'date-fns/is_same_day';
 
@@ -102,6 +102,10 @@ export class JobService {
 
     public saveNotes( jobId: string, saveNotesRequestModel: SaveNotesRequestModel){
         return this.httpClient.post(this.serviceUri+`/saveNotes/${jobId}`, saveNotesRequestModel ).shareReplay();
+    }
+
+    public saveTags( jobId: string, saveTagsRequestModel: SaveTagsRequestModel ){
+        return this.httpClient.post(this.serviceUri+`/saveTags/${jobId}`, saveTagsRequestModel).shareReplay();
     }
 
     public getJobStartAndEndDate(jobId: string) {

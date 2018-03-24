@@ -1,0 +1,48 @@
+<mat-toolbar class="mat-toolbar mat-toolbar-single-row">
+    <span flex>Manage Tags</span>
+</mat-toolbar>
+
+<mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
+    <div *tdLoading="'showTagsLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+    
+        <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true" (searchDebounce)="filterTags($event)"></td-search-box>
+        <mat-divider></mat-divider>
+        <mat-list class="will-load">
+
+            <td-message *ngIf="showErrorMessage" label="Error Getting Tags" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+            
+            <div class="md-padding" *ngIf="(filteredTags | async)?.length === 0" layout="row" layout-align="center center">
+                <h3>No tags to display.</h3>
+            </div>
+
+            <ng-template let-tag let-last="last" ngFor [ngForOf]="(filteredTags | async)">
+                <mat-list-item>
+                    <mat-icon [style.color]="tag.color" matListAvatar>{{tag.icon}}</mat-icon>
+                    <h3 matLine>{{ tag.description }}</h3>
+                    <p matLine>{{ tag.color }}</p>
+                    <span flex></span>
+                    <span>
+                        <button mat-icon-button [mat-menu-trigger-for]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu x-position="before" #menu="matMenu">
+                            <button mat-menu-item (click)="editTag(tag)">
+                                <mat-icon>edit</mat-icon> Edit
+                            </button>
+                           
+                            <button mat-menu-item (click)="deleteTag(tag.id)">
+                                <mat-icon>delete</mat-icon> Delete
+                            </button>
+                        </mat-menu>
+                    </span>
+                </mat-list-item>
+                    <mat-divider *ngIf="!last" matInset></mat-divider>
+            </ng-template>
+        </mat-list>
+    </div>
+</mat-card>
+
+<a mat-fab color="accent" matTooltip="Add new worker" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
+    (click)="addTag()">
+    <mat-icon>add</mat-icon>
+</a>

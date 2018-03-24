@@ -1,0 +1,48 @@
+<h1 class="mat-dialog-title">{{isEdit ? 'Edit' : 'Add'}} Tag</h1>
+
+<div *tdLoading="'addTagShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <form #addTagForm="ngForm">   
+        <div class="mat-dialog-content form-container">
+
+            <div layout="row" style="margin-bottom: 16px">
+                <span style="margin-right: 8px">Preview: </span>
+                <mat-icon [matTooltip]="description" [style.color]="color">{{ icon }}</mat-icon>
+            </div>
+
+            <mat-form-field>
+                <mat-select #iconControl="ngModel" [(ngModel)]="icon" placeholder="Icon" name="icon" required>
+                    <mat-select-trigger>
+                        {{ iconControl.value }}
+                    </mat-select-trigger>
+                    <mat-option *ngFor="let icon of iconOptions" [value]="icon"><mat-icon>{{ icon }}</mat-icon>{{icon}}</mat-option>
+                </mat-select>
+                <mat-error align="start">
+                    <span [hidden]="!iconControl.errors?.required || iconControl.pristine" class="tc-red-600">Icon is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #descriptionControl="ngModel" placeholder="Description" type="text" maxlength="25" name="description" [(ngModel)]="description">
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #colorControl="ngModel" placeholder="Color" type="text" maxlength="10" name="color" [(ngModel)]="color" required>
+                <mat-error align="start">
+                    <span [hidden]="!colorControl.errors?.required || colorControl.pristine" class="tc-red-600">Color is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
+            
+            <button mat-button 
+                [disabled]="!addTagForm.form.valid" 
+                (click)="onOkClick()">Ok</button>
+        </div>
+    </form>
+</div>

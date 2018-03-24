@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { MatSnackBar } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
+import {Tag} from '../../../models/tag/tag.model';
 import { WorkerMovedWithDateEvent } from '../../worker/worker-list.component';
 
 @Component({
@@ -16,6 +17,8 @@ export class WeekCellJobComponent {
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter();
     @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
+    @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
+
     @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     @Output() addToTimeOffRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     
@@ -53,6 +56,14 @@ export class WeekCellJobComponent {
             jobId: jobId
         });
     }
+
+    public addDayJobTag(job: CalendarJob){
+        
+        this.dayJobTagRequested.emit({
+            job: job,
+            date: this.calendarDay.date
+        });
+    }
     
     public onAddToAvailableRequested(event: WorkerMovedWithDateEvent) {
         this.addToAvailableRequested.emit({
@@ -76,6 +87,11 @@ export interface WorkerAddedJobEvent {
 
 export interface EditJobRequestedEvent {
     job: CalendarJob
+}
+
+export interface DayJobTagRequestedEvent {
+    job: CalendarJob,
+    date: Date
 }
 
 export interface DeleteJobRequestedEvent {

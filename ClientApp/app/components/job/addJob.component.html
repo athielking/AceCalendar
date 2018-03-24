@@ -41,6 +41,13 @@
                 </textarea>
             </mat-form-field>
         
+            <div layout="column">
+                <span>Selected Tags</span>
+                <div layout="row">
+                    <ac-tag *ngFor="let tag of selectedTags" [model]="tag"></ac-tag>
+                </div>
+                <button mat-button (click)="selectTags()">Select Tags</button>
+            </div>
         </div>
 
         <div class="mat-dialog-actions">

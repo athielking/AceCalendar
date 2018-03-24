@@ -1,5 +1,6 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
+import {Tag} from '../../../models/tag/tag.model';
 
 export class MonthView{
     constructor(public header: CalendarDay[],
@@ -10,7 +11,8 @@ export class MonthView{
 export class DayView{
 
     public workersByJob : Map<string, Worker[]>;
-    
+    public tagsByJob: Map<string, Tag[]>;
+
     constructor(public calendarDay: CalendarDay, 
                 public jobs: CalendarJob[],
                 public availableWorkers: Worker[],
@@ -109,6 +111,8 @@ export class CalendarDay {
 
 export class CalendarJob implements IDisplayModel{
     public workers: Worker[] = [];
+    public jobTags: Tag[] = [];
+    
     public display: string;
 
     constructor(public id: string,
@@ -165,6 +169,7 @@ export class AddJobModel {
         public notes: string,        
         public startDate: Date,
         public endDate: Date,
+        public tags: Tag[]
     ){
     }
 }
@@ -184,6 +189,14 @@ export class SaveNotesRequestModel {
         public notes: string
     ){
     }
+}
+
+export class SaveTagsRequestModel{
+    constructor(public idJob: string,
+                public tags: Tag[],
+                public date?: Date){
+                    
+                }
 }
 
 export interface IDisplayModel{
