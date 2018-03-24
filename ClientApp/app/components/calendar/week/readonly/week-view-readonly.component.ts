@@ -9,6 +9,7 @@ import * as end_of_week from 'date-fns/end_of_week';
 
 import { CalendarDay, DayView } from '../../../calendar/common/models'
 import { CalendarStore } from '../../../../stores/calendar.store'
+import { JobStore } from '../../../../stores/job.store'
 import { WeekViewComponent } from '../week-view.component';
 import { StorageService } from '../../../../services/storage.service';
 
@@ -23,9 +24,10 @@ export class WeekViewReadonlyComponent extends WeekViewComponent {
         dialog: MatDialog,
         storageService: StorageService,
         calendarStore: CalendarStore,
+        jobStore: JobStore,
         loadingService: TdLoadingService,
         dialogService: TdDialogService ) {
-            super(calendarStore, storageService, loadingService, dialogService, dialog);
+            super(calendarStore, jobStore, storageService, loadingService, dialogService, dialog);
     }
 
     protected toggleShowLoading(show:boolean) {

@@ -216,10 +216,12 @@ export class WeekViewComponent implements OnInit {
         dialogRef.afterClosed().subscribe( result => {
             if(!result)
                 return;
-                
+            
+            this.toggleShowLoading(true);
             this.jobStore.saveTags( event.job.id, dialogRef.componentInstance.selected, event.date )
                 .subscribe( result => {
                     this.calendarStore.getDataForWeek(this.viewDate);
+                    this.toggleShowLoading(false);
                 });
         });
     }
