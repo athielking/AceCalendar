@@ -49,7 +49,7 @@ export class AddTagComponent {
     private addTag() {
         this.toggleShowLoading(true);
 
-        var tag = new Tag('', this.icon, this.description, this.color);
+        var tag = new Tag('', this.icon, this.description, this.color, false);
 
         this.tagStore.addTag(tag).subscribe( result => {
             this.dialogRef.close();
@@ -66,7 +66,7 @@ export class AddTagComponent {
     private editWorker() {
         this.toggleShowLoading(true);
 
-        var editTag = new Tag( this.editId, this.icon, this.description, this.color);
+        var editTag = new Tag( this.editId, this.icon, this.description, this.color, false);
 
         this.tagStore.editTag(editTag).subscribe( result => {
             this.dialogRef.close();
