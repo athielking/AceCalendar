@@ -1,0 +1,47 @@
+<mat-toolbar layout-align="center">
+    <span>Manage Organization</span>
+</mat-toolbar>
+
+<div *tdLoading="'organizationDetailShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+    <mat-card>
+        <mat-card-title>
+            <div style="display: flex; flex-direction:row">
+                <span>{{organization.name}}</span>
+                <span flex></span>
+            </div>
+        </mat-card-title>
+        <mat-divider></mat-divider>
+    </mat-card>
+
+    <mat-card>
+        <mat-card-title>
+            <div style="display: flex; flex-direction:row">
+                <span>Users</span>
+                <span flex></span>
+                <button mat-icon-button><mat-icon>more_vert</mat-icon></button>
+            </div>
+        </mat-card-title>
+        
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+            <div layout="column">
+                <td-data-table
+                        #dataTable
+                        [data]="userData"
+                        [columns]="userColumns">
+                        <!-- <ng-template tdDataTableTemplate="deleteBtn" let-value="value" let-row="row" let-column="column">
+                            <button mat-button color="warn" (click)="deleteTimeOff(row)"><mat-icon>clear</mat-icon></button>
+                        </ng-template> -->
+                    </td-data-table>
+                    <div layout="row">
+                        <span flex></span>
+                        <a mat-mini-fab color="accent" matTooltip="Add User" matTooltipPosition="before" style="margin-top: 8px" (click)="addTimeOff()">
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+            </div>
+        </mat-card-content>
+
+    </mat-card>
+</div>

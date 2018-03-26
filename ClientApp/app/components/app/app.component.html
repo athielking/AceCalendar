@@ -11,8 +11,7 @@
                 <button *ngIf="authService.isEditor()" mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
                     <mat-icon>menu</mat-icon>
                 </button>
-                <img src="assets/Ace_Logo.png">
-                
+                <a routerLink="/calendar"><img src="assets/Ace_Logo.png"></a>
                 
                 <span flex></span>
                 <button mat-button [matMenuTriggerFor]="logoutMenu"><mat-icon>account_circle</mat-icon><span> {{loggedInUser}}</span></button>
@@ -32,6 +31,8 @@
                         <mat-icon matListIcon>people</mat-icon>Workers</a>
                     <a mat-list-item routerLink="/tag">
                         <mat-icon matListIcon>flag</mat-icon>Tags</a>
+                    <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/organization">
+                        <mat-icon matListIcon>public</mat-icon>Organizations</a>
                 </mat-nav-list>  
                 
                 <!-- View Outlet -->

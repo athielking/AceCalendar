@@ -1,0 +1,28 @@
+<h1 class="mat-dialog-title">{{isEdit ? 'Edit' : 'Add'}} Organization</h1>
+
+<div *tdLoading="'addOrganizationShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <form #addOrganizationForm="ngForm">   
+        <div class="mat-dialog-content form-container">
+           
+
+            <mat-form-field>
+                <input matInput #nameControl="ngModel" placeholder="Organization Name" type="text" maxlength="200" name="Name" [(ngModel)]="name" required>
+                <mat-error align="start">
+                    <span [hidden]="!nameControl.errors?.required || nameControl.pristine" class="tc-red-600">Name is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
+            
+            <button mat-button 
+                [disabled]="!addOrganizationForm.form.valid" 
+                (click)="onOkClick()">Ok</button>
+        </div>
+    </form>
+</div>

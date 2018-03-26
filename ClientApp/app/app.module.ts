@@ -51,6 +51,10 @@ import { TagComponent } from "./components/tag/tag.component";
 import { TagListComponent } from "./components/tag/tag-list.component";
 import { SelectTagComponent } from "./components/tag/select-tag.component";
 
+import { OrganizationListComponent } from './components/admin/organization-list.component';
+import { OrganizationDetailComponent } from './components/admin/organization-detail.component';
+import { AddOrganizationComponent } from './components/admin/add-organization.component';
+
 import { LoginComponent } from "./components/login/login.component";
 
 import { JwtHelper } from './services/jwtHelper.service';
@@ -60,11 +64,13 @@ import { CalendarService } from './services/calendar.service';
 import { WorkerService } from './services/worker.service';
 import { AuthService } from "./services/auth.service";
 import { TagService } from "./services/tag.service";
+import { OrganizationService } from './services/organization.service';
 
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
 import { TagStore } from "./stores/tag.store";
+import { OrganizationStore } from './stores/organization.store';
 
 import { AuthInterceptor } from './tools/authInterceptor';
 import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
@@ -110,6 +116,12 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     WeekViewReadonlyComponent,
     WeekCellComponent,
     WeekCellJobComponent,
+
+    //Organization
+    OrganizationListComponent,
+    OrganizationDetailComponent,
+    AddOrganizationComponent,
+
     DayViewComponent,
     LoginComponent
   ],
@@ -123,7 +135,8 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     DayViewComponent,
     MonthDisplayOptionsComponent,
     AddTagComponent,
-    SelectTagComponent
+    SelectTagComponent,
+    AddOrganizationComponent
   ],
   imports: [
     HttpClientModule,
@@ -149,7 +162,9 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
       { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor] }, 
       { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor]},    
       { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor] }, 
-      { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor] }, 
+      { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor] },
+      { path: 'organization', component: OrganizationListComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'organization/:id', component: OrganizationDetailComponent, canActivate: [AuthGuardAdmin] },
       { path: "**", redirectTo: 'calendar' }
     ])
   ],
@@ -161,10 +176,12 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     CalendarService,
     StorageService,
     TagService,
+    OrganizationService,
     JwtHelper,
     AuthGuardEditor,
     AuthGuardAdmin,
     //Stores
+    OrganizationStore,
     CalendarStore,
     TagStore,
     WorkerStore,
