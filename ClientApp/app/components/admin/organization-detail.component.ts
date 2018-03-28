@@ -1,10 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core'
 import {ActivatedRoute, Router, ParamMap} from '@angular/router'
 import {ITdDataTableColumn, TdLoadingService, TdDialogService} from '@covalent/core';
+import {MatDialog} from '@angular/material';
 
 import {Organization} from '../../models/admin/organization.model'
 import {User} from '../../models/admin/user.model'
 import {OrganizationStore} from '../../stores/organization.store';
+import { AddUserComponent } from './add-user.component';
 
 @Component({
     selector: "ac-organization-detail",
@@ -25,6 +27,7 @@ export class OrganizationDetailComponent implements OnInit{
     constructor(public route: ActivatedRoute, 
                 public router: Router,
                 public organizationStore: OrganizationStore,
+                public dialog: MatDialog,
                 private dialogService: TdDialogService,
                 private loadingService: TdLoadingService){
     }
@@ -58,6 +61,10 @@ export class OrganizationDetailComponent implements OnInit{
     }
 
     private addUser(){
-        
+        this.dialog.open(AddUserComponent, {data: {
+            organizationId: this.organization.id
+        }}).afterClosed().subscribe( result => {
+            this.organizationStore.getOrganization(this.organization.id);
+        })
     }
 }

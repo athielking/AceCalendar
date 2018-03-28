@@ -6,6 +6,8 @@ export class User{
                 public firstName: string,
                 public lastName: string,
                 public userName: string,
-                public organizationId: string){
+                public organizationId: string,
+                public userRole: string,
+                public password: string){
                 }
 }

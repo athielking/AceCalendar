@@ -54,7 +54,7 @@ import { SelectTagComponent } from "./components/tag/select-tag.component";
 import { OrganizationListComponent } from './components/admin/organization-list.component';
 import { OrganizationDetailComponent } from './components/admin/organization-detail.component';
 import { AddOrganizationComponent } from './components/admin/add-organization.component';
-
+import { AddUserComponent} from './components/admin/add-user.component';
 import { LoginComponent } from "./components/login/login.component";
 
 import { JwtHelper } from './services/jwtHelper.service';
@@ -65,6 +65,7 @@ import { WorkerService } from './services/worker.service';
 import { AuthService } from "./services/auth.service";
 import { TagService } from "./services/tag.service";
 import { OrganizationService } from './services/organization.service';
+import { UserService } from './services/user.service';
 
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
@@ -121,6 +122,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     OrganizationListComponent,
     OrganizationDetailComponent,
     AddOrganizationComponent,
+    AddUserComponent,
 
     DayViewComponent,
     LoginComponent
@@ -136,7 +138,8 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     MonthDisplayOptionsComponent,
     AddTagComponent,
     SelectTagComponent,
-    AddOrganizationComponent
+    AddOrganizationComponent,
+    AddUserComponent
   ],
   imports: [
     HttpClientModule,
@@ -177,6 +180,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     StorageService,
     TagService,
     OrganizationService,
+    UserService,
     JwtHelper,
     AuthGuardEditor,
     AuthGuardAdmin,

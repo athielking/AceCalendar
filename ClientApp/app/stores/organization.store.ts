@@ -3,7 +3,9 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 import { OrganizationService } from '../services/organization.service';
+import { UserService } from '../services/user.service';
 import { Organization } from '../models/admin/organization.model';
+import { User } from '../models/admin/user.model';
 
 @Injectable()
 export class OrganizationStore{
@@ -19,7 +21,8 @@ export class OrganizationStore{
     public readonly organizations : Observable<Organization[]> = this._organizations.asObservable();
     public readonly organization: Observable<Organization> = this._organization.asObservable();
     
-    constructor(private organizationService: OrganizationService){
+    constructor(private organizationService: OrganizationService,
+                private userService: UserService){
     }
 
     public addOrganization(organization: Organization){
@@ -81,5 +84,25 @@ export class OrganizationStore{
             this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
             this.hasError.next(true);
         });
+    }
+
+    public addUser(user: User){
+        var obs = this.userService.addUser(user);
+
+        obs.subscribe( response => {
+            this.getOrganization(user.organizationId);
+        });
+
+        return obs;
+    }
+
+    public editUser(user: User){
+        var obs = this.userService.editUser(user);
+
+        obs.subscribe( response => {
+            this.getOrganization(user.organizationId);
+        });
+
+        return obs;
     }
 }
