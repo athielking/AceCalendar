@@ -1,10 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import {TdDialogService,TdLoadingService} from '@covalent/core';
 
 import {User} from '../../models/admin/user.model';
 import {OrganizationStore} from '../../stores/organization.store';
+import {ChangePasswordComponent} from '../../components/login/change-password.component';
 
 @Component({
     selector: 'ac-add-user',
@@ -27,6 +28,7 @@ export class AddUserComponent {
     constructor(
         private organizationStore: OrganizationStore,
         private dialogRef: MatDialogRef<AddUserComponent>,
+        private dialog: MatDialog,
         private dialogService: TdDialogService,
         private loadingService: TdLoadingService,
         @Inject(MAT_DIALOG_DATA) public data: any
@@ -42,11 +44,27 @@ export class AddUserComponent {
         this.userRole = data.userRole
     }
 
+    public changePassword(){
+        this.dialog.open(ChangePasswordComponent, {data:{
+            userName: this.userName
+        }});
+    }
+
     public onCancelClick() {
         this.dialogRef.close();
     }
 
     public onOkClick() {
+
+        if(!this.isEdit && this.password != this.confirmPassword)
+        {
+            this.dialogService.openAlert({
+                message: "Passwords do not match",
+                title: "Error"
+            });
+            return;
+        }
+
         if(this.isEdit)
             this.editUser();
         else
@@ -85,6 +103,10 @@ export class AddUserComponent {
                 title: 'Unable to Update User'
             });
         } ); 
+    }
+
+    public compareRoles( o1: string, o2: string): boolean{
+        return o1 == o2;
     }
 
     private toggleShowLoading(show:boolean) {

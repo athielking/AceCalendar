@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AuthService } from "../../services/auth.service";
 import { TdLoadingService } from '@covalent/core';
 import { AppComponent } from "../app/app.component";
@@ -24,7 +24,9 @@ export class ChangePasswordComponent{
     constructor(private authService: AuthService,
                 private router: Router,
                 private dialogRef: MatDialogRef<ChangePasswordComponent>,
-                private loadingService: TdLoadingService){
+                private loadingService: TdLoadingService,
+                @Inject(MAT_DIALOG_DATA) public data: any){
+                this.username = data.username
         }
 
     public changePassword(){

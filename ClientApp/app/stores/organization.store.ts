@@ -105,4 +105,15 @@ export class OrganizationStore{
 
         return obs;
     }
+
+    public deleteUser(user: User){
+
+        var obs = this.userService.deleteUser(user.id);
+
+        obs.subscribe( response => {
+            this.getOrganization(user.organizationId);
+        });
+
+        return obs;
+    }
 }

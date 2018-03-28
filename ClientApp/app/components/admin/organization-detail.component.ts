@@ -56,8 +56,23 @@ export class OrganizationDetailComponent implements OnInit{
         }
     }
 
-    private deleteUser(row: any){
-        
+    private deleteUser(user: User){
+        this.organizationStore.deleteUser(user);
+    }
+
+    private editUser(user: User){
+        this.dialog.open(AddUserComponent, {data: {
+            isEdit: true,
+            editId: user.id,
+            userName: user.userName,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            userRole: user.role,
+            organizationId: this.organization.id
+        }}).afterClosed().subscribe( result => {
+            this.organizationStore.getOrganization(this.organization.id);
+        })
     }
 
     private addUser(){

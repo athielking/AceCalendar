@@ -44,11 +44,11 @@
                                         <mat-icon>more_vert</mat-icon>
                                     </button>
                                     <mat-menu x-position="before" #menu="matMenu">
-                                        <button mat-menu-item [routerLink]="['/user', user.id]">
+                                        <button mat-menu-item (click)="editUser(user)">
                                             <mat-icon>edit</mat-icon> Edit
                                         </button>
                                        
-                                        <button mat-menu-item (click)="deleteUser(user.id)">
+                                        <button mat-menu-item (click)="deleteUser(user)">
                                             <mat-icon>delete</mat-icon> Delete
                                         </button>
                                     </mat-menu>
