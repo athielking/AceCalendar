@@ -124,13 +124,13 @@ export class CalendarStore {
         return this.jobService.getJobStartAndEndDate(jobId);
     }
 
-    public getDataForMonth(date: Date) {
+    public getDataForMonth(date: Date, idWorker: string = null) {
         this._lastViewDate = date;
 
         this.isMonthLoading.next(true);
         this.hasMonthError.next(false);
 
-        this.calendarService.getMonthData(date).subscribe(result => {
+        this.calendarService.getMonthData(date, idWorker).subscribe(result => {
             this._monthData.next(List(result))
             this.isMonthLoading.next(false);          
         }, error => {
@@ -140,13 +140,13 @@ export class CalendarStore {
         });
     }
 
-    public getDataForWeek(date: Date) {
+    public getDataForWeek(date: Date, idWorker: string = null) {
         this._lastViewDate = date;
 
         this.isWeekLoading.next(true);
         this.hasWeekError.next(false);
 
-        this.calendarService.getWeekData(date).subscribe(result => {
+        this.calendarService.getWeekData(date, idWorker).subscribe(result => {
             this._weekData.next(List(result));
             this.isWeekLoading.next(false);
         }, error => {
@@ -156,7 +156,7 @@ export class CalendarStore {
         });
     }
 
-    public getDataForDay(date: Date) {
+    public getDataForDay(date: Date, idWorker: String = null) {
         this._lastViewDate = date;
 
         this.isDayLoading.next(true);

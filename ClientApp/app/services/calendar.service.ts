@@ -22,21 +22,25 @@ export class CalendarService{
     constructor( private httpClient: HttpClient ){
     }
     
-    getMonthData(date:Date){
-        return this._getData(date, ApiMethod.Month).shareReplay();
+    getMonthData(date:Date, idWorker: string = null){
+        return this._getData(date, idWorker, ApiMethod.Month).shareReplay();
     }
 
-    getWeekData(date: Date){
-        return this._getData(date, ApiMethod.Week).shareReplay();
+    getWeekData(date: Date, idWorker: string = null){
+        return this._getData(date, idWorker, ApiMethod.Week).shareReplay();
     }
 
-    getDayData(date: Date){
-        return this._getData(date, ApiMethod.Day).shareReplay();
+    getDayData(date: Date, idWorker: string = null){
+        return this._getData(date, idWorker, ApiMethod.Day).shareReplay();
     }
 
-    private _getData(date: Date, type: ApiMethod){
+    private _getData(date: Date, idWorker: string, type: ApiMethod){
 
-        return this.httpClient.get(this.api+ `${type}?date=${date.toISOString()}`)
+        let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
+        if(idWorker)
+            httpStr = httpStr + `&idWorker=${idWorker}`;
+
+        return this.httpClient.get(httpStr)
             .map(response => {
                 
                 let daymap : Map<Date, DayView> = new Map<Date, DayView>();

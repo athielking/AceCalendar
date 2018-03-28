@@ -15,23 +15,19 @@ export class CalendarComponent implements OnInit {
     @ViewChild(MonthViewComponent) monthView: MonthViewComponent;
     
     public viewDate : Date;
-    
     public selectedIndex: number = 0;
+
+    private isMobile: Boolean = false;
 
     constructor(private authService: AuthService){
 
     }
 
-    public onChangeViewDate( newDate: Date ){
-        this.viewDate = newDate;
-        this.storeViewDate();
-    }
-
-    public onChangeSelectedView( newView: CalendarViews ){
-        this.selectedIndex = newView;
-    }
-    
     public ngOnInit(){
+
+        if(window.screen.width <= 576)
+            this.isMobile = true;
+
         if(localStorage.getItem(StorageKeys.viewDate))
             this.viewDate = new Date(localStorage.getItem(StorageKeys.viewDate));
         else
@@ -43,7 +39,19 @@ export class CalendarComponent implements OnInit {
             this.selectedIndex = 1;
 
         this.storeViewDate();
+    }
+
+    public ngAfterViewInit(){
         this.updateCurrentTab();
+    }
+
+    public onChangeViewDate( newDate: Date ){
+        this.viewDate = newDate;
+        this.storeViewDate();
+    }
+
+    public onChangeSelectedView( newView: CalendarViews ){
+        this.selectedIndex = newView;
     }
 
     public onSelectedTabChange(event: MatTabChangeEvent){

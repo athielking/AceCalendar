@@ -5,6 +5,8 @@ import { environment } from '../../environments/environment';
 import { LoginModel } from '../components/login/loginModel';
 import { JwtHelper } from './jwtHelper.service';
 import { IdentityClaimTypes } from '../tools/identityClaimTypes';
+import { ChangePasswordModel } from '../models/auth/changePasswordModel';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 export const TOKEN_NAME: string = 'jwt_token';
 export const TOKEN_EXPIRATION: string = 'jwt_token_expiration';
@@ -27,6 +29,7 @@ export class AuthService {
         return token === null || token.length == 0 || tokenExpiration === null || tokenExpiration < new Date();
     }
 
+    
     public login(
         loginModel: LoginModel, 
         onSuccess: () => any,
@@ -48,6 +51,20 @@ export class AuthService {
                     onFailure();
                 }
             );
+    }
+
+    public changePassword( model: ChangePasswordModel ){
+        let url = this.serviceUri+'/changePassword';
+
+        let obs = this.httpClient.post(url, model);
+
+        obs.subscribe( result => {
+            this.setToken( result["token"] );
+            this.setTokenExpiration( result["expiration"]);
+            this.setLoggedInUser(result["user"]);
+        });
+
+        return obs.shareReplay();
     }
 
     public logout(

@@ -1,0 +1,4 @@
+<div class="job-card" >
+        <span *ngIf="job.number && job.number.length > 0" class="job-name-span"><strong>{{ job.number }}</strong> - {{ job.name }}</span>
+        <span *ngIf="!job.number || job.number.length == 0" class="job-name-span">{{ job.name }}</span>
+</div>
