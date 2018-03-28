@@ -1,0 +1,18 @@
+@import '~@angular/material/theming';
+@import '../../../ace-calendar-theme';
+@import '../calendar/common/calendar-card.scss';
+
+.job-card{
+    @extend %cal-card-base;
+    flex-direction: row;
+    padding: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    color: white;
+    text-align: center;
+    background-color: mat-color($primary, 500);
+}
+
+.job-name-span{
+    width: 100%;
+}

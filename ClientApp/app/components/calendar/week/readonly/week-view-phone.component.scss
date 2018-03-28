@@ -1,0 +1,23 @@
+.phone-title{
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 4px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.phone-subtitle{
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 14px;
+    color: rgba(0,0,0,.54);
+}
+
+.phone-grid{
+
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+    grid-gap: 2px;
+}

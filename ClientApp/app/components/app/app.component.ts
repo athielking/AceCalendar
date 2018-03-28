@@ -16,9 +16,11 @@ import {
   MatSidenavContainer,
   MatSidenavContent,
   MatNavList,
+  MatDialog,
 } from '@angular/material';
 
 import { AuthService } from "../../services/auth.service";
+import { ChangePasswordComponent } from '../login/change-password.component';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +33,8 @@ export class AppComponent {
   public loggedInUser: string;
   public menuOpen: boolean = true;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, 
+              private dialog: MatDialog ) {
     this.authorized = !this.authService.loginRequired();
     this.loggedInUser = this.authService.getLoggedInUser();
   }
@@ -40,6 +43,10 @@ export class AppComponent {
     this.menuOpen = !this.menuOpen;
   }
   
+  public changePassword(){
+    this.dialog.open(ChangePasswordComponent, {width: '600px', height: '700px'});
+  }
+
   public logout(): void {
     this.authService.logout(
       () => {

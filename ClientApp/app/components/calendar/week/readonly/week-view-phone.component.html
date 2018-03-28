@@ -1,0 +1,48 @@
+
+<mat-toolbar layout-align="center">
+
+    <button mat-icon-button (click)="viewDateBack()">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <span>{{ startOfWeek | date: 'MMM'}} {{ startOfWeek | date: 'd'}} - {{ endOfWeek | date: 'd' }}</span>
+
+    <button mat-icon-button (click)="viewDateForward()">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+    
+    <div *ngIf="!showingOptions" style="position: absolute; right: 0;">
+        <button mat-icon-button (click)="toggleJobFilterOptions()">
+            <mat-icon>expand_more</mat-icon>
+        </button>
+    </div>
+
+    <div *ngIf="showingOptions" style="position: absolute; right: 0;">
+        <button mat-icon-button (click)="toggleJobFilterOptions()">
+            <mat-icon>expand_less</mat-icon>
+        </button>
+    </div>
+
+</mat-toolbar>
+
+<mat-toolbar *ngIf="showingOptions" [@expandCollapse] layout-align="center" style="font-size: 14px">
+    <mat-form-field> 
+        <mat-select [(ngModel)]="showJobOption" placeholder="Showing Jobs For" [compareWith]="workerCompare" (selectionChange)="showJobOptionChange($event)">
+            <mat-option *ngFor="let worker of workers" [value]="worker.id">{{ worker.firstName }} {{ worker.lastName }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-toolbar>
+
+<div *tdLoading="'showWeekViewPhoneLoading'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent';"></div>
+
+<div class='phone-grid'>
+    <ng-template let-dayView ngFor [ngForOf]="weekData">
+        <div class='cal-card'>
+            <div class="phone-title">{{ dayView.calendarDay.date | date: 'd'}}</div>
+            <div class="phone-subtitle">{{ dayView.calendarDay.date | date: 'EEE'}}</div>
+        </div>
+        <div class='cal-card' style="padding-left: 4px; padding-right: 4px;">
+            <ac-simple-job *ngFor="let job of dayView.jobs" [job]="job"></ac-simple-job>
+        </div>
+    </ng-template>
+</div>

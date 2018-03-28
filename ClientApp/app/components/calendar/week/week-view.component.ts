@@ -29,9 +29,8 @@ import { JobStore } from '../../../stores/job.store';
 export class WeekViewComponent implements OnInit {
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
-    private weekData: DayView[];
-
-    private viewDate: Date;
+    protected weekData: DayView[];
+    protected viewDate: Date;
 
     public startOfWeek: Date;
     
@@ -48,8 +47,8 @@ export class WeekViewComponent implements OnInit {
         public jobStore: JobStore,
         private storageService: StorageService,
         protected loadingService: TdLoadingService,
-        private dialogService: TdDialogService,
-        private dialog: MatDialog ) {
+        protected dialogService: TdDialogService,
+        protected dialog: MatDialog ) {
     }
 
     public addWorkerOptionCompare(o1, o2): boolean{

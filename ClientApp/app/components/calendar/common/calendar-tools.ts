@@ -41,6 +41,7 @@ export enum StorageKeys{
     monthViewShowAvailable = "MONTH_VIEW_SHOW_AVAILABLE",
     monthViewShowOff = "MONTH_VIEW_SHOW_OFF",
     addWorkerOption = "ADD_WORKER_OPTION",
+    showJobOption = "SHOW_JOB_OPTION",
     readonlyViewDate = "READONLY_VIEW_DATE",
     readonlySelectedTab = "READONLY_SELECTED_TAB",
 }

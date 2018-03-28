@@ -36,6 +36,8 @@ import { JobComponent } from './components/job/job.component';
 import { AddJobToWeekViewComponent } from "./components/job/addJobToWeekViewComponent";
 import { AddJobToDayViewComponent } from "./components/job/addJobToDayViewComponent";
 import { JobNotesComponent } from "./components/job/jobNotes.component";
+import { SimpleJobCardComponent } from './components/job/simple-job-card.component';
+
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -44,6 +46,7 @@ import { MonthDisplayOptionsComponent } from './components/calendar/month/month-
 import { DayViewComponent } from "./components/calendar/day/day-view.component";
 import { WeekViewComponent } from "./components/calendar/week/week-view.component";
 import { WeekViewReadonlyComponent } from "./components/calendar/week/readonly/week-view-readonly.component";
+import { WeekViewPhoneComponent } from "./components/calendar/week/readonly/week-view-phone.component";
 import { WeekCellComponent } from "./components/calendar/week/week-cell.component";
 import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.component";
 import { AddTagComponent } from "./components/tag/add-tag.component";
@@ -56,7 +59,7 @@ import { OrganizationDetailComponent } from './components/admin/organization-det
 import { AddOrganizationComponent } from './components/admin/add-organization.component';
 import { AddUserComponent} from './components/admin/add-user.component';
 import { LoginComponent } from "./components/login/login.component";
-
+import { ChangePasswordComponent } from './components/login/change-password.component';
 import { JwtHelper } from './services/jwtHelper.service';
 import { StorageService } from './services/storage.service';
 import { JobService } from './services/job.service';
@@ -106,6 +109,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AddJobToDayViewComponent,    
     JobNotesComponent,
     JobListComponent,
+    SimpleJobCardComponent,
 
     //Month View
     MonthViewComponent,
@@ -115,6 +119,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     //Week View
     WeekViewComponent,
     WeekViewReadonlyComponent,
+    WeekViewPhoneComponent,
     WeekCellComponent,
     WeekCellJobComponent,
 
@@ -125,7 +130,10 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AddUserComponent,
 
     DayViewComponent,
-    LoginComponent
+
+    //Auth
+    LoginComponent,
+    ChangePasswordComponent
   ],
   entryComponents: [
     AddWorkerComponent,
@@ -136,6 +144,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     AddWorkerToComponent,
     DayViewComponent,
     MonthDisplayOptionsComponent,
+    ChangePasswordComponent,
     AddTagComponent,
     SelectTagComponent,
     AddOrganizationComponent,
