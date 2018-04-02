@@ -22,6 +22,8 @@ import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, Covale
 import { AppComponent } from './components/app/app.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarReadonlyComponent } from "./components/calendar/calendar-readonly.component";
+import { MultiDatePickerComponent } from './components/calendar/common/multi-datepicker.component';
+
 import { WorkerComponent } from './components/worker/worker.component';
 import { AddWorkerComponent } from './components/worker/addWorker.component';
 import { AvailableWorkerPickerComponent } from './components/worker/availableWorkerPicker.component';
@@ -86,6 +88,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     NavMenuComponent,
     CalendarComponent,
     CalendarReadonlyComponent,
+    MultiDatePickerComponent,
     
     //Tag CRUD
     AddTagComponent,

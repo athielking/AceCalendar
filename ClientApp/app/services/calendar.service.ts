@@ -34,6 +34,40 @@ export class CalendarService{
         return this._getData(date, idWorker, ApiMethod.Day).shareReplay();
     }
 
+    private _getData2(date: Date, idWorker: string, type: ApiMethod){
+        let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
+        if(idWorker)
+            httpStr = httpStr + `&idWorker=${idWorker}`;
+
+        return this.httpClient.get(httpStr)
+            .map(response => {
+
+                let obj = response["data"];
+                //let keys = Object.keys(obj);
+                let dayViews: DayView[] = [];
+
+                obj.forEach( dv => {
+                    let ymd = dv.date.substr(0, dv.date.indexOf("T")).split("-");
+                    let d: Date = new Date(+ymd[0], (+ymd[1])-1, +ymd[2]);
+
+                    let jobs: CalendarJob[] = dv.jobs.map( item => {
+                        let job = new CalendarJob(item.id, item.number, item.name, item.notes);
+                        job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
+                        job.jobTags = item.jobTags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay));
+
+                        return job;
+                    });
+
+                    let availableWorkers: Worker[] = dv.availableWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
+                    let timeOffWorkers: Worker[] = dv.timeOffWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
+
+                    dayViews.push( new DayView( getCalendarDay(d, date), jobs, availableWorkers, timeOffWorkers));
+                });
+
+                return dayViews;
+            });
+    }
+
     private _getData(date: Date, idWorker: string, type: ApiMethod){
 
         let httpStr = this.api+ `${type}?date=${date.toISOString()}`;

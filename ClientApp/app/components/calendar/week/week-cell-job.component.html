@@ -5,6 +5,9 @@
         <div style="display: flex; flex-direction:column" flex>
             <div>{{calendarJob.name}}</div>
             <div>{{calendarJob.number}}</div>
+            <div *ngIf="calendarJob.jobTags?.length > 0" class="week-cell-job-tags">
+                <ac-tag *ngFor="let tag of calendarJob.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
+            </div>
         </div>
 
         <a class="week-cell-job-button-container" mat-icon-button *ngIf="calendarJob.notes && calendarJob.notes.length > 0" (click)="showNotes()">
@@ -28,9 +31,7 @@
             </mat-menu>
         </div>
     </div>
-    <div *ngIf="calendarJob.jobTags?.length > 0" class="week-cell-job-tags">
-        <ac-tag *ngFor="let tag of calendarJob.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
-    </div>
+    
     <div class="week-cell-job-workers">
         <ac-worker-card *ngFor="let worker of calendarJob.workers" 
             [worker]="worker"

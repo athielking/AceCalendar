@@ -9,6 +9,7 @@ import { JobStore } from '../../stores/job.store';
 import { Observable } from 'rxjs/Rx';
 import { SelectTagComponent } from '../tag/select-tag.component';
 import { Tag } from '../../models/tag/tag.model';
+import { ChangeViewDateEvent } from '../calendar/common/multi-datepicker.component';
 
 @Component({
     selector: 'ac-addJob',
@@ -18,6 +19,9 @@ export abstract class AddJobComponent {
     
     private isEdit: boolean;
     private editJobId: string;
+
+    public viewDate: Date;
+    public jobDays: Date[];
 
     public selectedTags: Tag[];
     public jobDayTags: Tag[];
@@ -40,8 +44,7 @@ export abstract class AddJobComponent {
         this.jobNumber = data.jobNumber,
         this.jobName = data.jobName,
         this.notes = data.notes,
-        this.startDate = data.startDate,
-        this.endDate = data.endDate,
+        this.jobDays = data.jobDays ? data.jobDays : [],
         this.selectedTags = data.selectedTags ? data.selectedTags.filter( value => !value.fromJobDay) : [];
         this.jobDayTags = data.selectedTags ? data.selectedTags.filter( value => value.fromJobDay) : [];        
     }
@@ -55,6 +58,10 @@ export abstract class AddJobComponent {
             this.editJob();
         else
             this.addJob();      
+    }
+
+    public onChangeViewDateRequested(event: ChangeViewDateEvent){
+        this.viewDate = event.newDate;
     }
 
     public endDateIsNotBeforeStartDate() {
@@ -82,9 +89,8 @@ export abstract class AddJobComponent {
             this.jobNumber, 
             this.jobName, 
             this.notes, 
-            this.startDate,
-            this.endDate,
-            this.selectedTags
+            this.selectedTags,
+            this.jobDays
         );
 
         this.AddJobThroughStore(addJobModel).subscribe( result => {
@@ -106,9 +112,8 @@ export abstract class AddJobComponent {
             this.jobNumber, 
             this.jobName, 
             this.notes, 
-            this.startDate,
-            this.endDate,
-            this.selectedTags
+            this.selectedTags,
+            this.jobDays
         );
 
         this.EditJobThroughStore(this.editJobId, addJobModel).subscribe( result => {

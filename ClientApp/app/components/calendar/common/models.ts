@@ -167,9 +167,9 @@ export class AddJobModel {
         public number: string,
         public name: string,
         public notes: string,        
-        public startDate: Date,
-        public endDate: Date,
-        public tags: Tag[]
+        public tags: Tag[],
+        public jobDays: Date[]
+
     ){
     }
 }

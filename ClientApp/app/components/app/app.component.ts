@@ -44,7 +44,7 @@ export class AppComponent {
   }
   
   public changePassword(){
-    this.dialog.open(ChangePasswordComponent, {width: '600px', height: '700px'});
+    this.dialog.open(ChangePasswordComponent, { data: {username: this.loggedInUser }, width: '600px', height: '700px'});
   }
 
   public logout(): void {

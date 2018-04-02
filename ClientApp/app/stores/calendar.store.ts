@@ -124,6 +124,10 @@ export class CalendarStore {
         return this.jobService.getJobStartAndEndDate(jobId);
     }
 
+    public getJobDays(jobId: string){
+        return this.jobService.getJobDays(jobId);
+    }
+
     public getDataForMonth(date: Date, idWorker: string = null) {
         this._lastViewDate = date;
 

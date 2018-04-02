@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
 import { TdLoadingService } from '@covalent/core';
 import { AppComponent } from "../app/app.component";
@@ -16,6 +17,7 @@ export class LoginComponent {
     public showErrorMessage: boolean;
 
     constructor(
+        private router: Router,
         private appComponent: AppComponent,
         private authService: AuthService,
         private loadingService: TdLoadingService
@@ -36,6 +38,8 @@ export class LoginComponent {
                 this.toggleShowLoading( false );
                 this.appComponent.authorized = true;
                 this.appComponent.loggedInUser = this.authService.getLoggedInUser();
+
+                this.router.navigate(['calendar']);
             },
             () => {               
                 this.showErrorMessage = true;

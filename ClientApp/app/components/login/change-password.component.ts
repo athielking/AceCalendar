@@ -61,7 +61,7 @@ export class ChangePasswordComponent{
     }
 
     public cancelClick(){
-        this.dialogRef.afterClosed();
+        this.dialogRef.close();
     }
 
     private toggleShowLoading(show:boolean): void {

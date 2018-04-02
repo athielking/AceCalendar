@@ -1,0 +1,25 @@
+<div class="multi-datepicker-container">
+    <div class="multi-datepicker-header">
+        <button mat-icon-button (click)="monthBack()"><mat-icon>chevron_left</mat-icon></button>
+        <span class="view-date" flex>{{ viewDate | date: "MMM yyyy"}}</span>
+        <button mat-icon-button (click)="monthForward()"><mat-icon>chevron_right</mat-icon></button>
+    </div>
+    <div class="multi-datepicker-days header">
+        <span class="multi-datepicker-day day-header">S</span>
+        <span class="multi-datepicker-day day-header">M</span>
+        <span class="multi-datepicker-day day-header">T</span>
+        <span class="multi-datepicker-day day-header">W</span>
+        <span class="multi-datepicker-day day-header">T</span>
+        <span class="multi-datepicker-day day-header">F</span>
+        <span class="multi-datepicker-day day-header">S</span>
+    </div>
+    
+    <div class="multi-datepicker-days">        
+        <span (click)="toggleSelectDay(day, $event)" *ngFor="let day of monthDays; let i = index"
+            class="multi-datepicker-day date"
+            [class.selected]="day.selected" 
+            [ngStyle]="{'grid-column-start': (dateOffset + i) % 7}"> 
+            {{ day.date | date: "d"}}
+        </span>
+    </div>
+</div>

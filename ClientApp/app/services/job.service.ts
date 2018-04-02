@@ -117,4 +117,14 @@ export class JobService {
                 );
             });
     }
+
+    public getJobDays(jobId: string) {
+        return this.httpClient.get(this.serviceUri+`/getJobDays?jobId=${jobId}`)
+            .map( response => {
+                return response["records"].map( record => {
+                    var ymd = record.substr(0, record.indexOf("T")).split("-");
+                    return new Date(+ymd[0], (+ymd[1])-1, +ymd[2]);
+                });
+            });
+    }
 }

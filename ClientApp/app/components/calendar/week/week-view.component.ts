@@ -118,7 +118,7 @@ export class WeekViewComponent implements OnInit {
     }
     
     public onEditJobRequested(event: EditJobRequestedEvent) {
-        this.calendarStore.getJobStartAndEndDate( event.job.id).subscribe(result => { 
+        this.calendarStore.getJobDays( event.job.id).subscribe(result => { 
             let dialogRef = this.dialog.open(AddJobToWeekViewComponent, {
                 disableClose: true,
                 data: {
@@ -127,8 +127,7 @@ export class WeekViewComponent implements OnInit {
                     jobNumber: event.job.number,
                     jobName: event.job.name,
                     notes: event.job.notes,
-                    startDate: result.startDate,
-                    endDate: result.endDate,
+                    jobDays: result,
                     selectedTags: event.job.jobTags     
                 }
             });
