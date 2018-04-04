@@ -160,7 +160,7 @@ export class WeekViewComponent implements OnInit {
         if(this.workerAddOption != AddWorkerOption.SingleDay)
             this.toggleShowLoading(true);
 
-        this.calendarStore.moveWorkerToJob( event.worker, event.date, event.calendarJob, this.workerAddOption ).subscribe(result => {      
+        this.calendarStore.moveWorkerToJob( this.viewDate, event.worker, event.date, event.calendarJob, this.workerAddOption ).subscribe(result => {      
             this.weekData.forEach( dv => {
                 if( isSameDay(dv.calendarDay.date, event.date)){
                     dv.addWorkerToJob(event.worker, event.calendarJob);

@@ -76,7 +76,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
     public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
         this.dataUpdated = true;
 
-        this.calendarStore.moveWorkerToJob( event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
+        this.calendarStore.moveWorkerToJob(this.viewDate, event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
             this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
         }, error => {
             this.dialogService.openAlert({

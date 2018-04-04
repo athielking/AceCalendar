@@ -14,8 +14,8 @@
         <mat-form-field> 
             <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
                 <mat-option value=0>Single Day</mat-option>
-                <mat-option value=1>All Days</mat-option>
-                <mat-option value=2>All Days when available</mat-option>
+                <mat-option value=1>All Days this week</mat-option>
+                <mat-option value=2>All Days this week when available</mat-option>
             </mat-select>
         </mat-form-field>           
     </div>

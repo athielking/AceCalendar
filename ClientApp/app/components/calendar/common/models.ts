@@ -179,6 +179,7 @@ export class MoveWorkerRequestModel {
         public idWorker: string,
         public idJob: string,
         public date: Date,
+        public viewDate: Date,
         public addWorkerOption: AddWorkerOption = AddWorkerOption.SingleDay
     ){
     }

@@ -176,8 +176,8 @@ export class CalendarStore {
         });
     }
 
-    public moveWorkerToJob(worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
-        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date, workerAddOption));
+    public moveWorkerToJob(viewDate: Date, worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
+        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date, viewDate, workerAddOption));
 
         if( workerAddOption != AddWorkerOption.SingleDay ) {
             obs.subscribe( response => {
@@ -190,11 +190,11 @@ export class CalendarStore {
     }
 
     public moveWorkerToAvailable(worker: Worker, date: Date  ){
-        return this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date));
+        return this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date, null));
     }
 
     public moveWorkerToOff(worker: Worker, date: Date  ){
-        return this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date));
+        return this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date, null));
     }
 
     public copyCalendarDay(viewDate: Date, dateFrom: Date, dateTo: Date){
