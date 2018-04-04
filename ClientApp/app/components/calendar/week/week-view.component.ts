@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core'
+import { DatePipe } from '@angular/common'
+
 import { TdLoadingService, TdDialogService } from '@covalent/core'
 import {MatSelectChange} from '@angular/material';
 import { Observable } from 'rxjs/Rx';
@@ -20,11 +22,13 @@ import { AddJobToWeekViewComponent } from '../../job/addJobToWeekViewComponent';
 import { StorageKeys } from '../common/calendar-tools';
 import { SelectTagComponent } from '../../tag/select-tag.component';
 import { JobStore } from '../../../stores/job.store';
+import { CopyDayRequest } from './week-cell.component';
 
 @Component({
     selector: 'ac-week-view',
     templateUrl: './week-view.component.html',
-    styleUrls: ["./week-view.component.scss"]
+    styleUrls: ["./week-view.component.scss"],
+    providers: [DatePipe]
 })
 export class WeekViewComponent implements OnInit {
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
@@ -48,7 +52,8 @@ export class WeekViewComponent implements OnInit {
         private storageService: StorageService,
         protected loadingService: TdLoadingService,
         protected dialogService: TdDialogService,
-        protected dialog: MatDialog ) {
+        protected dialog: MatDialog,
+        private datePipe: DatePipe ) {
     }
 
     public addWorkerOptionCompare(o1, o2): boolean{
@@ -139,6 +144,17 @@ export class WeekViewComponent implements OnInit {
         });
     }
     
+    public onCopyDayRequested(event: CopyDayRequest){
+        this.dialogService.openConfirm({
+            message: `Are you sure you wish to copy all jobs and workers from ${this.datePipe.transform(event.dayFrom, 'EEEE')} to ${this.datePipe.transform(event.dayTo, 'EEEE')}`
+        }).afterClosed().subscribe(result => {
+            if(!result)
+                return;
+
+            this.calendarStore.copyCalendarDay(this.viewDate, event.dayFrom, event.dayTo);
+        })
+    }
+
     public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
 
         if(this.workerAddOption != AddWorkerOption.SingleDay)

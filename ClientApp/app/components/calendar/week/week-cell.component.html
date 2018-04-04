@@ -4,8 +4,24 @@
         {{ dayView.calendarDay?.date | date:'d' }}
     </div>
 
-    <div class="cal-card-subtitle">
-        {{ dayView.calendarDay?.date | date:'EEEE' }}
+    
+    <div layout="row">
+        <div class="cal-card-subtitle" flex>
+            {{ dayView.calendarDay?.date | date:'EEEE' }}
+        </div>
+        <div style="margin-top: -10px;">
+            <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>more_vert</mat-icon></button>
+        </div>
     </div>
+    
+    <mat-menu x-position="before" #menu="matMenu">
+        <button mat-menu-item [mat-menu-trigger-for]="dayMenu">
+            <mat-icon>content_copy</mat-icon> Copy To
+        </button>
+    </mat-menu>
+    <mat-menu #dayMenu="matMenu">
+        <button mat-menu-item *ngFor="let day of otherDays" (click)="copyToDay(day)">{{ day | date: 'EEEE' }}</button>
+    </mat-menu>
+
 
 </div>

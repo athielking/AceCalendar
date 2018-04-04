@@ -31,7 +31,8 @@
         <ac-week-cell 
             class="week-jobs"
             *ngFor="let dayView of weekData" 
-            [dayView]="dayView">         
+            [dayView]="dayView"
+            (copyDayRequested)="onCopyDayRequested($event)">         
         </ac-week-cell>
 
         <ac-job-list 

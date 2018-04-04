@@ -196,4 +196,17 @@ export class CalendarStore {
     public moveWorkerToOff(worker: Worker, date: Date  ){
         return this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date));
     }
+
+    public copyCalendarDay(viewDate: Date, dateFrom: Date, dateTo: Date){
+        this.isWeekLoading.next(true);
+
+        this.calendarService.copyCalendarDay(viewDate, dateFrom, dateTo).subscribe( result => {
+            this._weekData.next(List(result));
+            this.isWeekLoading.next(false);
+        }, error => {
+            this.isWeekLoading.next(false);
+            this.weekErrorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;
+            this.hasWeekError.next(true);
+        })
+    }
 }

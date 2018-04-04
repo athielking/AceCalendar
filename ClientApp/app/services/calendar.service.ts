@@ -34,6 +34,12 @@ export class CalendarService{
         return this._getData(date, idWorker, ApiMethod.Day).shareReplay();
     }
 
+    public copyCalendarDay(viewDate: Date, dateFrom: Date, dateTo: Date){
+        let httpStr = this.api+ `copyCalendarDay?dateFrom=${dateFrom.toISOString()}&dateTo=${dateTo.toISOString()}`;
+
+        return this.httpClient.post(httpStr,{}).map( response => this._mapDayViewResponse(viewDate, response));
+    }
+
     private _getData2(date: Date, idWorker: string, type: ApiMethod){
         let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
         if(idWorker)
@@ -75,9 +81,11 @@ export class CalendarService{
             httpStr = httpStr + `&idWorker=${idWorker}`;
 
         return this.httpClient.get(httpStr)
-            .map(response => {
-                
-                let daymap : Map<Date, DayView> = new Map<Date, DayView>();
+            .map(response => this._mapDayViewResponse(date, response));
+    }
+
+    private _mapDayViewResponse(viewDate: Date, response: any){
+        let daymap : Map<Date, DayView> = new Map<Date, DayView>();
                 let dayViews : DayView[] = [];
 
                 var obj = response["data"];
@@ -154,7 +162,7 @@ export class CalendarService{
                         );
                     });
 
-                    let dv = new DayView(getCalendarDay( d, date ), jobs, workers, offWorkers );
+                    let dv = new DayView(getCalendarDay( d, viewDate ), jobs, workers, offWorkers );
                     dv.workersByJob = workersByJob;
                     dv.tagsByJob = tagsByJob;
 
@@ -163,8 +171,7 @@ export class CalendarService{
                 });
 
                 return dayViews;
-            });
-
     }
 
+    
 }

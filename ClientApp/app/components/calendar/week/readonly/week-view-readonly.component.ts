@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core'
+import {DatePipe} from '@angular/common';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { MatDialog } from '@angular/material';
 import * as isSameWeek from 'date-fns/is_same_week'
@@ -26,8 +27,9 @@ export class WeekViewReadonlyComponent extends WeekViewComponent {
         calendarStore: CalendarStore,
         jobStore: JobStore,
         loadingService: TdLoadingService,
-        dialogService: TdDialogService ) {
-            super(calendarStore, jobStore, storageService, loadingService, dialogService, dialog);
+        dialogService: TdDialogService,
+        datePipe: DatePipe ) {
+            super(calendarStore, jobStore, storageService, loadingService, dialogService, dialog, datePipe);
     }
 
     protected toggleShowLoading(show:boolean) {

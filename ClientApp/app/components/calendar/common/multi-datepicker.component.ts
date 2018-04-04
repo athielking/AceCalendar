@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges
 import * as dateFns from 'date-fns'
 
 import {DAYS_OF_WEEK} from './calendar-tools';
+import * as dateTools from '../../../tools/dateTools';
 
 @Component({
     selector: 'ac-multi-datepicker',
@@ -95,9 +96,7 @@ export class MultiDatePickerComponent implements OnInit, OnChanges {
     }
 
     private _datesAreEqual( d1: Date, d2: Date){
-        return dateFns.getYear(d1) == dateFns.getYear(d2) && 
-            dateFns.getMonth(d1) == dateFns.getMonth(d2) && 
-            dateFns.getDate(d1) == dateFns.getDate(d2);
+        return dateTools.datesAreEqual(d1, d2);
     }
 
     private _handleShiftToggle( day: SelectedDate ){
