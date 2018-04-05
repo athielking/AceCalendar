@@ -7,7 +7,7 @@ import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
-import { WorkerAddedJobEvent, EditJobRequestedEvent, DeleteJobRequestedEvent } from '../../calendar/week/week-cell-job.component';
+import { WorkerAddedJobEvent, EditJobRequestedEvent, DeleteJobDayRequestedEvent } from '../../calendar/week/week-cell-job.component';
 import { AddJobToDayViewComponent } from '../../job/addJobToDayViewComponent';
 import { Subscription } from 'rxjs';
 
@@ -133,7 +133,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    public onDeleteJobRequested(event: DeleteJobRequestedEvent ) {
+    public onDeleteJobRequested(event: DeleteJobDayRequestedEvent ) {
         this.dataUpdated = true;
         
         this.dialogService.openConfirm({
@@ -143,7 +143,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
             if (accept) {
                 this.toggleShowLoading(true);
 
-                this.calendarStore.deleteJobFromDayView(event.jobId)
+                this.calendarStore.deleteJobFromDayView(event.jobId, event.date)
                     .subscribe(result => {
                         this.toggleShowLoading(false);                        
                     }, error => {

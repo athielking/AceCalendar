@@ -5,6 +5,7 @@ import * as startOfWeek from 'date-fns/start_of_week';
 import * as endOfWeek from 'date-fns/end_of_week';
 import * as isSameWeek from 'date-fns/is_same_week';
 
+import * as dateTools from '../tools/dateTools';
 import { AddWorkerOption } from '../models/shared/calendar-options';
 import { environment } from '../../environments/environment';
 import { CalendarService } from '../services/calendar.service';
@@ -98,19 +99,36 @@ export class CalendarStore {
         return obs;
     }
 
-    public deleteJobFromWeekView(jobId: string){
-        var obs = this.jobService.deleteJob(jobId);
+    public deleteJobFromWeekView(jobId: string, date: Date){
+        let obs = this.jobService.deleteDayJob(jobId, date);
+        let weekData = this._weekData.getValue().toArray();
 
         obs.subscribe( response => {
-            this.getDataForWeek(this._lastViewDate);
+            
+            weekData.forEach(dayView => {
+
+                if(! dateTools.datesAreEqual( dayView.calendarDay.date, date ))
+                    return;
+                
+                var index = dayView.jobs.findIndex( job => job.id == jobId);
+                if( index > -1 )
+                    dayView.jobs.splice(index, 1);
+            })
+            //this.getDataForWeek(this._lastViewDate);
+
+            this._weekData.next(List(weekData));
         }, error => {
+            this.hasWeekError.next(true)
+            this.weekErrorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;
+            this._weekData.next(List(weekData));
         })
         
         return obs;
     }
 
-    public deleteJobFromDayView(jobId: string){
-        var obs = this.jobService.deleteJob(jobId);
+    public deleteJobFromDayView(jobId: string, date: Date){
+        var obs = this.jobService.deleteDayJob(jobId, date);
+        let dayData = this._dayData.getValue();
 
         obs.subscribe( response => {
             this.getDataForDay(this._lastViewDate);
@@ -118,6 +136,26 @@ export class CalendarStore {
         })
         
         return obs;
+    }
+
+    public deleteJobsFromDay(date: Date){
+        let obs = this.jobService.deleteJobsFromDay(date);
+        let weekData = this._weekData.getValue().toArray();
+
+        obs.subscribe( response => {
+            let dayView = weekData.find( value => dateTools.datesAreEqual( value.calendarDay.date, date));
+
+            dayView.jobs.forEach( job => {
+                job.workers.forEach( w => dayView.availableWorkers.push(w));
+            });
+
+            dayView.jobs = [];
+            this._weekData.next(List(weekData));
+        }, error =>{ 
+            this.hasWeekError.next(true);
+            this.weekErrorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;
+            this._weekData.next(List(weekData));
+        });
     }
 
     public getJobStartAndEndDate(jobId: string){

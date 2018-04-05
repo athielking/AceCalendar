@@ -14,7 +14,7 @@ import { AddWorkerOption } from '../../../models/shared/calendar-options';
 import { CalendarDay, DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { StorageService} from '../../../services/storage.service';
-import { WeekCellJobComponent, DeleteJobRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
+import { WeekCellJobComponent, DeleteJobDayRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
 import { MatDialog } from '@angular/material';
@@ -100,7 +100,7 @@ export class WeekViewComponent implements OnInit {
         this.handleDateChanged( add_weeks(this.viewDate, -1))
     }
 
-    public onDeleteJobRequested(event: DeleteJobRequestedEvent ) {
+    public onDeleteJobRequested(event: DeleteJobDayRequestedEvent ) {
         this.dialogService.openConfirm({
             message: 'Are you sure you wish to delete this Job?',
             title: 'Confirm Delete'
@@ -108,7 +108,7 @@ export class WeekViewComponent implements OnInit {
             if (accept) {
                 this.toggleShowLoading(true);
 
-                this.calendarStore.deleteJobFromWeekView(event.jobId)
+                this.calendarStore.deleteJobFromWeekView(event.jobId, event.date)
                     .subscribe(result => {
                         this.toggleShowLoading(false);                        
                     }, error => {
@@ -147,11 +147,22 @@ export class WeekViewComponent implements OnInit {
     public onCopyDayRequested(event: CopyDayRequest){
         this.dialogService.openConfirm({
             message: `Are you sure you wish to copy all jobs and workers from ${this.datePipe.transform(event.dayFrom, 'EEEE')} to ${this.datePipe.transform(event.dayTo, 'EEEE')}`
-        }).afterClosed().subscribe(result => {
-            if(!result)
+        }).afterClosed().subscribe((accept: boolean) => {
+            if(!accept)
                 return;
 
             this.calendarStore.copyCalendarDay(this.viewDate, event.dayFrom, event.dayTo);
+        })
+    }
+
+    public onDeleteJobsFromDayRequested(event: Date){
+        this.dialogService.openConfirm({
+            message: `Are you sure you wish to remove all jobs and workers from ${this.datePipe.transform(event, 'EEEE, mmmm dd')}?`
+        }).afterClosed().subscribe((accept: boolean) => {
+            if(!accept)
+                return;
+
+            this.calendarStore.deleteJobsFromDay(event);
         })
     }
 

@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core'
 import { MatDialog } from '@angular/material';
 
 import { DayView, AddJobModel } from '../calendar/common/models'
-import { WorkerAddedJobEvent, DeleteJobRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from '../calendar/week/week-cell-job.component';
+import { WorkerAddedJobEvent, DeleteJobDayRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from '../calendar/week/week-cell-job.component';
 import { AddJobToWeekViewComponent } from './addJobToWeekViewComponent';
 import { WorkerMovedWithDateEvent } from '../worker/worker-list.component';
 
@@ -19,7 +19,7 @@ export class JobListComponent {
     @Input() isReadonly: boolean = false;
 
     @Output() workerAddedToJob: EventEmitter<WorkerAddedToJobEvent> = new EventEmitter();
-    @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
+    @Output() deleteJobRequested: EventEmitter<DeleteJobDayRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
     @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
     @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
@@ -37,7 +37,7 @@ export class JobListComponent {
         });
     }
 
-    public onDeleteJobRequested(event: DeleteJobRequestedEvent ) {
+    public onDeleteJobRequested(event: DeleteJobDayRequestedEvent ) {
         this.deleteJobRequested.emit(event);
     }
 

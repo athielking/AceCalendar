@@ -87,6 +87,13 @@ export class JobService {
     public deleteJob( jobId: string ){
         return this.httpClient.delete( this.serviceUri + `/${jobId}` ).shareReplay();
     }
+    public deleteDayJob( jobId: string, date: Date){
+        return this.httpClient.delete( this.serviceUri+`/deleteDayJob/${jobId}/${date.toISOString()}`).shareReplay();
+    }
+
+    public deleteJobsFromDay(date: Date){
+        return this.httpClient.delete( this.serviceUri+`/deleteJobs/${date.toISOString()}`).shareReplay();
+    }
 
     public moveWorkerToJob(moveWorkerRequestModel: MoveWorkerRequestModel){
         return this.httpClient.post(this.serviceUri+`/moveWorkerToJob`, moveWorkerRequestModel).shareReplay();

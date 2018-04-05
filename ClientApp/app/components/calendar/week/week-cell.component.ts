@@ -12,6 +12,7 @@ import * as dateTools from '../../../tools/dateTools';
 export class WeekCellComponent implements OnInit {
     @Input() dayView: DayView;
     @Output() copyDayRequested: EventEmitter<CopyDayRequest> = new EventEmitter();
+    @Output() deleteJobsFromDayRequest: EventEmitter<Date> = new EventEmitter();
 
     public otherDays: Date[];
 
@@ -33,6 +34,10 @@ export class WeekCellComponent implements OnInit {
 
     public copyToDay(date: Date){
         this.copyDayRequested.emit({dayFrom: this.dayView.calendarDay.date, dayTo: date});
+    }
+
+    public deleteAllJobsFromDay(){
+        this.deleteJobsFromDayRequest.emit(this.dayView.calendarDay.date);
     }
 }
 

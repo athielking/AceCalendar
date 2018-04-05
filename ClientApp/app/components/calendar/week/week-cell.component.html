@@ -18,6 +18,7 @@
         <button mat-menu-item [mat-menu-trigger-for]="dayMenu">
             <mat-icon>content_copy</mat-icon> Copy To
         </button>
+        <button mat-menu-item (click)="deleteAllJobsFromDay()"><mat-icon>delete</mat-icon> Remove all jobs</button>
     </mat-menu>
     <mat-menu #dayMenu="matMenu">
         <button mat-menu-item *ngFor="let day of otherDays" (click)="copyToDay(day)">{{ day | date: 'EEEE' }}</button>

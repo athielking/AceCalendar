@@ -15,7 +15,7 @@ export class WeekCellJobComponent {
     @Input() calendarDay: CalendarDay;
     @Input() isReadonly: boolean = false;
     @Output() workerAdded: EventEmitter<WorkerAddedJobEvent> = new EventEmitter();
-    @Output() deleteJobRequested: EventEmitter<DeleteJobRequestedEvent> = new EventEmitter();
+    @Output() deleteJobDayRequested: EventEmitter<DeleteJobDayRequestedEvent> = new EventEmitter();
     @Output() editJobRequested: EventEmitter<EditJobRequestedEvent> = new EventEmitter();    
     @Output() dayJobTagRequested: EventEmitter<DayJobTagRequestedEvent> = new EventEmitter();
 
@@ -52,8 +52,9 @@ export class WeekCellJobComponent {
 
     public deleteJob(jobId: string) {
 
-        this.deleteJobRequested.emit({
-            jobId: jobId
+        this.deleteJobDayRequested.emit({
+            jobId: jobId,
+            date: this.calendarDay.date
         });
     }
 
@@ -94,6 +95,7 @@ export interface DayJobTagRequestedEvent {
     date: Date
 }
 
-export interface DeleteJobRequestedEvent {
-    jobId: string
+export interface DeleteJobDayRequestedEvent {
+    jobId: string, 
+    date: Date
 }
