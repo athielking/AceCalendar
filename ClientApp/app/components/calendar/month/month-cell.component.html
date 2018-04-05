@@ -8,7 +8,8 @@
     </div>
     
         <div class="month-job-details">
-            <div *ngIf="showAllJobs && dayView.calendarDay.inMonth" class="cal-card month-card">
+            <div *ngIf="showAllJobs" class="cal-card month-card"
+                [class.out-month]="!dayView.calendarDay.inMonth">
                 <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
                 <div class="cal-card-content">
                     <div *ngFor="let job of dayView.jobs">
@@ -20,14 +21,14 @@
                 </div>
             </div>
 
-            <div *ngIf="showAvailableWorkers && dayView.calendarDay.inMonth" class="cal-card month-card">
+            <div *ngIf="showAvailableWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
                 <div class="cal-card-header" style="margin-top: 4px">Available - {{dayView.availableWorkers.length}}</div>
                 <div class="cal-card-content">
                     <span *ngFor="let worker of dayView.availableWorkers">{{ worker.firstName }} {{ worker.lastName }}</span>
                 </div>
             </div>
 
-            <div *ngIf="showOffWorkers && dayView.calendarDay.inMonth" class="cal-card month-card">
+            <div *ngIf="showOffWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
                 <div class="cal-card-header" style="margin-top: 4px">Time Off - {{dayView.timeOffWorkers.length}}</div>
                 <div class="cal-card-content">
                     <span *ngFor="let worker of dayView.timeOffWorkers">{{ worker.firstName }} {{ worker.lastName }}</span>
@@ -35,7 +36,7 @@
             </div>
         </div>
 
-        <div layout="row" *ngIf="dayView.calendarDay.inMonth">
+        <div layout="row">
 
             <button *ngIf="!showAllJobs" mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right' [matMenuTriggerFor]="jobsMenu">
                 <mat-icon *ngIf="dayView.jobs.length == 0">business</mat-icon>

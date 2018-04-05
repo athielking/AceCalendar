@@ -52,6 +52,18 @@
     height: max-content;
     background: rgba(0,0,0, .2)
 }
+.out-month{
+    .cal-card-header{
+        color: white;
+    }
+    .cal-card-content{
+        color: white;
+    }
+}
+
+.cal-card.month-card.out-month{
+    color: white;
+}
 
 .month-cell.out-month{
     background-color: mat-color($primary,800);
