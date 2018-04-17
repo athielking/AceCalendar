@@ -27,7 +27,7 @@ export class MonthViewComponent implements OnInit {
   @Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
 
   private viewDate: Date;
-
+  private isLoading: Boolean = false;
   private header: CalendarDay[];
 
   public showErrorMessage: boolean;
@@ -41,14 +41,11 @@ export class MonthViewComponent implements OnInit {
   }
 
   ngOnInit() {   
-    this.calendarStore.isMonthLoading.subscribe( result => {
-      this.toggleShowLoading(result); 
-    });
 
-    this.calendarStore.hasMonthError.subscribe( result => {
-        this.showErrorMessage = result;
-        this.errorMessage = this.calendarStore.monthErrorMessage;
-    });
+    this.calendarStore.isMonthLoading.subscribe( result => {
+      //this.toggleShowLoading(result); 
+      this.isLoading = result;
+    }); 
   }
 
   public updateViewDate(date: Date) {

@@ -33,9 +33,10 @@ import { CopyDayRequest } from './week-cell.component';
 export class WeekViewComponent implements OnInit {
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
+    private isLoading = false;
     protected weekData: DayView[];
     protected viewDate: Date;
-
+    
     public startOfWeek: Date;
     
     public endOfWeek: Date;
@@ -54,6 +55,9 @@ export class WeekViewComponent implements OnInit {
         protected dialogService: TdDialogService,
         protected dialog: MatDialog,
         private datePipe: DatePipe ) {
+
+            if(this.storageService.hasItem(StorageKeys.addWorkerOption))
+                this.workerAddOption= +this.storageService.getItem(StorageKeys.addWorkerOption);    
     }
 
     public addWorkerOptionCompare(o1, o2): boolean{
@@ -66,30 +70,21 @@ export class WeekViewComponent implements OnInit {
 
     public ngOnInit() {
 
-        if(this.storageService.hasItem(StorageKeys.addWorkerOption))
-            this.workerAddOption= +this.storageService.getItem(StorageKeys.addWorkerOption);
-
         this.calendarStore.isWeekLoading.subscribe( result => {
-            this.toggleShowLoading(result); 
-        });
-
-        this.calendarStore.hasWeekError.subscribe( result => {
-            this.showErrorMessage = result;
-            this.errorMessage = this.calendarStore.weekErrorMessage;
+            this.isLoading = result;
         });
 
         this.calendarStore.weekData.subscribe( result => {
-            this.weekData = result.toArray();     
+            this.weekData = result;     
         });
     }
 
     public updateViewDate(date: Date) {
         this.viewDate = date;
-
-        this.calendarStore.getDataForWeek(this.viewDate);
-
         this.startOfWeek = start_of_week(this.viewDate);
         this.endOfWeek = end_of_week(this.viewDate);
+
+        this.calendarStore.getDataForWeek(this.viewDate);
     }
 
     public viewDateForward(): void {
@@ -106,17 +101,17 @@ export class WeekViewComponent implements OnInit {
             title: 'Confirm Delete'
         }).afterClosed().subscribe((accept: boolean) => {
             if (accept) {
-                this.toggleShowLoading(true);
-
-                this.calendarStore.deleteJobFromWeekView(event.jobId, event.date)
-                    .subscribe(result => {
-                        this.toggleShowLoading(false);                        
+                this.isLoading = true;
+                let sub = this.calendarStore.deleteJob(event.jobId, event.date)
+                    .subscribe(result => {                     
                     }, error => {
-                        this.toggleShowLoading(false);
                         this.dialogService.openAlert({
                             message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
                             title: 'Unable to Delete Job'
                         });
+                    }, () => {
+                        this.isLoading = false;
+                        sub.unsubscribe();
                     });
             }
         });
@@ -169,34 +164,22 @@ export class WeekViewComponent implements OnInit {
     public onWorkerAddedJob(event: WorkerAddedToJobEvent ){
 
         if(this.workerAddOption != AddWorkerOption.SingleDay)
-            this.toggleShowLoading(true);
+            this.isLoading = true;
 
-        this.calendarStore.moveWorkerToJob( this.viewDate, event.worker, event.date, event.calendarJob, this.workerAddOption ).subscribe(result => {      
-            this.weekData.forEach( dv => {
-                if( isSameDay(dv.calendarDay.date, event.date)){
-                    dv.addWorkerToJob(event.worker, event.calendarJob);
-                    return;
-                }
-
-                this.toggleShowLoading(false);
-            });           
-        }, error => {
-            this.toggleShowLoading(false);
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Worker to Job'
-            });
+        var sub = this.calendarStore.moveWorkerToJob( this.viewDate, event.worker, event.date, event.calendarJob, this.workerAddOption )
+            .subscribe( result => {}, error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Unable to Add Worker to Job'
+                });
+        }, () => {
+            this.isLoading = false;
+            sub.unsubscribe();
         });
     }
 
     public onWorkerAddedAvailable(event: WorkerListAdded){
-        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result => {      
-            this.weekData.forEach( dv => {
-                if( isSameDay(dv.calendarDay.date, event.date)){
-                    dv.makeWorkerAvailable(event.worker)
-                    return;
-                }
-            });                   
+        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result => {                        
         }, error => {
             this.dialogService.openAlert({
                 message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
@@ -206,13 +189,7 @@ export class WeekViewComponent implements OnInit {
     }
 
     public onWorkerAddedOff(event: WorkerListAdded){
-        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result => {      
-            this.weekData.forEach( dv => {
-                if( isSameDay(dv.calendarDay.date, event.date)){
-                    dv.makeWorkerOff(event.worker)
-                    return;
-                }
-            });                  
+        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result => {               
         }, error => {
             this.dialogService.openAlert({
                 message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
@@ -242,26 +219,14 @@ export class WeekViewComponent implements OnInit {
             if(!result)
                 return;
             
-            this.toggleShowLoading(true);
-            this.jobStore.saveTags( event.job.id, dialogRef.componentInstance.selected, event.date )
-                .subscribe( result => {
-                    this.calendarStore.getDataForWeek(this.viewDate);
-                    this.toggleShowLoading(false);
-                });
+            this.isLoading = true;
+            this.calendarStore.saveTagsForJobDay( event.job.id, dialogRef.componentInstance.selected, event.date )
+            this.isLoading = false;
         });
     }
 
     private handleDateChanged(date: Date) {
         this.updateViewDate(date);
         this.changeViewDate.emit(date);
-    }
-
-    protected toggleShowLoading(show:boolean) {
-        if (show) {
-            this.loadingService.register('showWeekViewLoading');
-        } 
-        else {
-            this.loadingService.resolve('showWeekViewLoading');
-        }
     }
 }

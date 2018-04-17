@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <td-message *ngIf="showErrorMessage" label="Error Getting Day Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+        <td-message *ngIf="calendarStore.hasError | async" label="Error Getting Day Data" sublabel="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
 
         <div class="day-content" *ngIf="!isLoading">
         

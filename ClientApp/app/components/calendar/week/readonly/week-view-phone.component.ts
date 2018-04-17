@@ -5,6 +5,7 @@ import { MatDialog, MatSelectChange } from '@angular/material';
 import * as isSameWeek from 'date-fns/is_same_week'
 import * as isSameDay from 'date-fns/is_same_day';
 import * as add_weeks from 'date-fns/add_weeks';
+import * as add_days from 'date-fns/add_days';
 import * as start_of_week from 'date-fns/start_of_week';
 import * as end_of_week from 'date-fns/end_of_week';
 
@@ -31,7 +32,6 @@ import { StorageService } from '../../../../services/storage.service';
     ]
 })
 export class WeekViewPhoneComponent implements OnInit {
-    @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
     public showJobOption: string = null;
     public showingOptions: boolean = false;
@@ -53,6 +53,10 @@ export class WeekViewPhoneComponent implements OnInit {
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
         private dialogService: TdDialogService ) {
+
+            this.viewDate = new Date();
+            this.startOfWeek = this.viewDate;
+            this.endOfWeek = add_days(this.viewDate, 7);
     }
     
     public showJobOptionChange(event:  MatSelectChange){
@@ -74,13 +78,8 @@ export class WeekViewPhoneComponent implements OnInit {
             this.toggleShowLoading(result); 
         });
 
-        this.calendarStore.hasWeekError.subscribe( result => {
-            this.showErrorMessage = result;
-            this.errorMessage = this.calendarStore.weekErrorMessage;
-        });
-
-        this.calendarStore.weekData.subscribe( result => {
-            this.weekData = result.toArray();     
+        this.calendarStore.phoneWeekData.subscribe( result => {
+            this.weekData = result;     
         });
 
         this.workerStore.workers.subscribe( result => {
@@ -91,32 +90,12 @@ export class WeekViewPhoneComponent implements OnInit {
             if( key == StorageKeys.showJobOption )
             {
                 this.showJobOption = this.storageService.getItem(key);
-                this.calendarStore.getDataForWeek(this.viewDate, this.showJobOption);
+                this.calendarStore.getPhoneDataForWeek(this.showJobOption);
             }
         });
-    }
 
-    public updateViewDate(date: Date) {
-        this.viewDate = date;
-
-        this.calendarStore.getDataForWeek(this.viewDate, this.showJobOption);
+        this.calendarStore.getPhoneDataForWeek(this.showJobOption);
         this.workerStore.getWorkers();
-
-        this.startOfWeek = start_of_week(this.viewDate);
-        this.endOfWeek = end_of_week(this.viewDate);
-    }
-
-    public viewDateForward(): void {
-        this.handleDateChanged( add_weeks(this.viewDate, 1))
-    }
-
-    public viewDateBack(): void {
-        this.handleDateChanged( add_weeks(this.viewDate, -1))
-    }
-
-    private handleDateChanged(date: Date) {
-        this.updateViewDate(date);
-        this.changeViewDate.emit(date);
     }
 
     protected toggleJobFilterOptions(){
@@ -131,6 +110,4 @@ export class WeekViewPhoneComponent implements OnInit {
             this.loadingService.resolve('showWeekViewPhoneLoading');
         }
     }
-
-
 }

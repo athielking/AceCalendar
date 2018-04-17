@@ -1,16 +1,8 @@
 
 <mat-toolbar layout-align="center">
 
-    <button mat-icon-button (click)="viewDateBack()">
-        <mat-icon>chevron_left</mat-icon>
-    </button>
+    <span>{{ startOfWeek | date: 'MMM'}} {{ startOfWeek | date: 'd'}} - {{ endOfWeek | date: 'MMM' }} {{ endOfWeek | date: 'd' }}</span>
 
-    <span>{{ startOfWeek | date: 'MMM'}} {{ startOfWeek | date: 'd'}} - {{ endOfWeek | date: 'd' }}</span>
-
-    <button mat-icon-button (click)="viewDateForward()">
-        <mat-icon>chevron_right</mat-icon>
-    </button>
-    
     <div *ngIf="!showingOptions" style="position: absolute; right: 0;">
         <button mat-icon-button (click)="toggleJobFilterOptions()">
             <mat-icon>expand_more</mat-icon>

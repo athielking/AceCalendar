@@ -8,10 +8,14 @@
 
             <!-- Main Toolbar -->
             <div td-toolbar-content layout="row" layout-align="start center" flex>
-                <button *ngIf="authService.isEditor()" mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
+                <button *ngIf="authService.isEditor() && !isMobile" mat-icon-button class="td-menu-button" (click)="toggleMenu()" mdTooltip="Main menu">
                     <mat-icon>menu</mat-icon>
                 </button>
-                <a routerLink="/calendar"><img src="assets/Ace_Logo.png"></a>
+                
+                <div layout="row">
+                    <a routerLink="/calendar"><img src="assets/Ace_Logo.png"></a>
+                    <span style="display: flex; justify-content: center; align-items: center; padding-left: 24px;">Calendar</span>
+                </div>
                 
                 <span flex></span>
                 <button mat-button [matMenuTriggerFor]="logoutMenu"><mat-icon>account_circle</mat-icon><span> {{loggedInUser}}</span></button>
@@ -26,7 +30,7 @@
                     </button>
                 </mat-menu>               
             </div>       
-            <td-layout-manage-list [opened]="menuOpen && authService.isEditor()" mode="side">
+            <td-layout-manage-list [opened]="menuOpen && authService.isEditor() && !isMobile" mode="side">
                 <!-- Side Nav -->
                 <mat-nav-list td-sidenav-content>
                     <a mat-list-item routerLink="/calendar">

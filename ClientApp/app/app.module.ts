@@ -11,7 +11,7 @@ import { NgDragDropModule } from 'ng-drag-drop';
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
-  MatProgressSpinnerModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
+  MatProgressSpinnerModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
   MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule, MatGridListModule,
   MatDatepickerModule, MatNativeDateModule, MatSliderModule, MatAutocompleteModule, MatChipsModule } from '@angular/material';
 
@@ -162,7 +162,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     NgDragDropModule.forRoot(),
     /** Material Modules */
     MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatSelectModule,
-    MatButtonToggleModule, MatSlideToggleModule, MatProgressSpinnerModule, MatDialogModule, MatSnackBarModule,
+    MatButtonToggleModule, MatSlideToggleModule, MatProgressSpinnerModule, MatProgressBarModule, MatDialogModule, MatSnackBarModule,
     MatToolbarModule, MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule,
     MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatSliderModule, MatAutocompleteModule, MatChipsModule,
     

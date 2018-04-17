@@ -12,7 +12,7 @@
     
     </mat-toolbar>
     
-    <td-message *ngIf="showErrorMessage" label="Error Getting Week of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+    <td-message *ngIf="calendarStore.hasError | async" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
     
     <div *tdLoading="'showWeekViewReadonlyLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
     

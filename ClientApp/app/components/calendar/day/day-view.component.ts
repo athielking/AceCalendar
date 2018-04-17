@@ -46,6 +46,9 @@ export class DayViewComponent implements OnInit, OnDestroy {
 
         this.viewDate = data.viewDate;
 
+        this.dayDataSubscription = this.calendarStore.dayData.subscribe( result => {
+            this.dayView = result;
+        })
         this.calendarStore.getDataForDay(this.viewDate);
     }
 
@@ -54,22 +57,11 @@ export class DayViewComponent implements OnInit, OnDestroy {
             this.isLoading = result;
             this.toggleShowLoading(result); 
         });
-
-        this.hasDayErrorSubscription = this.calendarStore.hasDayError.subscribe( result => {
-            this.showErrorMessage = result;
-            this.errorMessage = this.calendarStore.dayErrorMessage;
-        });
-
-        this.dayDataSubscription = this.calendarStore.dayData.subscribe( result => {
-            this.dayView = result;
-        })
     }
 
     public ngOnDestroy() {
         this.isDayLoadingSubscription.unsubscribe();
-
         this.hasDayErrorSubscription.unsubscribe();
-
         this.dayDataSubscription.unsubscribe();
     }
 
@@ -143,7 +135,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
             if (accept) {
                 this.toggleShowLoading(true);
 
-                this.calendarStore.deleteJobFromDayView(event.jobId, event.date)
+                this.calendarStore.deleteJob(event.jobId, event.date)
                     .subscribe(result => {
                         this.toggleShowLoading(false);                        
                     }, error => {

@@ -30,10 +30,10 @@ export class AddJobToWeekViewComponent extends AddJobComponent {
     }
 
     protected AddJobThroughStore(addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.addJobToWeekView(addJobModel);
+        return this.calendarStore.addJob(addJobModel);
     }
 
     protected EditJobThroughStore(editJobId: string, addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.editJobFromWeekView(editJobId, addJobModel);
+        return this.calendarStore.editJob(editJobId, addJobModel);
     }
 }

@@ -11,7 +11,8 @@ import {Tag} from '../models/tag/tag.model';
 enum ApiMethod{
     Month = "getMonth",
     Week = "getWeek",
-    Day = "getDay"
+    Day = "getDay",
+    Range = "getRange"
 }
 
 @Injectable()
@@ -23,21 +24,25 @@ export class CalendarService{
     }
     
     getMonthData(date:Date, idWorker: string = null){
-        return this._getData(date, idWorker, ApiMethod.Month).shareReplay();
+        return this._getData(date, ApiMethod.Month, idWorker ).shareReplay();
     }
 
     getWeekData(date: Date, idWorker: string = null){
-        return this._getData(date, idWorker, ApiMethod.Week).shareReplay();
+        return this._getData(date, ApiMethod.Week, idWorker ).shareReplay();
     }
 
     getDayData(date: Date, idWorker: string = null){
-        return this._getData(date, idWorker, ApiMethod.Day).shareReplay();
+        return this._getData(date, ApiMethod.Day, idWorker).shareReplay();
+    }
+
+    getRangeData( date: Date, end: Date, viewDate: Date, idWorker: string = null){
+        return this._getData(date, ApiMethod.Range, idWorker, end, viewDate);
     }
 
     public copyCalendarDay(viewDate: Date, dateFrom: Date, dateTo: Date){
         let httpStr = this.api+ `copyCalendarDay?dateFrom=${dateFrom.toISOString()}&dateTo=${dateTo.toISOString()}`;
 
-        return this.httpClient.post(httpStr,{}).map( response => this._mapDayViewResponse(viewDate, response));
+        return this.httpClient.post(httpStr,{}).shareReplay();
     }
 
     private _getData2(date: Date, idWorker: string, type: ApiMethod){
@@ -74,14 +79,21 @@ export class CalendarService{
             });
     }
 
-    private _getData(date: Date, idWorker: string, type: ApiMethod){
+    private _getData(date: Date, type: ApiMethod, idWorker: string = null, end: Date = null, viewDate: Date = null ){
+
+        if(!viewDate)
+            viewDate = date;
 
         let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
+        
+        if(end)
+            httpStr += `&endDate=${end.toISOString()}`;
+
         if(idWorker)
             httpStr = httpStr + `&idWorker=${idWorker}`;
 
         return this.httpClient.get(httpStr)
-            .map(response => this._mapDayViewResponse(date, response));
+            .map(response => this._mapDayViewResponse(viewDate, response));
     }
 
     private _mapDayViewResponse(viewDate: Date, response: any){
@@ -121,7 +133,7 @@ export class CalendarService{
                             return;
                         
                         tagsByJob.set( g, obj[key].tagsByJob[g].map( item => {
-                            return new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay == 1 ? true : false);
+                            return new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay == 1 );
                         }));
                     });
 

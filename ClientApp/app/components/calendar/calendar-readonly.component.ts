@@ -32,8 +32,8 @@ export class CalendarReadonlyComponent implements OnInit {
     }
 
     public ngOnInit(){
-        if(localStorage.getItem(StorageKeys.readonlyViewDate))
-            this.viewDate = new Date(localStorage.getItem(StorageKeys.readonlyViewDate));
+        if(localStorage.getItem(StorageKeys.viewDate) && !this.isMobile)
+            this.viewDate = new Date(localStorage.getItem(StorageKeys.viewDate));
         else
             this.viewDate = new Date();
 
@@ -61,9 +61,7 @@ export class CalendarReadonlyComponent implements OnInit {
             }
 
             this.storeSelectedTab();
-        }
-        else
-            this.weekViewPhone.updateViewDate(this.viewDate);
+        } 
     }
 
     private storeViewDate(){

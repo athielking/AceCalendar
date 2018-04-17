@@ -25,7 +25,7 @@ export class WeekCellComponent implements OnInit {
         for( let i:number=0; dateFns.addDays(sunday, i) <= saturday; i++)
         {
             let weekDay = dateFns.addDays(sunday, i);
-            if( dateTools.datesAreEqual(weekDay, this.dayView.calendarDay.date))
+            if( dateTools.equal(weekDay, this.dayView.calendarDay.date))
                 continue;
             
             this.otherDays.push(weekDay);
