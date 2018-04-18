@@ -215,7 +215,7 @@ export class CalendarStore {
     }
 
     public moveWorkerToJob(viewDate: Date, worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
-        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date, viewDate, workerAddOption));
+        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date.toDateString(), viewDate, workerAddOption));
 
         if( workerAddOption != AddWorkerOption.SingleDay ) {
             obs.subscribe( response => {
@@ -228,11 +228,11 @@ export class CalendarStore {
     }
 
     public moveWorkerToAvailable(worker: Worker, date: Date  ){
-        return this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date, null));
+        return this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date.toDateString(), null));
     }
 
     public moveWorkerToOff(worker: Worker, date: Date  ){
-        return this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date, null));
+        return this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date.toDateString(), null));
     }
 
     public copyCalendarDay(viewDate: Date, dateFrom: Date, dateTo: Date){

@@ -1,96 +1,21 @@
-<mat-toolbar layout-align="center">
+<mat-toolbar>
     <span>Manage Worker</span>
 </mat-toolbar>
 
-<div *tdLoading="'workerDetailShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
-    <mat-card>
-        <mat-card-title>
-            <div style="display: flex; flex-direction:row">
-                <span>{{worker.firstName}} {{worker.lastName}}</span>
-                <span flex></span>
-                <mat-slide-toggle [(ngModel)]="editMode">Edit Mode</mat-slide-toggle>
-            </div>
-        </mat-card-title>
-
-        <mat-card-content>
-            <form #addWorkerForm="ngForm">
-                <div class="mat-dialog-content form-container">
-
-                    <mat-form-field *ngIf="editMode">
-                        <input matInput #firstNameControl="ngModel" placeholder="First Name" type="text" maxlength="50" name="firstName" [(ngModel)]="worker.firstName"
-                            [readonly]="!editMode" required>
-                        <mat-error align="start">
-                            <span [hidden]="!firstNameControl.errors?.required || firstNameControl.pristine" class="tc-red-600">First Name is Required</span>
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field *ngIf="editMode">
-                        <input matInput #lastNameControl="ngModel" placeholder="Last Name" type="text" maxlength="50" name="lastName" [(ngModel)]="worker.lastName"
-                            [readonly]="!editMode" required>
-                        <mat-error align="start">
-                            <span [hidden]="!lastNameControl.errors?.required || lastNameControl.pristine" class="tc-red-600">Last Name is Required</span>
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput #emailControl="ngModel" placeholder="Email" type="text" maxlength="200" name="email" [(ngModel)]="worker.email"
-                            [readonly]="!editMode" required email>
-                        <mat-error align="start">
-                            <span [hidden]="!emailControl.errors?.email || emailControl.errors?.required" class="tc-red-600">Please Enter a Valid Email Address</span>
-                            <span [hidden]="!emailControl.errors?.required || emailControl.pristine" class="tc-red-600">Email is Required</span>
-                        </mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input matInput #phoneControl="ngModel" [textMask]="{mask: phoneMask}" placeholder="Phone Number" type="text" name="worker.phone"
-                            [readonly]="!editMode" [(ngModel)]="phone">
-                        <mat-hint align="start">
-                            <span [hidden]="phoneIsValid() || !phoneControl.touched" class="tc-red-600">Please Enter a Valid Phone Number</span>
-                        </mat-hint>
-                    </mat-form-field>
-                </div>
-            </form>
-
-            <div layout="row" layout-margin>
-                
-                <div layout="column" flex-lg="30" flex-md="50" flex-gt-xs="50">
-                    <span class="mat-title">Time Off</span>
-                    <mat-divider></mat-divider>
-                    <td-data-table
-                        #dataTable
-                        [data]="timeOffData"
-                        [columns]="timeOffColumns">
-                        <ng-template tdDataTableTemplate="deleteBtn" let-value="value" let-row="row" let-column="column">
-                            <button mat-button color="warn" (click)="deleteTimeOff(row)"><mat-icon>clear</mat-icon></button>
-                        </ng-template>
-                    </td-data-table>
-                    <div layout="row">
-                        <span flex></span>
-                        <a mat-mini-fab color="accent" matTooltip="Add time off" matTooltipPosition="before" style="margin-top: 8px" (click)="addTimeOff()">
-                            <mat-icon>add</mat-icon>
-                        </a>
-                    </div>
-                </div>
-                
-                <div layout="column"flex-lg="70" flex-md="50" flex-gt-xs="50" >
-                    <span class="mat-title">Jobs</span>
-                    <mat-divider></mat-divider>
-                    <td-data-table
-                        #dataTable
-                        [data]="jobsData"
-                        [columns]="jobsColumns">
-                        <ng-template tdDataTableTemplate="deleteBtn" let-value="value" let-row="row" let-column="column">
-                            <button mat-button color="warn" (click)="deleteTimeOff(row)"><mat-icon>clear</mat-icon></button>
-                        </ng-template>
-                    </td-data-table>
-                </div>
-            </div>
-            
-        </mat-card-content>
-        <mat-card-actions>
-            <span flex></span>
-            <button mat-button (click)="onCancelClick()">Cancel</button>
-            <button mat-button [disabled]="!addWorkerForm.form.valid || !editMode || !phoneIsValid()" (click)="onOkClick()">Ok</button>
-        </mat-card-actions>
-    </mat-card>
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    <div flex-gt-sm="100">
+        <ac-worker-detail-header></ac-worker-detail-header> 
+    </div>
 </div>
+
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    
+    <div flex-gt-sm="50">
+        <ac-worker-time-off></ac-worker-time-off> 
+    </div>
+
+    <div flex-gt-sm="50">
+        <ac-worker-jobs></ac-worker-jobs> 
+    </div>
+
+</div> 

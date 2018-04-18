@@ -178,7 +178,7 @@ export class MoveWorkerRequestModel {
     constructor(
         public idWorker: string,
         public idJob: string,
-        public date: Date,
+        public date: string,
         public viewDate: Date,
         public addWorkerOption: AddWorkerOption = AddWorkerOption.SingleDay
     ){

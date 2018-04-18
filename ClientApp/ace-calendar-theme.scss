@@ -8,8 +8,7 @@
 // Define a custom typography config that overrides the font-family
 // or any typography level.
 $typography: mat-typography-config(
-  $font-family: 'Roboto, Helvetica Neue, sans-serif',
-  $headline: mat-typography-level(32px, 48px, 700)
+  $font-family: 'Roboto, Helvetica Neue, sans-serif'
 );
 
 $primary: mat-palette($mat-blue-grey);

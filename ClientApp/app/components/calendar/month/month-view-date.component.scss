@@ -1,0 +1,7 @@
+@import '~@angular/material/theming';
+@import '../../../../ace-calendar-theme';
+
+.month-date-changer {
+    display: flex;
+    align-items: center;
+}

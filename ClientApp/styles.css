@@ -168,3 +168,8 @@ body {
 .error-message {
     margin-bottom: 10px;
 }
+
+button.time-off-delete-button div.mat-button-focus-overlay {
+    margin-left: 20px;
+    margin-right: 20px;
+}

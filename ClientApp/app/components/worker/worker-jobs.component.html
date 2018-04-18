@@ -1,0 +1,39 @@
+<mat-card>
+    <mat-toolbar layout-align="center">
+
+        <ac-month-view-date (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
+
+    </mat-toolbar>
+
+    <mat-card-title>
+        Jobs
+    </mat-card-title>
+
+    <mat-divider></mat-divider>
+
+    <div layout="row" layout-margin>
+            
+        <div layout="column" flex>
+                
+            <td-data-table
+                #dataTable
+                [data]="workerJobsDataPage"
+                [sortBy]="sortBy"
+                [sortOrder]="sortOrder"
+                (sortChange)="sort($event)"
+                [columns]="jobsColumns">
+            </td-data-table>
+
+            <div class="md-padding" *ngIf="!dataTable.hasData" layout="row" layout-align="center center">
+                <h3>There Are No Jobs to Display</h3>
+            </div>
+
+            <td-paging-bar #pagingBarLinks pageLinkCount="5" [firstLast]="false" [pageSize]="pageSize" [total]="workerJobsDataCount" (change)="pageChanged($event)">
+                <span hide-xs>{{pagingBarLinks.range}} of {{pagingBarLinks.total}}</span>
+            </td-paging-bar>
+
+        </div>
+    
+    </div> 
+
+</mat-card>                

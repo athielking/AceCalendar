@@ -1,0 +1,12 @@
+
+<div class = "month-date-changer" >
+    <button mat-icon-button (click)="viewDateBack()">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
+            
+    <span>{{viewDate | date: 'MMMM y'}}</span>
+
+    <button mat-icon-button (click)="viewDateForward()">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+</div>
