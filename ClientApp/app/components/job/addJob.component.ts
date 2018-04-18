@@ -83,7 +83,6 @@ export abstract class AddJobComponent {
     }
 
     private addJob() {
-        this.toggleShowLoading(true);
 
         var addJobModel = new AddJobModel(
             this.jobNumber, 
@@ -93,20 +92,18 @@ export abstract class AddJobComponent {
             this.jobDays
         );
 
-        this.AddJobThroughStore(addJobModel).subscribe( result => {
-            this.dialogRef.close();
-            this.toggleShowLoading(false);
-        }, error => {
-            this.toggleShowLoading(false);
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Job'
-            });
-        } ); 
+        var sub = this.AddJobThroughStore(addJobModel).subscribe( result => {},
+            error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Failed to Add Job'
+                });
+            }, () => sub.unsubscribe() ); 
+
+        this.dialogRef.close();
     }
 
     private editJob() {
-        this.toggleShowLoading(true);
         
         var addJobModel = new AddJobModel(
             this.jobNumber, 
@@ -116,28 +113,17 @@ export abstract class AddJobComponent {
             this.jobDays
         );
 
-        this.EditJobThroughStore(this.editJobId, addJobModel).subscribe( result => {
-            this.dialogRef.close();
-            this.toggleShowLoading(false);
-        }, error => {
-            this.toggleShowLoading(false);
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Update Job'
-            });
-        } ); 
+        var sub = this.EditJobThroughStore(this.editJobId, addJobModel).subscribe( result => {}, 
+            error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Failed to Update Job'
+                });
+        }, () => sub.unsubscribe() ); 
+        this.dialogRef.close();
     }
     
     protected abstract AddJobThroughStore(addJobModel: AddJobModel) : Observable<object>;
 
     protected abstract EditJobThroughStore(editJobId: string, addJobModel: AddJobModel) : Observable<object>;
-    
-    private toggleShowLoading(show:boolean) {
-        if (show) {
-            this.loadingService.register('addJobShowLoading');
-        } 
-        else {
-            this.loadingService.resolve('addJobShowLoading');
-        }
-    }
 }
