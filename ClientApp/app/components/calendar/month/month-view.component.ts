@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit,OnChanges, SimpleChanges, EventEmitter } from '@angular/core'
+import { Component, Input, Output, OnInit,OnChanges, SimpleChanges, EventEmitter, ViewChild } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { MatDialog } from '@angular/material'
 import { Observable } from 'rxjs/Rx';
@@ -9,12 +9,7 @@ import { MonthDisplayOptionsComponent } from './month-displayOptions.component';
 import { CalendarStore } from '../../../stores/calendar.store';
 import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';
-
-import * as add_months from 'date-fns/add_months'
-import * as is_same_month from 'date-fns/is_same_month'
-import * as end_of_month from 'date-fns/end_of_month'
-import * as start_of_month from 'date-fns/start_of_month'
-import * as is_this_month from 'date-fns/is_this_month'
+import { MonthViewDateComponent } from './month-view-date.component';
 
 @Component({
   selector: 'ac-month-view',
@@ -25,6 +20,8 @@ import * as is_this_month from 'date-fns/is_this_month'
 export class MonthViewComponent implements OnInit {
   @Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
   @Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
+
+  @ViewChild(MonthViewDateComponent) monthViewDate: MonthViewDateComponent;
 
   private viewDate: Date;
   private isLoading: Boolean = false;
@@ -49,19 +46,14 @@ export class MonthViewComponent implements OnInit {
   }
 
   public updateViewDate(date: Date) {
-    this.viewDate = date;
+    this.monthViewDate.updateViewDate(date);
 
-    this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
-
-    this.calendarStore.getDataForMonth(this.viewDate);
+    this.handleDateChanged(date);
   }
 
-  public viewDateBack(){
-    this.handleDateChanged( end_of_month( add_months(this.viewDate, -1) ) );
-  }
-
-  public viewDateForward(){
-    this.handleDateChanged( start_of_month( add_months(this.viewDate, 1) ) );
+  public onChangeViewDate( date: Date ){
+    this.handleDateChanged(date);
+    this.changeViewDate.emit(date);
   }
 
   public onChangeView( event: ViewChangeRequest){
@@ -74,14 +66,15 @@ export class MonthViewComponent implements OnInit {
   public showDisplayOptions(){
     this.dialog.open(MonthDisplayOptionsComponent);
   }
-  private handleDateChanged(date: Date) {
 
-    if(is_this_month(date))
-      date= new Date();
-      
-    this.updateViewDate(date);
-    this.changeViewDate.emit(date);
-  }
+  private handleDateChanged(date: Date) {
+  
+    this.viewDate = date;
+
+    this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
+
+    this.calendarStore.getDataForMonth(this.viewDate);
+  } 
 
   private toggleShowLoading(show:boolean) {
     if (show) {

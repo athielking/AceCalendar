@@ -319,7 +319,7 @@ export class CalendarStore {
     }
 
     public moveWorkerToJob(viewDate: Date, worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
-        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date, viewDate, workerAddOption));
+        var obs = this.jobService.moveWorkerToJob(new MoveWorkerRequestModel(worker.id, toJob.id, date.toDateString(), viewDate, workerAddOption));
 
         let start = dateFns.startOfWeek(viewDate);
         let end = dateFns.endOfWeek(viewDate);
@@ -340,7 +340,7 @@ export class CalendarStore {
     }
 
     public moveWorkerToAvailable(worker: Worker, date: Date  ){
-        var obs = this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date, null));
+        var obs = this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date.toISOString(), null));
 
         var dayViews = this._dayViews.getValue();
         var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
@@ -354,7 +354,7 @@ export class CalendarStore {
     }
 
     public moveWorkerToOff(worker: Worker, date: Date  ){
-        var obs = this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date, null));
+        var obs = this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date.toISOString(), null));
 
         var dayViews = this._dayViews.getValue();
         var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));

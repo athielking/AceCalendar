@@ -31,6 +31,9 @@ import { WorkerListComponent } from './components/worker/worker-list.component';
 import { WorkerCardComponent } from './components/worker/worker-card.component';
 import { JobListComponent } from './components/job/job-list.component';
 import { WorkerDetailComponent } from './components/worker/worker-detail.component';
+import { WorkerDetailHeaderComponent } from './components/worker/worker-detail-header.component';
+import { WorkerTimeOffComponent } from './components/worker/worker-time-off.component';
+import { WorkerJobsComponent } from './components/worker/worker-jobs.component';
 import { AddTimeOffComponent } from './components/worker/add-time-off.component';
 import { AddWorkerToComponent } from './components/worker/add-worker-to.component';
 
@@ -42,6 +45,7 @@ import { SimpleJobCardComponent } from './components/job/simple-job-card.compone
 
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
+import { MonthViewDateComponent } from './components/calendar/month/month-view-date.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
 import { MonthDisplayOptionsComponent } from './components/calendar/month/month-displayOptions.component';
 
@@ -76,6 +80,8 @@ import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
 import { JobStore } from './stores/job.store';
 import { TagStore } from "./stores/tag.store";
+import { TimeOffStore } from './stores/timeOff.store';
+import { WorkerJobsStore } from './stores/workerJobs.store';
 import { OrganizationStore } from './stores/organization.store';
 
 import { AuthInterceptor } from './tools/authInterceptor';
@@ -103,6 +109,9 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     WorkerListComponent,
     WorkerCardComponent,
     WorkerDetailComponent,
+    WorkerDetailHeaderComponent,
+    WorkerTimeOffComponent,
+    WorkerJobsComponent,
     AddTimeOffComponent,
     AddWorkerToComponent,
 
@@ -116,6 +125,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 
     //Month View
     MonthViewComponent,
+    MonthViewDateComponent,  
     MonthCellComponent,
     MonthDisplayOptionsComponent,
 
@@ -201,6 +211,8 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     CalendarStore,
     TagStore,
     WorkerStore,
+    TimeOffStore,
+    WorkerJobsStore,
     JobStore,
     {
       provide: HTTP_INTERCEPTORS, 

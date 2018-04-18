@@ -1,0 +1,65 @@
+<mat-card>
+    <mat-toolbar layout-align="center">
+
+        <ac-month-view-date (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
+
+    </mat-toolbar>
+
+    <mat-card-title>
+        Time Off
+    </mat-card-title>
+<!-- 
+    <mat-card-title>
+        <div style="display: flex; flex-direction:row">
+            <span>Time Off</span>
+            <span flex></span>
+            <span>
+                <button mat-icon-button [mat-menu-trigger-for]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu x-position="before" #menu="matMenu">
+                    <button mat-menu-item (click)="editTimeOff()">
+                        <mat-icon>edit</mat-icon> Edit
+                    </button>
+                </mat-menu>
+            </span>
+        </div>
+    </mat-card-title> -->
+
+    <mat-divider></mat-divider>
+    <div layout="row" layout-margin>
+            
+        <div layout="column" flex>
+                
+            <td-data-table
+                #dataTable
+                [data]="timeOffDataPage"
+                [sortBy]="sortBy"
+                [sortOrder]="sortOrder"
+                (sortChange)="sort($event)"
+                [columns]="timeOffColumns">
+                <ng-template tdDataTableTemplate="deleteBtn" let-row="row">
+                    <button class="time-off-delete-button" mat-button (click)="deleteTimeOff(row)" >
+                        <mat-icon class="material-icons md-dark">delete</mat-icon>
+                    </button>
+                </ng-template>
+            </td-data-table>
+
+            <div class="md-padding" *ngIf="!dataTable.hasData" layout="row" layout-align="center center">
+                <h3>There Is No Time Off Data to Display</h3>
+            </div>
+
+            <td-paging-bar #pagingBarLinks pageLinkCount="5" [firstLast]="false" [pageSize]="pageSize" [total]="timeOffDataCount" (change)="pageChanged($event)">
+                <span hide-xs>{{pagingBarLinks.range}} of {{pagingBarLinks.total}}</span>
+            </td-paging-bar>
+<!-- 
+            <div layout="row">
+                <span flex></span>
+                <a mat-mini-fab color="accent" matTooltip="Add time off" matTooltipPosition="before" style="margin-top: 8px" (click)="addTimeOff()">
+                    <mat-icon>add</mat-icon>
+                </a>
+            </div> -->
+        </div>
+    
+    </div> 
+</mat-card>                

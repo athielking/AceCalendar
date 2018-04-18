@@ -6,6 +6,8 @@ import { List } from 'immutable';
 import { environment } from '../../environments/environment';
 import { Worker, AddWorkerModel } from '../components/calendar/common/models';
 import { DateRangeModel } from '../models/shared/dateRangeModel';
+import { TimeOffGridModel } from '../models/worker/timeOffGridModel';
+import { JobByDateGridModel } from '../models/worker/jobByDateGridModel';
 
 @Injectable()
 export class WorkerService{
@@ -37,6 +39,14 @@ export class WorkerService{
         return this.httpClient.get(this.serviceUri + `/${id}`).map(json => (<Worker>json['data']));
     }
 
+    public getTimeOffData(workerId: string, date: Date): Observable<TimeOffGridModel[]>{
+        return this.httpClient.get(this.serviceUri + `/getTimeOffForMonth?id=${workerId}&date=${date.toISOString()}`).map(json => (<TimeOffGridModel[]>json['data']));
+    }
+
+    public getWorkerJobs(workerId: string, date: Date): Observable<JobByDateGridModel[]>{
+        return this.httpClient.get(this.serviceUri + `/GetJobsForMonth?id=${workerId}&date=${date.toISOString()}`).map(json => (<JobByDateGridModel[]>json['data']));
+    }
+
     public getAvailable(date: Date, end?: Date): Observable<Worker[]>{
 
         let api = this.serviceUri+`/getAvailableWorkers?start=${date.toISOString()}`;
@@ -54,10 +64,7 @@ export class WorkerService{
             .map(json => <Worker>json['data']).shareReplay();
     }
 
-    public deleteTimeOff(id: string, date: Date, end?: Date){
-        var body = new DateRangeModel(id, date, end);
-
-        return this.httpClient.post(this.serviceUri+`/deleteTimeOff`, body )
-            .map(json => <Worker>json['data']).shareReplay();
+    public deleteTimeOff(workerId: string, date: Date){
+        return this.httpClient.delete(this.serviceUri+`/deleteTimeOff?workerId=${workerId}&date=${date}`).shareReplay();
     }
 }

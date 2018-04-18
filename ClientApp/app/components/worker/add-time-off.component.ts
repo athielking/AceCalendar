@@ -28,16 +28,16 @@ export class AddTimeOffComponent {
     public onOkClick(){
         this.toggleShowLoading(true);
 
-        this.workerStore.addTimeOff(this.idWorker, this.startDate, this.endDate).subscribe(result => {
-            this.toggleShowLoading(false);
-            this.dialogRef.close();
-        }, error => {
-            this.toggleShowLoading(false);
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Time Off'
-            });
-        });
+        // this.workerStore.addTimeOff(this.idWorker, this.startDate, this.endDate).subscribe(result => {
+        //     this.toggleShowLoading(false);
+        //     this.dialogRef.close();
+        // }, error => {
+        //     this.toggleShowLoading(false);
+        //     this.dialogService.openAlert({
+        //         message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+        //         title: 'Unable to Add Time Off'
+        //     });
+        // });
     }
 
     public onCancelClick(){

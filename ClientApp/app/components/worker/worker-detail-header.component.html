@@ -1,0 +1,38 @@
+<div *tdLoading="'workerDetailHeaderShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+    <mat-card>
+        <mat-card-title>
+            <div style="display: flex; flex-direction:row">
+                <span>{{firstName}} {{lastName}}</span>
+                <span flex></span>
+                <span>
+                    <button mat-icon-button [mat-menu-trigger-for]="menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu x-position="before" #menu="matMenu">
+                        <button mat-menu-item (click)="editWorker()">
+                            <mat-icon>edit</mat-icon> Edit
+                        </button>
+                        <button mat-menu-item (click)="deleteWorker()">
+                            <mat-icon>delete</mat-icon> Delete
+                        </button>
+                    </mat-menu>
+                </span>
+            </div>
+        </mat-card-title>
+        
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+                <div class="mat-dialog-content form-container">
+
+                    <mat-form-field>
+                        <input matInput #emailControl="ngModel" placeholder="Email" type="text" name="email" [(ngModel)]="email" disabled email>    
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="phone">
+                        <input matInput #phoneControl="ngModel" placeholder="Phone Number" type="text" name="phone" [(ngModel)]="phone" disabled phone>
+                    </mat-form-field>
+                </div>           
+        </mat-card-content>
+    </mat-card>
+</div>
