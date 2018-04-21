@@ -17,7 +17,8 @@ import { StorageService } from '../../../../services/storage.service';
 @Component({
     selector: 'ac-week-view-readonly',
     templateUrl: './week-view-readonly.component.html',
-    styleUrls: ['../week-view.component.scss']
+    styleUrls: ['../week-view.component.scss'],
+    providers:[DatePipe]
 })
 export class WeekViewReadonlyComponent extends WeekViewComponent {
 
@@ -30,14 +31,5 @@ export class WeekViewReadonlyComponent extends WeekViewComponent {
         dialogService: TdDialogService,
         datePipe: DatePipe ) {
             super(calendarStore, jobStore, storageService, loadingService, dialogService, dialog, datePipe);
-    }
-
-    protected toggleShowLoading(show:boolean) {
-        if (show) {
-            this.loadingService.register('showWeekViewReadonlyLoading');
-        } 
-        else {
-            this.loadingService.resolve('showWeekViewReadonlyLoading');
-        }
     }
 }

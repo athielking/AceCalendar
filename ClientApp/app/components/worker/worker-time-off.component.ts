@@ -76,9 +76,6 @@ export class WorkerTimeOffComponent implements OnInit {
 
             this.toggleShowLoading(false);
         });
-
-
-        this.monthViewDate.updateViewDate(this.viewDate);
     }
 
     public deleteTimeOff(timeOffGridModel: TimeOffGridModel) {
@@ -114,16 +111,6 @@ export class WorkerTimeOffComponent implements OnInit {
         this.sortOrder = sortEvent.order;
 
         this.updatePageOfData();
-    }
-
-    public updateViewDate(date: Date) {
-        this.monthViewDate.updateViewDate(date);
-
-        this.handleDateChanged(date);
-    }
-
-    public updateWorkerId(workerId: string) {
-        this.workerId = workerId;
     }
 
     public onChangeViewDate(date: Date) {
@@ -173,15 +160,6 @@ export class WorkerTimeOffComponent implements OnInit {
             this.updatePageOfData();
         }
     }
-
-    // private addTimeOff(){
-    //     let dialogRef = this.dialogService.open(AddTimeOffComponent, {
-    //         disableClose: true,
-    //         data: { 
-    //             idWorker: this.worker.id
-    //         }
-    //     });
-    // }
 
     private toggleShowLoading(show: boolean) {
         if (show) {

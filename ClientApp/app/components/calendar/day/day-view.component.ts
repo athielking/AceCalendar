@@ -21,9 +21,6 @@ export class DayViewComponent implements OnInit, OnDestroy {
     private viewDate: Date;
     
     private isDayLoadingSubscription: Subscription;
-
-    private hasDayErrorSubscription: Subscription;
-
     private dayDataSubscription: Subscription;
     
     private dataUpdated: Boolean;
@@ -61,7 +58,6 @@ export class DayViewComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy() {
         this.isDayLoadingSubscription.unsubscribe();
-        this.hasDayErrorSubscription.unsubscribe();
         this.dayDataSubscription.unsubscribe();
     }
 

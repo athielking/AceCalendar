@@ -21,10 +21,6 @@ export class CalendarComponent implements OnInit {
 
     constructor(private authService: AuthService){
 
-    }
-
-    public ngOnInit(){
-
         if(window.screen.width <= 576)
             this.isMobile = true;
 
@@ -37,12 +33,10 @@ export class CalendarComponent implements OnInit {
             this.selectedIndex = +localStorage.getItem(StorageKeys.selectedTab);
         else
             this.selectedIndex = 1;
-
-        this.storeViewDate();
     }
 
-    public ngAfterViewInit(){
-        this.updateCurrentTab();
+    public ngOnInit(){
+        this.storeViewDate();
     }
 
     public onChangeViewDate( newDate: Date ){
@@ -55,22 +49,6 @@ export class CalendarComponent implements OnInit {
     }
 
     public onSelectedTabChange(event: MatTabChangeEvent){
-        this.updateCurrentTab();
-    }
-
-    private updateCurrentTab(){
-        
-            switch(this.selectedIndex) {
-                case 0: {
-                    this.monthView.updateViewDate(this.viewDate);
-                    break;
-                } 
-                case 1: {
-                    this.weekView.updateViewDate(this.viewDate);
-                    break;
-                }
-            }
-
         this.storeSelectedTab();
     }
 

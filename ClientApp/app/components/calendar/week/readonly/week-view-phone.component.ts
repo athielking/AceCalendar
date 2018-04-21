@@ -32,7 +32,9 @@ import { StorageService } from '../../../../services/storage.service';
     ]
 })
 export class WeekViewPhoneComponent implements OnInit {
+    @Input() viewDate: Date;
 
+    public isLoading: boolean = false;
     public showJobOption: string = null;
     public showingOptions: boolean = false;
     private allWorkers: Worker = new Worker('', "All Workers", null, null, null);
@@ -40,7 +42,6 @@ export class WeekViewPhoneComponent implements OnInit {
     public workers: Worker[] = [];
 
     protected weekData: DayView[];
-    protected viewDate: Date;
     public startOfWeek: Date;
     public endOfWeek: Date;
     public showErrorMessage: boolean;
@@ -75,7 +76,7 @@ export class WeekViewPhoneComponent implements OnInit {
             this.showJobOption = this.storageService.getItem(StorageKeys.showJobOption);
 
         this.calendarStore.isWeekLoading.subscribe( result => {
-            this.toggleShowLoading(result); 
+            this.isLoading = result;
         });
 
         this.calendarStore.phoneWeekData.subscribe( result => {
@@ -100,14 +101,5 @@ export class WeekViewPhoneComponent implements OnInit {
 
     protected toggleJobFilterOptions(){
         this.showingOptions = !this.showingOptions;
-    }
-
-    protected toggleShowLoading(show:boolean) {
-        if (show) {
-            this.loadingService.register('showWeekViewPhoneLoading');
-        } 
-        else {
-            this.loadingService.resolve('showWeekViewPhoneLoading');
-        }
     }
 }

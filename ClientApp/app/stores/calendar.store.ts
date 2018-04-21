@@ -23,6 +23,7 @@ export class CalendarStore {
     private _viewDate: BehaviorSubject<Date>;
     private _dayViews: BehaviorSubject<DayView[]> = new BehaviorSubject([]);
     private _phoneDays: BehaviorSubject<DayView[]> = new BehaviorSubject([]);
+    private _dayData: BehaviorSubject<DayView> = new BehaviorSubject(undefined);
 
     public hasError: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public errorMessage: BehaviorSubject<string> = new BehaviorSubject('');
@@ -35,7 +36,7 @@ export class CalendarStore {
     public readonly monthData: Observable<DayView[]>;
     public readonly weekData: Observable<DayView[]>;
     public readonly phoneWeekData: Observable<DayView[]> = this._phoneDays.asObservable();
-    public readonly dayData: Observable<DayView>;
+    public readonly dayData: Observable<DayView> = this._dayData.asObservable();
 
     constructor(
         private calendarService: CalendarService,
@@ -56,9 +57,9 @@ export class CalendarStore {
             return data;
         });
 
-        this.dayData = this._dayViews.combineLatest( this._viewDate, (dayViews, viewDate) => {
-            return dayViews.find( dayView => dateTools.equal(dayView.calendarDay.date, viewDate));
-        });
+        // this.dayData = this._dayViews.combineLatest( this._viewDate, (dayViews, viewDate) => {
+        //     return dayViews.find( dayView => dateTools.equal(dayView.calendarDay.date, viewDate));
+        // });
 
         this.monthData = this._dayViews.combineLatest( this._viewDate, (dayViews, viewDate) => {
 
@@ -229,11 +230,9 @@ export class CalendarStore {
 
     public getDataForDay(date: Date, idWorker: String = null) {
 
-        if( this.isDayLoading.getValue())
-            return;
-
-        this._lastViewDate = date;
-        this._viewDate.next(date);
+        var dayViews = this._dayViews.getValue();
+        var dv = dayViews.find( dv => dateTools.equal(dv.calendarDay.date, date));
+        this._dayData.next(dv);
     }
 
     public getDataForRange(start: Date, end: Date, idWorker = null ){

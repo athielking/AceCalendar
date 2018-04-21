@@ -1,7 +1,7 @@
 <mat-card>
     <mat-toolbar layout-align="center">
 
-        <ac-month-view-date (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
+        <ac-month-view-date [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
 
     </mat-toolbar>
 

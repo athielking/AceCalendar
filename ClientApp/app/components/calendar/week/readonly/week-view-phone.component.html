@@ -25,7 +25,7 @@
     </mat-form-field>
 </mat-toolbar>
 
-<div *tdLoading="'showWeekViewPhoneLoading'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent';"></div>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
 <div class='phone-grid'>
     <ng-template let-dayView ngFor [ngForOf]="weekData">

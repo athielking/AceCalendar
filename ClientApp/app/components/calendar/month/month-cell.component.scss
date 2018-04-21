@@ -26,6 +26,7 @@
     .month-dayofmonth{
         @extend %month-day-title-base;
         font-size: 16px;
+        padding-top: 4px;
         padding-right: 8px;
         display: flex;
         justify-content: flex-end;
@@ -69,7 +70,6 @@
     background-color: mat-color($primary,800);
     
     .month-dayofmonth{
-        font-size: 12px;
         color: white;
     }
 }

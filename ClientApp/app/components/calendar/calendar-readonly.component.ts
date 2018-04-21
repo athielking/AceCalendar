@@ -26,10 +26,6 @@ export class CalendarReadonlyComponent implements OnInit {
         this.viewDate = newDate;
         this.storeViewDate();
     }
-    
-    public ngAfterViewInit(){
-        this.updateCurrentTab();
-    }
 
     public ngOnInit(){
         if(localStorage.getItem(StorageKeys.viewDate) && !this.isMobile)
@@ -37,31 +33,11 @@ export class CalendarReadonlyComponent implements OnInit {
         else
             this.viewDate = new Date();
 
-        // if(localStorage.getItem(StorageKeys.readonlySelectedTab))
-        //     this.selectedIndex = +localStorage.getItem(StorageKeys.readonlySelectedTab);
-        // else
-        //     this.selectedIndex = 0;
-
         this.storeViewDate();        
     }
 
     public onSelectedTabChange(event: MatTabChangeEvent){
-        this.updateCurrentTab();
-    }
-
-    private updateCurrentTab(){
-        
-        if(!this.isMobile)
-        {
-            switch(this.selectedIndex) {
-                case 0: {
-                    this.weekViewReadonly.updateViewDate(this.viewDate);
-                    break;
-                }
-            }
-
-            this.storeSelectedTab();
-        } 
+        this.storeSelectedTab();
     }
 
     private storeViewDate(){

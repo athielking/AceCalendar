@@ -30,12 +30,12 @@ import { CopyDayRequest } from './week-cell.component';
     styleUrls: ["./week-view.component.scss"],
     providers: [DatePipe]
 })
-export class WeekViewComponent implements OnInit {
+export class WeekViewComponent implements OnInit, OnChanges {
+    @Input() viewDate: Date;
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
-    private isLoading = false;
+    public isLoading = false;
     protected weekData: DayView[];
-    protected viewDate: Date;
     
     public startOfWeek: Date;
     
@@ -70,6 +70,9 @@ export class WeekViewComponent implements OnInit {
 
     public ngOnInit() {
 
+        this.startOfWeek = start_of_week(this.viewDate);
+        this.endOfWeek = end_of_week(this.viewDate);
+
         this.calendarStore.isWeekLoading.subscribe( result => {
             this.isLoading = result;
         });
@@ -79,12 +82,12 @@ export class WeekViewComponent implements OnInit {
         });
     }
 
-    public updateViewDate(date: Date) {
-        this.viewDate = date;
-        this.startOfWeek = start_of_week(this.viewDate);
-        this.endOfWeek = end_of_week(this.viewDate);
-
-        this.calendarStore.getDataForWeek(this.viewDate);
+    public ngOnChanges( changes: SimpleChanges ){
+        if( changes.viewDate )
+        {
+            this.startOfWeek = start_of_week(this.viewDate);
+            this.endOfWeek = end_of_week(this.viewDate);
+        }
     }
 
     public viewDateForward(): void {
@@ -226,7 +229,7 @@ export class WeekViewComponent implements OnInit {
     }
 
     private handleDateChanged(date: Date) {
-        this.updateViewDate(date);
         this.changeViewDate.emit(date);
+        this.calendarStore.getDataForWeek(date);
     }
 }

@@ -1,6 +1,6 @@
 <mat-toolbar layout-align="center">
     
-    <ac-month-view-date (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
+    <ac-month-view-date [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
 
     <div style="position: absolute; right: 0; margin-right: 30px">            
         <button mat-icon-button color="primary" (click)="showDisplayOptions()" matTooltip="Display Options" matTooltipPosition="left">
