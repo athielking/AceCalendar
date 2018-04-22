@@ -77,10 +77,10 @@ import { CalendarStore } from '../../../stores/calendar.store';
         data: {viewDate: this.dayView.calendarDay.date}
       })
 
-      dialogRef.afterClosed().subscribe(dataUpdated => {
-        if(dataUpdated)
-          this.calendarStore.getDataForMonth(this.dayView.calendarDay.date);
-      });
+      // dialogRef.afterClosed().subscribe(dataUpdated => {
+      //   if(dataUpdated)
+      //     this.calendarStore.getDataForMonth(this.dayView.calendarDay.date);
+      // });
     }
 
     public goToWeekView(){

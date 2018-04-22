@@ -96,7 +96,7 @@ export class MultiDatePickerComponent implements OnInit, OnChanges {
     }
 
     private _datesAreEqual( d1: Date, d2: Date){
-        return dateTools.datesAreEqual(d1, d2);
+        return dateTools.equal(d1, d2);
     }
 
     private _handleShiftToggle( day: SelectedDate ){

@@ -26,44 +26,18 @@ export class CalendarReadonlyComponent implements OnInit {
         this.viewDate = newDate;
         this.storeViewDate();
     }
-    
-    public ngAfterViewInit(){
-        this.updateCurrentTab();
-    }
 
     public ngOnInit(){
-        if(localStorage.getItem(StorageKeys.readonlyViewDate))
-            this.viewDate = new Date(localStorage.getItem(StorageKeys.readonlyViewDate));
+        if(localStorage.getItem(StorageKeys.viewDate) && !this.isMobile)
+            this.viewDate = new Date(localStorage.getItem(StorageKeys.viewDate));
         else
             this.viewDate = new Date();
-
-        // if(localStorage.getItem(StorageKeys.readonlySelectedTab))
-        //     this.selectedIndex = +localStorage.getItem(StorageKeys.readonlySelectedTab);
-        // else
-        //     this.selectedIndex = 0;
 
         this.storeViewDate();        
     }
 
     public onSelectedTabChange(event: MatTabChangeEvent){
-        this.updateCurrentTab();
-    }
-
-    private updateCurrentTab(){
-        
-        if(!this.isMobile)
-        {
-            switch(this.selectedIndex) {
-                case 0: {
-                    this.weekViewReadonly.updateViewDate(this.viewDate);
-                    break;
-                }
-            }
-
-            this.storeSelectedTab();
-        }
-        else
-            this.weekViewPhone.updateViewDate(this.viewDate);
+        this.storeSelectedTab();
     }
 
     private storeViewDate(){

@@ -5,12 +5,12 @@
             <div class="day-subtitle">{{dayView.calendarDay.date | date: 'MM/dd/yyyy'}}</div>
         </div>
         
-        <div *ngIf="isLoading">
-            <div *tdLoading="'showDayViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';" style="height:500px">     
-            </div>
-        </div>
 
-        <td-message *ngIf="showErrorMessage" label="Error Getting Day Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+            <div *tdLoading="'showDayViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">     
+            </div>
+
+
+        <td-message *ngIf="calendarStore.hasError | async" label="Error Getting Day Data" sublabel="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
 
         <div class="day-content" *ngIf="!isLoading">
         

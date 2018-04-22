@@ -77,8 +77,6 @@ export class WorkerJobsComponent implements OnInit {
 
             this.toggleShowLoading(false);
         });
-
-        this.monthViewDate.updateViewDate(this.viewDate);
     }
 
     public pageChanged(event: IPageChangeEvent): void {
@@ -92,16 +90,6 @@ export class WorkerJobsComponent implements OnInit {
         this.sortOrder = sortEvent.order;
 
         this.updatePageOfData();
-    }
-
-    public updateViewDate(date: Date) {
-        this.monthViewDate.updateViewDate(date);
-
-        this.handleDateChanged(date);
-    }
-
-    public updateWorkerId(workerId: string) {
-        this.workerId = workerId;
     }
 
     public onChangeViewDate(date: Date) {

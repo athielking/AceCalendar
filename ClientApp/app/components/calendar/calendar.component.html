@@ -1,12 +1,12 @@
-<mat-tab-group *ngIf="!isMobile" (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
+<mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
            
     <mat-tab label="Month View">
-        <ac-month-view (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
+        <ac-month-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
         </ac-month-view>
     </mat-tab>
     
     <mat-tab label="Week View">
-        <ac-week-view (changeViewDate)="onChangeViewDate($event)">
+        <ac-week-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
         </ac-week-view>
     </mat-tab>
 

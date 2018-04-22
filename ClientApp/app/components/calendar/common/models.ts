@@ -1,6 +1,8 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
+import * as calendarTools from '../../../components/calendar/common/calendar-tools';
 import {Tag} from '../../../models/tag/tag.model';
+import {Guid} from '../../../tools/guid';
 
 export class MonthView{
     constructor(public header: CalendarDay[],
@@ -20,15 +22,20 @@ export class DayView{
                 {
                 }
 
+    public refreshCalendarDay(viewDate: Date){
+        var cd = calendarTools.getCalendarDay(this.calendarDay.date, viewDate);
+        this.calendarDay = cd;
+    }
+
     public makeWorkerAvailable( worker: Worker ){
 
-        if(this._workerIsAvailable(worker))
+        if(this.workerIsAvailable(worker))
             return;
 
-        if(this._workerIsOff(worker))
+        if(this.workerIsOff(worker))
             this._removeWorker(worker, this.timeOffWorkers);
         else {
-            var job = this._findJobForWorker(worker);
+            var job = this.findJobForWorker(worker);
             this._removeWorker(worker, job.workers);
         }
 
@@ -36,13 +43,13 @@ export class DayView{
     }
 
     public makeWorkerOff( worker: Worker){
-        if(this._workerIsOff(worker))
+        if(this.workerIsOff(worker))
             return;
 
-        if(this._workerIsAvailable(worker))
+        if(this.workerIsAvailable(worker))
             this._removeWorker(worker, this.availableWorkers);
         else {
-            var job = this._findJobForWorker(worker);
+            var job = this.findJobForWorker(worker);
             this._removeWorker(worker, job.workers);
         }
         
@@ -50,34 +57,40 @@ export class DayView{
     }
 
     public addWorkerToJob( worker: Worker, calendarJob: CalendarJob){
-        if( this._workerIsAvailable(worker)){
-            this._removeWorker( worker, this.availableWorkers );
+
+        let jobTo = this.jobs.find( j => j.id === calendarJob.id );
+        if( !jobTo )
+            return;
+
+        let removed: Worker;
+        if( this.workerIsAvailable(worker)){
+            removed = this._removeWorker( worker, this.availableWorkers );
         }
-        else if( this._workerIsOff(worker)){
-            this._removeWorker(worker, this.timeOffWorkers);
+        else if( this.workerIsOff(worker)){
+            removed = this._removeWorker(worker, this.timeOffWorkers);
         }
         else{
-            var jobFrom = this._findJobForWorker(worker);
-            this._removeWorker(worker, jobFrom.workers);
+            var jobFrom = this.findJobForWorker(worker);
+            removed = this._removeWorker(worker, jobFrom.workers);
         }
 
-        calendarJob.workers.push(worker);
+        jobTo.workers.push(removed);
     }
 
-    private _workerIsAvailable(worker: Worker): Boolean{
-        return this.availableWorkers.indexOf(worker) > -1;
+    public workerIsAvailable(worker: Worker): Boolean{
+        return this.availableWorkers.findIndex( w => w.id === worker.id) > -1;
     }
     
-    private _workerIsOff(worker: Worker): Boolean{
-        return this.timeOffWorkers.indexOf(worker) > -1;
+    public workerIsOff(worker: Worker): Boolean{
+        return this.timeOffWorkers.findIndex(w => w.id === worker.id) > -1;
     }
 
-    private _findJobForWorker(worker: Worker): CalendarJob{
+    public findJobForWorker(worker: Worker): CalendarJob{
 
-        let workerJob: CalendarJob;
+        var workerJob: CalendarJob;
 
         this.jobs.forEach(job => {
-            if (job.workers.indexOf(worker) >= 0)
+            if (job.workers.findIndex(w => w.id === worker.id) >= 0)
             {
                 workerJob = job;
                 return;
@@ -88,12 +101,12 @@ export class DayView{
     }
 
     private _removeWorker(worker: Worker, removeFrom: Worker[]){
-        var index = removeFrom.indexOf(worker);
+        var index = removeFrom.findIndex(w => w.id === worker.id);
 
         if(index == -1)
             return;
 
-        removeFrom.splice(index, 1);
+        return removeFrom.splice(index, 1)[0]
     }
 }
 
@@ -116,7 +129,7 @@ export class CalendarJob implements IDisplayModel{
     public display: string;
 
     constructor(public id: string,
-                public number: number,
+                public number: string,
                 public name: string,
                 public notes: string){
         this.display = `${this.number} ${name}`;
@@ -163,14 +176,15 @@ export class AddWorkerModel {
 }
 
 export class AddJobModel {
+    public id: string;
     constructor(
         public number: string,
         public name: string,
         public notes: string,        
         public tags: Tag[],
         public jobDays: Date[]
-
     ){
+        this.id = Guid.newGuid();
     }
 }
 

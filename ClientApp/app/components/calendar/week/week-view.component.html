@@ -1,12 +1,12 @@
 <mat-toolbar layout-align="center">
     
-    <button mat-icon-button (click)="viewDateBack()">
+    <button mat-icon-button [disabled]="isLoading" (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
     </button>
     
-    <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
+    <span>{{ startOfWeek | date: 'MMMM'}} {{ startOfWeek | date: 'd'}} - {{ endOfWeek | date: 'MMMM' }} {{ endOfWeek | date: 'd' }}</span>
     
-    <button mat-icon-button (click)="viewDateForward()">
+    <button mat-icon-button [disabled]="isLoading" (click)="viewDateForward()">
         <mat-icon>chevron_right</mat-icon>
     </button>
 
@@ -19,61 +19,59 @@
             </mat-select>
         </mat-form-field>           
     </div>
-
 </mat-toolbar>
 
-<td-message *ngIf="showErrorMessage" label="Error Getting Week of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-<div *tdLoading="'showWeekViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+<td-message *ngIf="calendarStore.hasError | async" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
 
-    <div class="week-grid" *ngIf="!showErrorMessage">
+<div class="week-grid" *ngIf="!showErrorMessage">
 
-        <ac-week-cell 
-            class="week-jobs"
-            *ngFor="let dayView of weekData" 
-            [dayView]="dayView"
-            (copyDayRequested)="onCopyDayRequested($event)"
-            (deleteJobsFromDayRequest)="onDeleteJobsFromDayRequested($event)">         
-        </ac-week-cell>
+    <ac-week-cell 
+        class="week-jobs"
+        *ngFor="let dayView of weekData" 
+        [dayView]="dayView"
+        (copyDayRequested)="onCopyDayRequested($event)"
+        (deleteJobsFromDayRequest)="onDeleteJobsFromDayRequested($event)">         
+    </ac-week-cell>
 
-        <ac-job-list 
-            *ngFor="let dayView of weekData" 
-            [dayView]="dayView"
-            [isPast]="dayView.calendarDay.isPast"
-            (workerAddedToJob)="onWorkerAddedJob($event)"
-            (addToTimeOffRequested)="onWorkerAddedOff($event)"    
-            (addToAvailableRequested)="onWorkerAddedAvailable($event)"                                       
-            (deleteJobRequested)="onDeleteJobRequested($event)"
-            (editJobRequested)="onEditJobRequested($event)"
-            (dayJobTagRequested)="onDayJobTagRequested($event)">
-        </ac-job-list>
+    <ac-job-list 
+        *ngFor="let dayView of weekData" 
+        [dayView]="dayView"
+        [isPast]="dayView.calendarDay.isPast"
+        (workerAddedToJob)="onWorkerAddedJob($event)"
+        (addToTimeOffRequested)="onWorkerAddedOff($event)"    
+        (addToAvailableRequested)="onWorkerAddedAvailable($event)"                                       
+        (deleteJobRequested)="onDeleteJobRequested($event)"
+        (editJobRequested)="onEditJobRequested($event)"
+        (dayJobTagRequested)="onDayJobTagRequested($event)">
+    </ac-job-list>
 
-        <ac-worker-list
-            *ngFor="let dayView of weekData"
-            [workers]="dayView.availableWorkers"
-            [jobs]="dayView.jobs"
-            [calendarDay]="dayView.calendarDay"
-            [isPast]="dayView.calendarDay.isPast"
-            [headerText]="'Available Workers'"
-            [showMoveToTimeOff]="true"         
-            (addToTimeOffRequested)="onWorkerAddedOff($event)"      
-            (addToJobRequested)="onWorkerAddedJob($event)"
-            (workerAdded)="onWorkerAddedAvailable($event)">
-        </ac-worker-list>
-            
-        <ac-worker-list
-            *ngFor="let dayView of weekData"
-            [workers]="dayView.timeOffWorkers"
-            [jobs]="dayView.jobs"
-            [calendarDay]="dayView.calendarDay"
-            [isPast]="dayView.calendarDay.isPast"
-            [isAccent]="true"
-            [headerText]="'Time Off'"
-            [showMoveToAvailable]="true"
-            (addToAvailableRequested)="onWorkerAddedAvailable($event)" 
-            (addToJobRequested)="onWorkerAddedJob($event)"
-            (workerAdded)="onWorkerAddedOff($event)">
-        </ac-worker-list>
+    <ac-worker-list
+        *ngFor="let dayView of weekData"
+        [workers]="dayView.availableWorkers"
+        [jobs]="dayView.jobs"
+        [calendarDay]="dayView.calendarDay"
+        [isPast]="dayView.calendarDay.isPast"
+        [headerText]="'Available Workers'"
+        [showMoveToTimeOff]="true"         
+        (addToTimeOffRequested)="onWorkerAddedOff($event)"      
+        (addToJobRequested)="onWorkerAddedJob($event)"
+        (workerAdded)="onWorkerAddedAvailable($event)">
+    </ac-worker-list>
         
-    </div>
+    <ac-worker-list
+        *ngFor="let dayView of weekData"
+        [workers]="dayView.timeOffWorkers"
+        [jobs]="dayView.jobs"
+        [calendarDay]="dayView.calendarDay"
+        [isPast]="dayView.calendarDay.isPast"
+        [isAccent]="true"
+        [headerText]="'Time Off'"
+        [showMoveToAvailable]="true"
+        (addToAvailableRequested)="onWorkerAddedAvailable($event)" 
+        (addToJobRequested)="onWorkerAddedJob($event)"
+        (workerAdded)="onWorkerAddedOff($event)">
+    </ac-worker-list>
+    
 </div>

@@ -1,66 +1,62 @@
 <h1 *ngIf="!isEdit" class="mat-dialog-title">Add Job</h1>
 <h1 *ngIf="isEdit" class="mat-dialog-title">Edit Job</h1>
 
-<div *tdLoading="'addJobShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+<form #addJobForm="ngForm">   
+    <div class="mat-dialog-content form-container">
 
-    <form #addJobForm="ngForm">   
-        <div class="mat-dialog-content form-container">
+        <mat-form-field>
+            <input matInput #jobNameControl="ngModel" placeholder="Job Name" type="text" name="jobName" [(ngModel)]="jobName" required>
+            <mat-error align="start">
+                <span [hidden]="!jobNameControl.errors?.required || jobNameControl.pristine" class="tc-red-600">Job Name is Required</span>
+            </mat-error>
+        </mat-form-field>
 
-            <mat-form-field>
-                <input matInput #jobNameControl="ngModel" placeholder="Job Name" type="text" name="jobName" [(ngModel)]="jobName" required>
-                <mat-error align="start">
-                    <span [hidden]="!jobNameControl.errors?.required || jobNameControl.pristine" class="tc-red-600">Job Name is Required</span>
-                </mat-error>
-            </mat-form-field>
-
-            <mat-form-field>
-                <input matInput #jobNumberControl="ngModel" placeholder="Job Number" type="text" name="jobNumber" [(ngModel)]="jobNumber">
-            </mat-form-field>
-        
-            <div>
-                <mat-tab-group style="height: 260px">
-                    <mat-tab label="Select Days">
-                        <ac-multi-datepicker 
-                            [viewDate]="viewDate" 
-                            [(selectedDays)]="jobDays" 
-                            (changeViewDateRequested)="onChangeViewDateRequested($event)">
-                        </ac-multi-datepicker>
-                        <mat-hint align="start">       
-                            <span [hidden]="jobDays?.length > 0" class="tc-red-600">At least one day must be selected</span>                
-                        </mat-hint>
-                    </mat-tab>
-                    
-                    <mat-tab label="Notes">
-                        <mat-form-field style="width: 100%">
-                            <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="5" name="notes" [(ngModel)]="notes" flex>
-                            </textarea>
-                        </mat-form-field>
-                    </mat-tab>
-                
-                </mat-tab-group>
-            </div>
-
+        <mat-form-field>
+            <input matInput #jobNumberControl="ngModel" placeholder="Job Number" type="text" name="jobNumber" [(ngModel)]="jobNumber">
+        </mat-form-field>
     
-            <mat-divider style="margin-top: 4px; margin-bottom: 4px"></mat-divider>
-
-            <div layout="column">
-                <span>Selected Tags</span>
-                <div layout="row">
-                    <ac-tag *ngFor="let tag of selectedTags" [model]="tag"></ac-tag>
-                </div>
-                <button mat-button color="accent" (click)="selectTags()">Select Tags</button>
-            </div>
-        </div>
-
-        <div class="mat-dialog-actions">
-            <span flex></span>
-            <button mat-button 
-                (click)="onCancelClick()">Cancel</button>
+        <div>
+            <mat-tab-group style="height: 260px">
+                <mat-tab label="Select Days">
+                    <ac-multi-datepicker 
+                        [viewDate]="viewDate" 
+                        [(selectedDays)]="jobDays" 
+                        (changeViewDateRequested)="onChangeViewDateRequested($event)">
+                    </ac-multi-datepicker>
+                    <mat-hint align="start">       
+                        <span [hidden]="jobDays?.length > 0" class="tc-red-600">At least one day must be selected</span>                
+                    </mat-hint>
+                </mat-tab>
+                
+                <mat-tab label="Notes">
+                    <mat-form-field style="width: 100%">
+                        <textarea matInput placeholder="Notes" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="5" name="notes" [(ngModel)]="notes" flex>
+                        </textarea>
+                    </mat-form-field>
+                </mat-tab>
             
-            <button mat-button 
-                [disabled]="!addJobForm.form.valid || !endDateIsNotBeforeStartDate()" 
-                (click)="onOkClick()">Ok</button>
+            </mat-tab-group>
         </div>
-    </form>
 
-</div>
+
+        <mat-divider style="margin-top: 4px; margin-bottom: 4px"></mat-divider>
+
+        <div layout="column">
+            <span>Selected Tags</span>
+            <div layout="row">
+                <ac-tag *ngFor="let tag of selectedTags" [model]="tag"></ac-tag>
+            </div>
+            <button mat-button color="accent" (click)="selectTags()">Select Tags</button>
+        </div>
+    </div>
+
+    <div class="mat-dialog-actions">
+        <span flex></span>
+        <button mat-button 
+            (click)="onCancelClick()">Cancel</button>
+        
+        <button mat-button 
+            [disabled]="!addJobForm.form.valid || !endDateIsNotBeforeStartDate()" 
+            (click)="onOkClick()">Ok</button>
+    </div>
+</form>

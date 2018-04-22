@@ -1,6 +1,6 @@
 <mat-toolbar layout-align="center">
     
-    <ac-month-view-date (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
+    <ac-month-view-date [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
 
     <div style="position: absolute; right: 0; margin-right: 30px">            
         <button mat-icon-button color="primary" (click)="showDisplayOptions()" matTooltip="Display Options" matTooltipPosition="left">
@@ -8,21 +8,20 @@
         </button>
     </div>
 </mat-toolbar>
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-<div *tdLoading="'showMonthViewLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';" style="min-height:300px">
-    <td-message *ngIf="showErrorMessage" label="Error Getting Month of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+<td-message *ngIf="calendarStore.hasError | async" label="Error Getting Month of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>  
+<div class="month-grid" *ngIf="!showErrorMessage">
     
-    <div class="month-grid" *ngIf="!showErrorMessage">
-        
-        <div class="cal-card" *ngFor="let dayHeader of header">
-            <div class="month-dayofweek">
-                {{dayHeader.date | date:'EEEE'}}
-            </div>
+    <div class="cal-card" *ngFor="let dayHeader of header">
+        <div class="month-dayofweek">
+            {{dayHeader.date | date:'EEEE'}}
         </div>
-
-        <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" 
-            [dayView]="dayView" 
-            (changeView)="onChangeView($event)">
-        </ac-month-cell>
     </div>
+
+    <ac-month-cell *ngFor="let dayView of (calendarStore.monthData | async)" 
+        [dayView]="dayView" 
+        (changeView)="onChangeView($event)">
+    </ac-month-cell>
 </div>
+

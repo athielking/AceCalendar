@@ -1,34 +1,33 @@
 <mat-toolbar layout-align="center">
     
-        <button mat-icon-button (click)="viewDateBack()">
-            <mat-icon>chevron_left</mat-icon>
-        </button>
-        
-        <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
-        
-        <button mat-icon-button (click)="viewDateForward()">
-            <mat-icon>chevron_right</mat-icon>
-        </button>
+    <button mat-icon-button (click)="viewDateBack()">
+        <mat-icon>chevron_left</mat-icon>
+    </button>
     
-    </mat-toolbar>
+    <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
     
-    <td-message *ngIf="showErrorMessage" label="Error Getting Week of Data" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
-    
-    <div *tdLoading="'showWeekViewReadonlyLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
-    
-        <div class="week-grid" *ngIf="!showErrorMessage">
-    
-            <ac-week-cell 
-                class="week-jobs"
-                *ngFor="let dayView of weekData" 
-                [dayView]="dayView">         
-            </ac-week-cell>
-    
-            <ac-job-list 
-                *ngFor="let dayView of weekData" 
-                [dayView]="dayView"
-                [isPast]="dayView.calendarDay.isPast"
-                [isReadonly]="true">
-            </ac-job-list>
-        </div>
-    </div>
+    <button mat-icon-button (click)="viewDateForward()">
+        <mat-icon>chevron_right</mat-icon>
+    </button>
+
+</mat-toolbar>
+
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<td-message *ngIf="calendarStore.hasError | async" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
+
+<div class="week-grid" *ngIf="!showErrorMessage">
+
+    <ac-week-cell 
+        class="week-jobs"
+        *ngFor="let dayView of weekData" 
+        [dayView]="dayView">         
+    </ac-week-cell>
+
+    <ac-job-list 
+        *ngFor="let dayView of weekData" 
+        [dayView]="dayView"
+        [isPast]="dayView.calendarDay.isPast"
+        [isReadonly]="true">
+    </ac-job-list>
+</div>

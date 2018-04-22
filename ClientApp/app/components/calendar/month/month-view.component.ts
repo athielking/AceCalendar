@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit,OnChanges, SimpleChanges, EventEmitter, ViewChild } from '@angular/core'
+import { Component, Input, Output, OnInit, OnChanges, SimpleChanges, EventEmitter, ViewChild } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { MatDialog } from '@angular/material'
 import { Observable } from 'rxjs/Rx';
@@ -12,79 +12,55 @@ import { ViewChangeRequest } from '../../../events/calendar.events';
 import { MonthViewDateComponent } from './month-view-date.component';
 
 @Component({
-  selector: 'ac-month-view',
-  templateUrl: './month-view.component.html',
-  styleUrls: ['./month-view.component.scss', 
-              '../common/calendar-card.scss']
+	selector: 'ac-month-view',
+	templateUrl: './month-view.component.html',
+	styleUrls: ['./month-view.component.scss',
+		'../common/calendar-card.scss']
 })
 export class MonthViewComponent implements OnInit {
-  @Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
-  @Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
+	@Input() viewDate: Date;
+	@Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
+	@Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
 
-  @ViewChild(MonthViewDateComponent) monthViewDate: MonthViewDateComponent;
+	@ViewChild(MonthViewDateComponent) monthViewDate: MonthViewDateComponent;
 
-  private viewDate: Date;
+	private isLoading: Boolean = false;
+	private header: CalendarDay[];
 
-  private header: CalendarDay[];
+	public showErrorMessage: boolean;
+	public errorMessage: string;
 
-  public showErrorMessage: boolean;
-  public errorMessage: string;
+	constructor(
+		public calendarStore: CalendarStore,
+		private loadingService: TdLoadingService,
+		private dialog: MatDialog,
+		private storageService: StorageService) {
+	}
 
-  constructor(
-    public calendarStore: CalendarStore,
-    private loadingService: TdLoadingService,
-    private dialog: MatDialog,
-    private storageService: StorageService ) {
-  }
+	ngOnInit() {
+		this.calendarStore.isMonthLoading.subscribe(result => {
+			this.isLoading = result;
+		});
+	}
 
-  ngOnInit() {   
-    this.calendarStore.isMonthLoading.subscribe( result => {
-      this.toggleShowLoading(result); 
-    });
+	public onChangeViewDate(date: Date) {
+		this.handleDateChanged(date);
+		this.changeViewDate.emit(date);
+	}
 
-    this.calendarStore.hasMonthError.subscribe( result => {
-        this.showErrorMessage = result;
-        this.errorMessage = this.calendarStore.monthErrorMessage;
-    });
-  }
+	public onChangeView(event: ViewChangeRequest) {
+		this.changeViewDate.emit(event.viewDate);
+		this.changeSelectedView.emit(event.view);
+	}
 
-  public updateViewDate(date: Date) {
-    this.monthViewDate.updateViewDate(date);
+	public showDisplayOptions() {
+		this.dialog.open(MonthDisplayOptionsComponent);
+	}
 
-    this.handleDateChanged(date);
-  }
+	private handleDateChanged(date: Date) {
 
-  public onChangeViewDate( date: Date ){
-    this.handleDateChanged(date);
-    this.changeViewDate.emit(date);
-  }
+		this.header = getWeekHeaderDays({ viewDate: date, excluded: [] });
+		this.calendarStore.getDataForMonth(date);
+	}
 
-  public onChangeView( event: ViewChangeRequest){
-    this.viewDate = event.viewDate;
-
-    this.changeViewDate.emit(event.viewDate);
-    this.changeSelectedView.emit(event.view);
-  }
-
-  public showDisplayOptions(){
-    this.dialog.open(MonthDisplayOptionsComponent);
-  }
-
-  private handleDateChanged(date: Date) {
-  
-    this.viewDate = date;
-
-    this.header = getWeekHeaderDays({viewDate: this.viewDate, excluded: []});
-
-    this.calendarStore.getDataForMonth(this.viewDate);
-  } 
-
-  private toggleShowLoading(show:boolean) {
-    if (show) {
-        this.loadingService.register('showMonthViewLoading');
-    } 
-    else {
-        this.loadingService.resolve('showMonthViewLoading');
-    }
-  }
 }

@@ -32,11 +32,15 @@ export class AppComponent {
   public authorized: boolean;
   public loggedInUser: string;
   public menuOpen: boolean = true;
+  public isMobile: boolean;
 
   constructor(private authService: AuthService, 
               private dialog: MatDialog ) {
     this.authorized = !this.authService.loginRequired();
     this.loggedInUser = this.authService.getLoggedInUser();
+    
+    if(window.screen.width <= 576)
+      this.isMobile = true;
   }
 
   public toggleMenu(){

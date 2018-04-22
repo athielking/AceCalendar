@@ -21,9 +21,6 @@ export class DayViewComponent implements OnInit, OnDestroy {
     private viewDate: Date;
     
     private isDayLoadingSubscription: Subscription;
-
-    private hasDayErrorSubscription: Subscription;
-
     private dayDataSubscription: Subscription;
     
     private dataUpdated: Boolean;
@@ -46,6 +43,9 @@ export class DayViewComponent implements OnInit, OnDestroy {
 
         this.viewDate = data.viewDate;
 
+        this.dayDataSubscription = this.calendarStore.dayData.subscribe( result => {
+            this.dayView = result;
+        })
         this.calendarStore.getDataForDay(this.viewDate);
     }
 
@@ -54,62 +54,47 @@ export class DayViewComponent implements OnInit, OnDestroy {
             this.isLoading = result;
             this.toggleShowLoading(result); 
         });
-
-        this.hasDayErrorSubscription = this.calendarStore.hasDayError.subscribe( result => {
-            this.showErrorMessage = result;
-            this.errorMessage = this.calendarStore.dayErrorMessage;
-        });
-
-        this.dayDataSubscription = this.calendarStore.dayData.subscribe( result => {
-            this.dayView = result;
-        })
     }
 
     public ngOnDestroy() {
         this.isDayLoadingSubscription.unsubscribe();
-
-        this.hasDayErrorSubscription.unsubscribe();
-
         this.dayDataSubscription.unsubscribe();
     }
 
     public onWorkerAddedToJob(event: WorkerAddedJobEvent) {
         this.dataUpdated = true;
 
-        this.calendarStore.moveWorkerToJob(this.viewDate, event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay ).subscribe(result => {     
-            this.dayView.addWorkerToJob(event.worker, event.calendarJob);            
-        }, error => {
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Worker to Job'
-            });
-        });
+        var sub = this.calendarStore.moveWorkerToJob(this.viewDate, event.worker, this.dayView.calendarDay.date, event.calendarJob, AddWorkerOption.SingleDay )
+            .subscribe(result => {}, error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Failed to Add Worker to Job'
+                });
+            }, () => sub.unsubscribe() );
     }
 
     public onWorkerAddedAvailable(event: WorkerListAdded){
         this.dataUpdated = true;
         
-        this.calendarStore.moveWorkerToAvailable( event.worker, event.date ).subscribe(result => {      
-            this.dayView.makeWorkerAvailable(event.worker)                  
-        }, error => {
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Worker to Available'
-            });
-        });
+        var sub = this.calendarStore.moveWorkerToAvailable( event.worker, event.date )
+            .subscribe(result => {}, error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Unable to Add Worker to Available'
+                });
+            }, () => sub.unsubscribe() );
     }
 
     public onWorkerAddedOff(event: WorkerListAdded){
         this.dataUpdated = true;
         
-        this.calendarStore.moveWorkerToOff( event.worker,event.date).subscribe(result => {      
-           this.dayView.makeWorkerOff(event.worker);            
-        }, error => {
-            this.dialogService.openAlert({
-                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-                title: 'Unable to Add Worker to Time Off'
-            });
-        });
+        var sub = this.calendarStore.moveWorkerToOff( event.worker,event.date)
+            .subscribe(result => {}, error => {
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Unable to Add Worker to Time Off'
+                });
+            }, () => sub.unsubscribe() );
     }
 
     public onCloseClick(){
@@ -141,18 +126,14 @@ export class DayViewComponent implements OnInit, OnDestroy {
             title: 'Confirm Delete'
         }).afterClosed().subscribe((accept: boolean) => {
             if (accept) {
-                this.toggleShowLoading(true);
-
-                this.calendarStore.deleteJobFromDayView(event.jobId, event.date)
-                    .subscribe(result => {
-                        this.toggleShowLoading(false);                        
-                    }, error => {
-                        this.toggleShowLoading(false);
+               
+                var sub = this.calendarStore.deleteJob(event.jobId, event.date)
+                    .subscribe(result => {}, error => {
                         this.dialogService.openAlert({
                             message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
                             title: 'Unable to Delete Job'
                         });
-                    });
+                    }, () => sub.unsubscribe());
             }
         });
     }
@@ -160,7 +141,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
     public onEditJobRequested(event: EditJobRequestedEvent) {
         this.dataUpdated = true;
 
-        this.calendarStore.getJobStartAndEndDate( event.job.id).subscribe(result => { 
+        this.calendarStore.getJobDays( event.job.id).subscribe(result => { 
             let dialogRef = this.dialog.open(AddJobToDayViewComponent, {
                 disableClose: true,
                 data: {
@@ -169,8 +150,8 @@ export class DayViewComponent implements OnInit, OnDestroy {
                     jobNumber: event.job.number,
                     jobName: event.job.name,
                     notes: event.job.notes,
-                    startDate: result.startDate,
-                    endDate: result.endDate       
+                    jobDays: result,
+                    selectedTags: event.job.jobTags     
                 }
             });
         }, error => {

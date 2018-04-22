@@ -30,10 +30,10 @@ export class AddJobToDayViewComponent extends AddJobComponent {
     }
 
     protected AddJobThroughStore(addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.addJobToDayView(addJobModel);
+        return this.calendarStore.addJob(addJobModel);
     }
 
     protected EditJobThroughStore(editJobId: string, addJobModel: AddJobModel): Observable<object> {
-        return this.calendarStore.editJobFromDayView(editJobId, addJobModel);
+        return this.calendarStore.editJob(editJobId, addJobModel);
     }
 }
