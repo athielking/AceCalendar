@@ -12,6 +12,7 @@ export class MonthDisplayOptionsComponent implements OnInit{
     public showAllJobs: boolean;
     public showAvailableWorkers: boolean;
     public showOffWorkers: boolean;
+    public showTags: boolean;
 
     constructor(private storageService: StorageService,
                 private dialogRef: MatDialogRef<MonthDisplayOptionsComponent> ){
@@ -27,6 +28,9 @@ export class MonthDisplayOptionsComponent implements OnInit{
         
         this.showOffWorkers = this.storageService.hasItem(StorageKeys.monthViewShowOff ) && 
                               this.storageService.getItem(StorageKeys.monthViewShowOff) == 'true'
+
+        this.showTags = this.storageService.hasItem(StorageKeys.monthViewShowTags ) && 
+                              this.storageService.getItem(StorageKeys.monthViewShowTags) == 'true'
     }
 
     toggleJobsChanged(event: MatSlideToggleChange){
@@ -39,6 +43,10 @@ export class MonthDisplayOptionsComponent implements OnInit{
 
     toggleOffChanged(event: MatSlideToggleChange){
         this.storageService.setItem(StorageKeys.monthViewShowOff, this.showOffWorkers);
+    }
+
+    toggleTagsChanged(event: MatSlideToggleChange){
+        this.storageService.setItem(StorageKeys.monthViewShowTags, this.showTags);
     }
 
     onCloseClick(){

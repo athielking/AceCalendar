@@ -27,6 +27,7 @@ import { CalendarStore } from '../../../stores/calendar.store';
     showAllJobs: boolean;
     showAvailableWorkers: boolean;
     showOffWorkers: boolean;
+    showJobTags: boolean;
 
     constructor(
       private router: Router, 
@@ -45,6 +46,9 @@ import { CalendarStore } from '../../../stores/calendar.store';
           
         if( key == StorageKeys.monthViewShowOff)
           this.showOffWorkers = this.storageService.getItem(key) == 'true';
+
+        if( key == StorageKeys.monthViewShowTags)
+          this.showJobTags = this.storageService.getItem(key) == 'true';
       });
 
      
@@ -56,6 +60,9 @@ import { CalendarStore } from '../../../stores/calendar.store';
         
         this.showOffWorkers = this.storageService.hasItem(StorageKeys.monthViewShowOff ) && 
                               this.storageService.getItem(StorageKeys.monthViewShowOff) == 'true'
+        
+        this.showJobTags = this.storageService.hasItem(StorageKeys.monthViewShowTags ) && 
+                              this.storageService.getItem(StorageKeys.monthViewShowTags) == 'true'
     }
 
     public getJobsTooltip(){

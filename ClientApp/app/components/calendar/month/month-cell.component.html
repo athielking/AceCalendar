@@ -13,7 +13,12 @@
                 <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
                 <div class="cal-card-content">
                     <div *ngFor="let job of dayView.jobs">
-                        <strong>{{job.getDisplayString()}}</strong>
+                        <div layout="row">
+                            <span style="padding-right: 4px"><strong>{{job.getDisplayString()}}</strong></span>
+                            <span *ngIf="showJobTags">
+                                <ac-tag *ngFor="let tag of job.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
+                            </span>
+                        </div>
                         <div style="margin-left: 16px" *ngFor="let worker of job.workers">
                             {{worker.firstName}} {{worker.lastName}}
                         </div>
