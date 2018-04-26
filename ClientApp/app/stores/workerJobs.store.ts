@@ -34,4 +34,12 @@ export class WorkerJobsStore{
             this.hasError.next(true);
         });
     }
+
+    public updateTimeOffDates( timeOffDates: Date[] ){
+        var dates = timeOffDates.map( date => new Date(date).getDate() );
+
+        var workerJobsData = this._workerJobsData.value.filter( job => !dates.includes( new Date(job.date).getDate() ) );
+
+        this._workerJobsData.next(workerJobsData);
+    }
 }

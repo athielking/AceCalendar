@@ -1,8 +1,8 @@
 <div class="multi-datepicker-container">
     <div class="multi-datepicker-header">
-        <button mat-icon-button (click)="monthBack()"><mat-icon>chevron_left</mat-icon></button>
+        <button mat-icon-button *ngIf="!disableChangingMonth" (click)="monthBack()"><mat-icon>chevron_left</mat-icon></button>
         <span class="view-date" flex>{{ viewDate | date: "MMM yyyy"}}</span>
-        <button mat-icon-button (click)="monthForward()"><mat-icon>chevron_right</mat-icon></button>
+        <button mat-icon-button *ngIf="!disableChangingMonth" (click)="monthForward()"><mat-icon>chevron_right</mat-icon></button>
     </div>
     <div class="multi-datepicker-days header">
         <span class="multi-datepicker-day day-header">S</span>

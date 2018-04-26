@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
-import { Worker, AddWorkerModel } from '../components/calendar/common/models';
+import { Worker, AddWorkerModel, EditTimeOffModel } from '../components/calendar/common/models';
 import { DateRangeModel } from '../models/shared/dateRangeModel';
 import { TimeOffGridModel } from '../models/worker/timeOffGridModel';
 import { JobByDateGridModel } from '../models/worker/jobByDateGridModel';
@@ -57,14 +57,17 @@ export class WorkerService{
             .map(json => (<Worker[]>json['data']));
     }
 
-    public addTimeOff(id: string, date: Date, end?:Date){
-        var body = new DateRangeModel(id, date, end);
+    public editTimeOff(workerId: string, monthDate: Date, timeOffDates: Date[]){
+        var editTimeOffModel = new EditTimeOffModel (
+            workerId,
+            monthDate,
+            timeOffDates
+        );
 
-        return this.httpClient.post(this.serviceUri+`/addTimeOff`, body )
-            .map(json => <Worker>json['data']).shareReplay();
+        return this.httpClient.post(this.serviceUri+`/editTimeOff`, editTimeOffModel ).shareReplay();
     }
 
     public deleteTimeOff(workerId: string, date: Date){
-        return this.httpClient.delete(this.serviceUri+`/deleteTimeOff?workerId=${workerId}&date=${date}`).shareReplay();
+        return this.httpClient.delete(this.serviceUri+`/deleteTimeOff?workerId=${workerId}&date=${new Date(date).toISOString()}`).shareReplay();
     }
 }

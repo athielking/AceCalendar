@@ -329,9 +329,9 @@ export class CalendarStore {
         if( workerAddOption == AddWorkerOption.SingleDay)
             filtered = filtered.filter( dv => dateTools.equal(date, dv.calendarDay.date ));
         else if( workerAddOption == AddWorkerOption.AvailableDays )
-            filtered = filtered.filter( dv => dv.workerIsAvailable(worker) );
+            filtered = filtered.filter( dv => dv.workerIsAvailable(worker.id) );
         
-        filtered.forEach( dv => dv.addWorkerToJob(worker, toJob));
+        filtered.forEach( dv => dv.addWorkerToJob(worker.id, toJob));
         this._dayViews.next( dayViews );
 
         var sub = obs.subscribe( result => {}, error => this.handleError(error), () => sub.unsubscribe());
@@ -341,26 +341,16 @@ export class CalendarStore {
     public moveWorkerToAvailable(worker: Worker, date: Date  ){
         var obs = this.jobService.moveWorkerToAvailable(new MoveWorkerRequestModel(worker.id, null, date.toISOString(), null));
 
-        var dayViews = this._dayViews.getValue();
-        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
+        this.makeWorkerAvailable(worker.id, date);
 
-        dv.makeWorkerAvailable(worker);
-
-        this._dayViews.next( dayViews );
-        
         var sub = obs.subscribe( result => {}, error => this.handleError(error), () => sub.unsubscribe());
         return obs;
     }
 
     public moveWorkerToOff(worker: Worker, date: Date  ){
         var obs = this.jobService.moveWorkerToOff(new MoveWorkerRequestModel(worker.id, null, date.toISOString(), null));
-
-        var dayViews = this._dayViews.getValue();
-        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
-
-        dv.makeWorkerOff(worker);
-
-        this._dayViews.next( dayViews );
+        
+        this.addTimeOff(worker.id, date);
         
         var sub = obs.subscribe( result => {}, error => this.handleError(error), () => sub.unsubscribe());
         return obs;
@@ -439,5 +429,23 @@ export class CalendarStore {
             this.errorMessage.next( error.message );
         else if( error.error && error.error.errorMessage )
             this.errorMessage.next( error.error.errorMessage );
+    }
+
+    public makeWorkerAvailable( workerId: string, date: Date ){
+        var dayViews = this._dayViews.getValue();
+        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
+
+        dv.makeWorkerAvailable(workerId);
+
+        this._dayViews.next( dayViews );    
+    }
+
+    public addTimeOff( workerId: string, date: Date ){
+        var dayViews = this._dayViews.getValue();
+        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
+
+        dv.makeWorkerOff(workerId);
+
+        this._dayViews.next( dayViews );
     }
 }

@@ -1,8 +1,8 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
-import {WorkerStore} from '../../stores/worker.store';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
+import { TimeOffStore } from '../../stores/timeOff.store';
 
 @Component({
     selector: 'ac-add-time-off',
@@ -11,44 +11,39 @@ import { TdLoadingService, TdDialogService } from '@covalent/core';
 export class AddTimeOffComponent {
 
     private idWorker: string;
-    public startDate: Date;
-    public endDate: Date;
+
+    public viewDate: Date;
+    public timeOffDays: Date[];
 
     constructor(
-        public workerStore: WorkerStore,
+        public timeOffStore: TimeOffStore,
         private dialogRef: MatDialogRef<AddTimeOffComponent>,
         private loadingService: TdLoadingService,
         private dialogService: TdDialogService,
         @Inject(MAT_DIALOG_DATA) public data: any
     ){
         this.idWorker = data.idWorker;
-        this.startDate = new Date();
+        this.timeOffDays = data.timeOffDays;
+        this.viewDate = data.viewDate;
     }
 
     public onOkClick(){
         this.toggleShowLoading(true);
 
-        // this.workerStore.addTimeOff(this.idWorker, this.startDate, this.endDate).subscribe(result => {
-        //     this.toggleShowLoading(false);
-        //     this.dialogRef.close();
-        // }, error => {
-        //     this.toggleShowLoading(false);
-        //     this.dialogService.openAlert({
-        //         message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
-        //         title: 'Unable to Add Time Off'
-        //     });
-        // });
+        this.timeOffStore.editTimeOff(this.idWorker, this.viewDate, this.timeOffDays).subscribe(result => {
+            this.toggleShowLoading(false);
+            this.dialogRef.close();
+        }, error => {
+            this.toggleShowLoading(false);
+            this.dialogService.openAlert({
+                message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                title: 'Unable to Add Time Off'
+            });
+        });
     }
 
     public onCancelClick(){
         this.dialogRef.close();
-    }
-
-    private areDatesValid():Boolean{
-        if(this.endDate != null)
-            return this.endDate > this.startDate;
-        
-        return this.startDate != null;
     }
 
     private toggleShowLoading(show:boolean) {

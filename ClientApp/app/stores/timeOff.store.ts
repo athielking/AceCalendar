@@ -4,6 +4,8 @@ import { List } from 'immutable';
 
 import { WorkerService } from '../services/worker.service';
 import { TimeOffGridModel } from '../models/worker/timeOffGridModel';
+import { WorkerJobsStore } from './workerJobs.store';
+import { CalendarStore } from './calendar.store';
 
 @Injectable()
 export class TimeOffStore{
@@ -18,7 +20,10 @@ export class TimeOffStore{
 
     public readonly timeOffData : Observable<TimeOffGridModel[]> = this._timeOffData.asObservable();
     
-    constructor(private workerService: WorkerService){
+    constructor(
+        private workerService: WorkerService,
+        private workerJobsStore: WorkerJobsStore,
+        private calendarStore: CalendarStore){
     }
 
     public getTimeOffData(workerId: string, date: Date){
@@ -43,7 +48,7 @@ export class TimeOffStore{
 
         obs.subscribe( response => {
             this.isLoading.next(false);
-            this.removeTimeOffModel(timeOffGridModel);
+            this.removeTimeOffModel(workerId, timeOffGridModel);
         }, error => {
             this.isLoading.next(false);
             this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
@@ -53,30 +58,58 @@ export class TimeOffStore{
         return obs;
     }
 
-    private removeTimeOffModel(timeOffGridModel: TimeOffGridModel) {
+    public editTimeOff(workerId: string, monthDate: Date, timeOffDates: Date[]) {
+
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        var obs = this.workerService.editTimeOff(workerId, monthDate, timeOffDates);
+        
+        obs.subscribe( response => {
+            this.isLoading.next(false);
+            this.updateTimeOffDates(workerId, timeOffDates);
+        }, error => {
+            this.isLoading.next(false);
+            this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
+            this.hasError.next(true);
+        });
+
+        return obs;
+    }
+
+    private removeTimeOffModel(workerId: string, timeOffGridModel: TimeOffGridModel) {
         var timeOffGridModels = this._timeOffData.value.filter( function(model: TimeOffGridModel) {
             return model.date !== timeOffGridModel.date;
         })
         
         this._timeOffData.next(timeOffGridModels);
+
+        this.calendarStore.makeWorkerAvailable(workerId, timeOffGridModel.date);
     }
-    // public addTimeOff(workerId: string, date: Date, end?: Date): Observable<Worker>{
 
-    //     this.isLoading.next(true);
-    //     this.hasError.next(false);
+    private updateTimeOffDates(workerId: string, timeOffDates: Date[]) {
+        var dates = timeOffDates.map( date => new Date(date).getDate() );
 
-    //     var obs = this.workerService.addTimeOff(workerId, date, end);
+        //Remove existing time off days from calendar store
+        for( let timeOffModel of this._timeOffData.value  ) {
+            if( !dates.includes( new Date(timeOffModel.date).getDate() ) ) 
+                this.calendarStore.makeWorkerAvailable(workerId, timeOffModel.date);           
+        }
+        
+        //Add new time off entries to calendar store
+        for( let timeOffDate of timeOffDates ) {
+            this.calendarStore.addTimeOff(workerId, timeOffDate);
+        }
 
-    //     obs.subscribe( response => {
-    //         this.isLoading.next(false);
-    //         if( this._worker.getValue().id == response.id )
-    //             this._worker.next(response);
-    //     }, error => {
-    //         this.isLoading.next(false);
-    //         this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
-    //         this.hasError.next(true);
-    //     });
+        var timeOffGridModels = timeOffDates.map( date => {
+            var timeOffGridModel = new TimeOffGridModel();
+            timeOffGridModel.date = date;
+            return timeOffGridModel;            
+        });
+        
+        this._timeOffData.next(timeOffGridModels);
 
-    //     return obs;
-    // }
+        //Remove worker jobs for new time off entries from worker jobs store
+        this.workerJobsStore.updateTimeOffDates( timeOffDates );
+    }
 }

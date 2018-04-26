@@ -27,70 +27,72 @@ export class DayView{
         this.calendarDay = cd;
     }
 
-    public makeWorkerAvailable( worker: Worker ){
+    public makeWorkerAvailable( workerId: string ){
 
-        if(this.workerIsAvailable(worker))
+        if(this.workerIsAvailable(workerId))
             return;
 
-        if(this.workerIsOff(worker))
-            this._removeWorker(worker, this.timeOffWorkers);
+        let removed: Worker;            
+        if(this.workerIsOff(workerId))
+            removed = this._removeWorker(workerId, this.timeOffWorkers);
         else {
-            var job = this.findJobForWorker(worker);
-            this._removeWorker(worker, job.workers);
+            var job = this.findJobForWorker(workerId);
+            removed = this._removeWorker(workerId, job.workers);
         }
 
-        this.availableWorkers.push(worker);
+        this.availableWorkers.push(removed);
     }
 
-    public makeWorkerOff( worker: Worker){
-        if(this.workerIsOff(worker))
+    public makeWorkerOff( workerId: string ){
+        if(this.workerIsOff(workerId))
             return;
 
-        if(this.workerIsAvailable(worker))
-            this._removeWorker(worker, this.availableWorkers);
+        let removed: Worker;
+        if(this.workerIsAvailable(workerId))
+            removed = this._removeWorker(workerId, this.availableWorkers);
         else {
-            var job = this.findJobForWorker(worker);
-            this._removeWorker(worker, job.workers);
+            var job = this.findJobForWorker(workerId);
+            removed = this._removeWorker(workerId, job.workers);
         }
         
-        this.timeOffWorkers.push(worker);
+        this.timeOffWorkers.push(removed);
     }
 
-    public addWorkerToJob( worker: Worker, calendarJob: CalendarJob){
+    public addWorkerToJob( workerId: string, calendarJob: CalendarJob){
 
         let jobTo = this.jobs.find( j => j.id === calendarJob.id );
         if( !jobTo )
             return;
 
         let removed: Worker;
-        if( this.workerIsAvailable(worker)){
-            removed = this._removeWorker( worker, this.availableWorkers );
+        if( this.workerIsAvailable(workerId)){
+            removed = this._removeWorker( workerId, this.availableWorkers );
         }
-        else if( this.workerIsOff(worker)){
-            removed = this._removeWorker(worker, this.timeOffWorkers);
+        else if( this.workerIsOff(workerId)){
+            removed = this._removeWorker(workerId, this.timeOffWorkers);
         }
         else{
-            var jobFrom = this.findJobForWorker(worker);
-            removed = this._removeWorker(worker, jobFrom.workers);
+            var jobFrom = this.findJobForWorker(workerId);
+            removed = this._removeWorker(workerId, jobFrom.workers);
         }
 
         jobTo.workers.push(removed);
     }
 
-    public workerIsAvailable(worker: Worker): Boolean{
-        return this.availableWorkers.findIndex( w => w.id === worker.id) > -1;
+    public workerIsAvailable(workerId: string): Boolean{
+        return this.availableWorkers.findIndex( w => w.id === workerId) > -1;
     }
     
-    public workerIsOff(worker: Worker): Boolean{
-        return this.timeOffWorkers.findIndex(w => w.id === worker.id) > -1;
+    public workerIsOff(workerId: string): Boolean{
+        return this.timeOffWorkers.findIndex(w => w.id === workerId) > -1;
     }
 
-    public findJobForWorker(worker: Worker): CalendarJob{
+    public findJobForWorker(workerId: string): CalendarJob{
 
         var workerJob: CalendarJob;
 
         this.jobs.forEach(job => {
-            if (job.workers.findIndex(w => w.id === worker.id) >= 0)
+            if (job.workers.findIndex(w => w.id === workerId) >= 0)
             {
                 workerJob = job;
                 return;
@@ -100,8 +102,8 @@ export class DayView{
         return workerJob;
     }
 
-    private _removeWorker(worker: Worker, removeFrom: Worker[]){
-        var index = removeFrom.findIndex(w => w.id === worker.id);
+    private _removeWorker(workerId: string, removeFrom: Worker[]){
+        var index = removeFrom.findIndex(w => w.id === workerId);
 
         if(index == -1)
             return;
@@ -171,6 +173,16 @@ export class AddWorkerModel {
         public lastName: string,
         public email: string,
         public phone: string
+    ){
+    }
+}
+
+
+export class EditTimeOffModel {
+    constructor(
+        public workerId: string,
+        public monthDate: Date,
+        public timeOffDates: Date[]
     ){
     }
 }

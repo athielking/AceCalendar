@@ -13,6 +13,7 @@ import { IPageChangeEvent } from '@covalent/core';
 import { TdDataTableSortingOrder } from '@covalent/core';
 import { ITdDataTableSortChangeEvent } from '@covalent/core';
 import { TdDataTableService } from '@covalent/core';
+import { AddTimeOffComponent } from './add-time-off.component';
 
 @Component({
     selector: "ac-worker-time-off",
@@ -168,5 +169,16 @@ export class WorkerTimeOffComponent implements OnInit {
         else {
             this.loadingService.resolve('workerDetailTimeOffShowLoading');
         }
+    }
+
+    public addTimeOff(){
+        let dialogRef = this.dialogService.open(AddTimeOffComponent, {
+            disableClose: true,
+            data: { 
+                idWorker: this.workerId,
+                timeOffDays: this.timeOffData.map( data => data.date ),
+                viewDate: this.viewDate
+            }
+        });
     }
 }

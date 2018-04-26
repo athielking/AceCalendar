@@ -12,6 +12,7 @@ import * as dateTools from '../../../tools/dateTools';
 export class MultiDatePickerComponent implements OnInit, OnChanges {
     @Input() viewDate: Date;
     @Input() selectedDays: Date[] = [];
+    @Input() disableChangingMonth: boolean;
     @Output() selectedDaysChange: EventEmitter<Date[]> = new EventEmitter<Date[]>();
     @Output() changeViewDateRequested: EventEmitter<ChangeViewDateEvent> = new EventEmitter<ChangeViewDateEvent>();
 
