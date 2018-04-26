@@ -1,0 +1,26 @@
+<span style="text-align: center">
+    <h2>{{ startOfWeek | date: 'MMMM d'}} - {{ endOfWeek | date: 'MMMM d' }}</h2>
+</span>
+
+<div class="print-grid">
+    <div style="padding-bottom: 0px; border-bottom: 1px solid black" *ngFor="let dayView of weekData">
+        <span><h3>{{ dayView.calendarDay.date | date: 'EEEE dd' }}</h3></span>
+    </div>
+    <div class="column" *ngFor="let dayView of weekData">
+        <span style="margin-bottom: 4px; margin-top: 8px;"><h4>Jobs</h4></span>
+        <div class="column" *ngFor="let job of dayView.jobs">
+            <span style="margin-bottom: 4px; margin-top: 4px"><strong>{{job.getDisplayString()}}</strong></span>
+            <span stye="margin-left: 4px" *ngFor="let worker of job.workers"> {{worker.firstName}} {{worker.lastName}}</span>
+        </div>
+
+        <span style="margin-bottom: 8px; margin-top: 8px;"><h4>Available Workers</h4></span>
+        <div *ngFor="let worker of dayView.availableWorkers">
+            <span> {{worker.firstName}} {{worker.lastName}}</span>
+        </div>
+
+        <span style="margin-bottom: 8px; margin-top: 8px;"><h4>Time Off</h4></span>
+        <div *ngFor="let worker of dayView.timeOffWorkers">
+            <span> {{worker.firstName}} {{worker.lastName}}</span>
+        </div>
+    </div>
+</div>

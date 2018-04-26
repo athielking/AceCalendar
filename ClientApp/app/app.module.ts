@@ -86,6 +86,7 @@ import { OrganizationStore } from './stores/organization.store';
 
 import { AuthInterceptor } from './tools/authInterceptor';
 import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
+import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
 
 
 @NgModule({
@@ -133,6 +134,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     WeekViewComponent,
     WeekViewReadonlyComponent,
     WeekViewPhoneComponent,
+    WeekViewPrintComponent,
     WeekCellComponent,
     WeekCellJobComponent,
 
@@ -149,6 +151,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
     ChangePasswordComponent
   ],
   entryComponents: [
+    WeekViewPrintComponent,
     AddWorkerComponent,
     AddJobToWeekViewComponent,
     AddJobToDayViewComponent,

@@ -1,0 +1,22 @@
+h3 {
+    margin-bottom:0px;
+    margin-top:0px;
+}
+
+h4 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+.print-grid {
+    display: grid;
+    margin: 8px;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: 1fr;
+    grid-gap: 4px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}

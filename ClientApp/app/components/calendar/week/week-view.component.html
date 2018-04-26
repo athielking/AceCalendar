@@ -17,7 +17,10 @@
                 <mat-option value=1>All Days this week</mat-option>
                 <mat-option value=2>All Days this week when available</mat-option>
             </mat-select>
-        </mat-form-field>           
+        </mat-form-field>
+        <button mat-icon-button color="primary" [disabled]="isLoading" (click)="print()">
+            <mat-icon>print</mat-icon>
+        </button>           
     </div>
 </mat-toolbar>
 
@@ -74,4 +77,8 @@
         (workerAdded)="onWorkerAddedOff($event)">
     </ac-worker-list>
     
+</div>
+
+<div id="print-section" hidden="true">
+    <ac-week-print [viewDate]="viewDate"></ac-week-print>
 </div>

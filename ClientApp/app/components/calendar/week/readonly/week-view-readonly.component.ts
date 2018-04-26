@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit, ComponentFactoryResolver, ViewContainerRef } from '@angular/core'
 import {DatePipe} from '@angular/common';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { MatDialog } from '@angular/material';
