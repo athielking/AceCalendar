@@ -152,6 +152,7 @@ import { WeekViewPrintComponent } from "./components/calendar/week/print/week-vi
   ],
   entryComponents: [
     WeekViewPrintComponent,
+    WeekCellJobComponent,
     AddWorkerComponent,
     AddJobToWeekViewComponent,
     AddJobToDayViewComponent,

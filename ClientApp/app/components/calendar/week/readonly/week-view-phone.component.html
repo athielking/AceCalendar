@@ -34,7 +34,7 @@
             <div class="phone-subtitle">{{ dayView.calendarDay.date | date: 'EEE'}}</div>
         </div>
         <div class='cal-card' style="padding-left: 4px; padding-right: 4px;">
-            <ac-simple-job *ngFor="let job of dayView.jobs" [job]="job"></ac-simple-job>
+            <ac-simple-job *ngFor="let job of dayView.jobs" [job]="job" [calendarDay]="dayView.calendarDay"></ac-simple-job>
         </div>
     </ng-template>
 </div>

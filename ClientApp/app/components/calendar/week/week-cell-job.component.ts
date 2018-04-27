@@ -1,6 +1,6 @@
-import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
+import { Component, Input, Output, Inject, Optional, OnInit, EventEmitter } from '@angular/core'
 import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
 import {Tag} from '../../../models/tag/tag.model';
 import { WorkerMovedWithDateEvent } from '../../worker/worker-list.component';
@@ -22,7 +22,17 @@ export class WeekCellJobComponent {
     @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     @Output() addToTimeOffRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     
-    constructor(private snackBar: MatSnackBar) {
+    constructor(private snackBar: MatSnackBar,
+                @Optional() @Inject(MAT_DIALOG_DATA) data) {
+
+        if(data){
+            if( data.calendarJob )
+                this.calendarJob = data.calendarJob;
+            if( data.calendarDay )
+                this.calendarDay = data.calendarDay;
+            if(data.isReadonly)
+                this.isReadonly = data.isReadonly;
+        }
     }
 
     public onWorkerDropped(e: any) {
