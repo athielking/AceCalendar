@@ -75,7 +75,13 @@ export class CalendarStore {
         });
 
         var start = dateFns.startOfWeek( dateFns.startOfMonth( this._lastViewDate ));
+        var weekBeforeStart = dateFns.subWeeks( dateFns.startOfWeek(this._lastViewDate), 1);
+        start = dateTools.lessThan( weekBeforeStart, start ) ? weekBeforeStart : start;
+        
         var end = dateFns.endOfWeek(dateFns.endOfMonth(this._lastViewDate));
+        var weekAfterEnd = dateFns.endOfWeek(dateFns.addWeeks(dateFns.startOfWeek(this._lastViewDate), 1));
+        end = dateTools.greaterThan(weekAfterEnd, end) ? weekAfterEnd : end;
+
         this.getDataForRange( start, end );
     }
 

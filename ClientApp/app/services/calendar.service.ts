@@ -2,6 +2,7 @@ import { Injectable, keyframes } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { HttpClient } from '@angular/common/http';
 import * as ParseDate from 'date-fns/parse';
+import * as dateFns from 'date-fns';
 
 import { environment } from '../../environments/environment';
 import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
@@ -84,10 +85,10 @@ export class CalendarService{
         if(!viewDate)
             viewDate = date;
 
-        let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
+        let httpStr = this.api+ `${type}?date=${dateFns.startOfDay(date).toISOString()}`;
         
         if(end)
-            httpStr += `&endDate=${end.toISOString()}`;
+            httpStr += `&endDate=${dateFns.startOfDay(end).toISOString()}`;
 
         if(idWorker)
             httpStr = httpStr + `&idWorker=${idWorker}`;
