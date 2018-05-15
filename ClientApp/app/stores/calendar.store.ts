@@ -390,10 +390,17 @@ export class CalendarStore {
             workersByJob.set(key, workers);
         })
 
+        jobs.forEach( j => {
+            if( workersByJob.has(j.id ))
+                j.workers = workersByJob.get(j.id);
+            if(tagsByJob.has(j.id))
+                j.jobTags = tagsByJob.get(j.id);
+        });
+
         var copyTo = new DayView( calendarTools.getCalendarDay(dateTo, viewDate), jobs, availableWorkers, timeOffWorkers);
         copyTo.tagsByJob = tagsByJob;
         copyTo.workersByJob = workersByJob;
-        
+
         var toIndex = dayViews.findIndex( dv => dateTools.equal( dv.calendarDay.date, dateTo));
         dayViews[toIndex] = copyTo;
         
