@@ -5,15 +5,59 @@
 <mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
     <div *tdLoading="'showLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
     
-        <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true" (searchDebounce)="filterWorkers($event)"></td-search-box>
-        <mat-divider></mat-divider>
-        <mat-list class="will-load">
+        <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
 
-            <td-message *ngIf="showErrorMessage" label="Error Getting Workers" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+            <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+                <span class="mat-title">Workers</span>
+            </span>
             
-            <div class="md-padding" *ngIf="(filteredWorkers | async)?.count() === 0" layout="row" layout-align="center center">
-                <h3>No workers to display.</h3>
-            </div>
+            <td-search-box #searchBox backIcon="arrow_back" [(ngModel)]="currentFilter" class="push-right-sm" placeholder="Search here" (searchDebounce)="filterWorkers($event)" flex>
+            </td-search-box>
+    
+        </div>
+        
+        <mat-divider></mat-divider>
+                
+        <div *ngIf="!hasWorkers" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+            <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+            <h2>No Workers</h2>
+            <h3>You have not created any workers</h3>
+            <button mat-raised-button color="accent" class="text-upper" (click)="addWorker()">Create Worker</button>
+        </div>
+
+        <div *ngIf="hasWorkers && !hasFilteredWorkers"layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+            <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+            <h2>No Workers</h2>
+            <h3>There are no workers with your applied filters</h3>
+            <button mat-raised-button color="accent" class="text-upper" (click)="removeFilter()">Remove Filters</button>
+        </div>
+
+            
+        <mat-list *ngIf="hasFilteredWorkers" class="will-load">
+
+                <mat-list-item>
+                    <mat-icon matListAvatar>apps</mat-icon>
+
+                    <h3 matLine>Name</h3>
+
+                    <span flex></span>
+
+                    <span *ngIf="availableTags.length > 0" hide-xs class="md-sort-header" flex="20" layout="row" layout-align="center center" class="pad-left mat-body-1 tc-grey-500">
+                        <span flex></span>
+                        <ac-tag-filter [availableTags]="availableTags" (tagFilterChanged)="tagFilterChanged($event)">
+                        </ac-tag-filter>
+                    </span>
+                        
+                    <span hide-xs>
+                        <button mat-icon-button disabled>
+                        </button>
+                    </span>
+    
+                </mat-list-item>
+    
+                <mat-divider></mat-divider>
+
+            <td-message *ngIf="showErrorMessage" label="Error Getting Workers" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>        
 
             <ng-template let-worker let-last="last" ngFor [ngForOf]="(filteredWorkers | async)">
                 <mat-list-item>
@@ -21,6 +65,9 @@
                     <h3 matLine> {{worker.firstName}} {{worker.lastName}}</h3>
                     <p matLine> {{worker.email}} </p>
                     <span flex></span>
+                    <div style="display: flex">
+                        <ac-tag *ngFor="let tag of worker.tags" class="material-icons md-20" [model]="tag" style="vertical-align: middle"></ac-tag>
+                    </div>
                     <span>
                         <button mat-icon-button [mat-menu-trigger-for]="menu">
                             <mat-icon>more_vert</mat-icon>
@@ -31,6 +78,9 @@
                             </button>
                             <button mat-menu-item (click)="deleteWorker(worker.id)">
                                 <mat-icon>delete</mat-icon> Delete
+                            </button>
+                            <button mat-menu-item (click)="addWorkerTags(worker)">
+                                <mat-icon>label_outline</mat-icon> Tags
                             </button>
                         </mat-menu>
                     </span>

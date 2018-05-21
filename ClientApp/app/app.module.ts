@@ -58,7 +58,9 @@ import { WeekCellJobComponent } from "./components/calendar/week/week-cell-job.c
 import { AddTagComponent } from "./components/tag/add-tag.component";
 import { TagComponent } from "./components/tag/tag.component";
 import { TagListComponent } from "./components/tag/tag-list.component";
-import { SelectTagComponent } from "./components/tag/select-tag.component";
+import { SelectJobTagComponent } from "./components/tag/selectJobTag.component";
+import { SelectWorkerTagComponent } from "./components/tag/selectWorkerTag.component";
+
 
 import { OrganizationListComponent } from './components/admin/organization-list.component';
 import { OrganizationDetailComponent } from './components/admin/organization-detail.component';
@@ -87,6 +89,7 @@ import { OrganizationStore } from './stores/organization.store';
 import { AuthInterceptor } from './tools/authInterceptor';
 import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
+import { TagFilterComponent } from "./components/tag/tag-filter.component";
 
 
 @NgModule({
@@ -101,8 +104,10 @@ import { WeekViewPrintComponent } from "./components/calendar/week/print/week-vi
     AddTagComponent,
     TagComponent,
     TagListComponent,
-    SelectTagComponent,
-
+    SelectJobTagComponent,
+    SelectWorkerTagComponent,
+    TagFilterComponent,
+    
     //Worker CRUD
     WorkerComponent,
     AddWorkerComponent,
@@ -163,7 +168,8 @@ import { WeekViewPrintComponent } from "./components/calendar/week/print/week-vi
     MonthDisplayOptionsComponent,
     ChangePasswordComponent,
     AddTagComponent,
-    SelectTagComponent,
+    SelectJobTagComponent,
+    SelectWorkerTagComponent,
     AddOrganizationComponent,
     AddUserComponent
   ],

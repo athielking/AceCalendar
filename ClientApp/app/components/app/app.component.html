@@ -13,7 +13,7 @@
                 </button>
                 
                 <div layout="row">
-                    <a routerLink="/calendar"><img src="assets/Ace_Logo.png"></a>
+                    <a routerLink="/calendar"><img src="assets/Ace_Logo.png" style="vertical-align: middle"></a>
                 </div>
                 
                 <span flex></span>
@@ -37,7 +37,7 @@
                     <a mat-list-item routerLink="/worker">
                         <mat-icon matListIcon>people</mat-icon>Workers</a>
                     <a mat-list-item routerLink="/tag">
-                        <mat-icon matListIcon>flag</mat-icon>Tags</a>
+                        <mat-icon matListIcon>label_outline</mat-icon>Tags</a>
                     <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/organization">
                         <mat-icon matListIcon>public</mat-icon>Organizations</a>
                 </mat-nav-list>  

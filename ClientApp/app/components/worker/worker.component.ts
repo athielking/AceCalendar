@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -6,8 +6,12 @@ import { MatDialog } from '@angular/material';
 import { List } from 'immutable';
 
 import { WorkerStore } from '../../stores/worker.store';
-import { Worker } from '../calendar/common/models';
+import { Worker, AddWorkerModel } from '../calendar/common/models';
 import { AddWorkerComponent } from './addWorker.component';
+import { SelectWorkerTagComponent } from '../tag/selectWorkerTag.component';
+import { Tag } from '../../models/tag/tag.model';
+import { TagStore } from '../../stores/tag.store';
+import { TagFilterChangedEvent } from '../tag/tag-filter.component';
 
 @Component({
     selector: 'worker',
@@ -17,22 +21,37 @@ export class WorkerComponent implements OnInit {
     
     private workers: Worker[];
 
-    public filteredWorkers: BehaviorSubject<List<Worker>> = new BehaviorSubject<List<Worker>>(List([]));
+    public currentFilter: string;
+
+    public filteredWorkers: BehaviorSubject<Worker[]> = new BehaviorSubject<Worker[]>([]);
+
+    public hasFilteredWorkers: boolean;
+
+    public hasWorkers: boolean;
 
     public showErrorMessage: boolean;
     
     public errorMessage: string;
     
+    public availableTags: Tag[] = new Array<Tag>();
+
+    public tagFilter: Tag[] = new Array<Tag>();
+
     constructor(
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
         private dialog: MatDialog,
         private dialogService: TdDialogService,
+        private tagStore: TagStore,
         private router: Router
     ) {
     } 
     
     public ngOnInit() {
+        this.filteredWorkers.subscribe( filteredWorkers => {
+            this.hasFilteredWorkers = filteredWorkers.length > 0;
+        });
+
         this.workerStore.isLoading.subscribe( result => {
             this.toggleShowLoading(result); 
         });
@@ -42,20 +61,43 @@ export class WorkerComponent implements OnInit {
             this.errorMessage = this.workerStore.errorMessage;
         });
 
-        this.workerStore.workers.subscribe( result => {
-            this.workers = result.toArray();
+        this.workerStore.workers.subscribe( workers => {
+            this.workers = workers;
+            this.hasWorkers = workers.length > 0;
             this.filterWorkers();          
         });
 
+        this.tagStore.tags.subscribe(result => {            
+            this.availableTags = result;
+        });
+
+        this.tagStore.getWorkerTags();
+
         this.workerStore.getWorkers();
     }
+    
+    public tagFilterChanged(event: TagFilterChangedEvent){
+        this.tagFilter = event.tagFilter;
 
-    public filterWorkers(displayName: string = '') {              
+        this.filterWorkers(this.currentFilter);
+    }
+
+    public filterWorkers(filter: string = '') {      
+        this.currentFilter = filter;
+
         this.filteredWorkers.next( 
-            List(this.workers.filter( (user: Worker) => {
-                return (user.firstName + user.lastName).toLowerCase().indexOf(displayName.toLowerCase()) > -1;
-        })));
-      }
+            this.workers.filter( (worker: Worker) => {
+                var nameMatches = (worker.firstName + worker.lastName).toLowerCase().indexOf(filter.toLowerCase()) > -1
+                var tagsMatch = this.tagsMatchFilter(worker);
+
+                return nameMatches && tagsMatch;
+        }));
+    }
+
+    public removeFilter(){
+        this.tagFilter = []; 
+        this.filterWorkers();
+    }
 
     public addWorker(){
         this.showAddWorkerForm();
@@ -74,6 +116,34 @@ export class WorkerComponent implements OnInit {
 
     public viewWorker(worker: Worker){
         this.router.navigate(['worker', worker.id]);
+    }
+
+    public addWorkerTags(worker: Worker){
+
+        var selectTagsRef = this.dialog.open(SelectWorkerTagComponent, {
+            data: {
+                selected: worker.tags
+            }
+        });
+
+        selectTagsRef.afterClosed().subscribe( result => {
+            if(!result)
+                return;
+
+            worker.tags = selectTagsRef.componentInstance.selected;
+
+            var addWorkerModel = new AddWorkerModel(worker.firstName, worker.lastName, worker.email, worker.phone, worker.tags);
+            
+            this.workerStore.editWorker(worker.id, addWorkerModel).subscribe( result => {
+                this.toggleShowLoading(false);
+            }, error => {
+                this.toggleShowLoading(false);
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Unable to Update Worker Tags'
+                });
+            } );              
+        });
     }
 
     public deleteWorker(workerId: string){
@@ -96,6 +166,20 @@ export class WorkerComponent implements OnInit {
                     });
             }
           });
+    }
+
+    private tagsMatchFilter(worker: Worker){
+        var tagsMatch = true;
+
+        this.tagFilter.forEach( tag => 
+        {
+            if(!worker.tags.some( workerTag => workerTag.id === tag.id)){
+                tagsMatch = false;
+                return;
+            }
+        });
+
+        return tagsMatch;
     }
 
     private showAddWorkerForm(

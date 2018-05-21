@@ -2,7 +2,14 @@
     <mat-card>
         <mat-card-title>
             <div style="display: flex; flex-direction:row">
-                <span>{{firstName}} {{lastName}}</span>
+                
+                <div style="display: flex; flex-direction:column" flex>
+                    <span>{{firstName}} {{lastName}}</span>
+                    <div *ngIf="selectedTags?.length > 0">
+                        <ac-tag *ngFor="let tag of selectedTags" class="material-icons md-18" style="vertical-align: middle" [model]="tag"></ac-tag>
+                    </div>
+                </div>
+
                 <span flex></span>
                 <span>
                     <button mat-icon-button [mat-menu-trigger-for]="menu">
@@ -14,6 +21,9 @@
                         </button>
                         <button mat-menu-item (click)="deleteWorker()">
                             <mat-icon>delete</mat-icon> Delete
+                        </button>
+                        <button mat-menu-item (click)="addWorkerTags()">
+                            <mat-icon>label_outline</mat-icon> Tags
                         </button>
                     </mat-menu>
                 </span>

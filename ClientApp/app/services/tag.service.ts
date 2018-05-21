@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
-import { Tag } from '../models/tag/tag.model';
+import { Tag, TagDto } from '../models/tag/tag.model';
 
 @Injectable()
 export class TagService{
@@ -30,9 +30,16 @@ export class TagService{
         return this.httpClient.delete( this.serviceUri + `/${id}` ).shareReplay();
     }
 
-    public getTags(): Observable<Tag[]>{
-        return this.httpClient.get(this.serviceUri)
-            .map(json => (<Tag[]>json['data']));
+    public getTags(): Observable<TagDto[]>{
+        return this.httpClient.get(this.serviceUri).map(json => (<TagDto[]>json['data']));
+    }
+
+    public getJobTags(): Observable<TagDto[]>{
+        return this.httpClient.get(this.serviceUri + `/getJobTags`).map(json => (<TagDto[]>json['data']));
+    }
+
+    public getWorkerTags(): Observable<TagDto[]>{
+        return this.httpClient.get(this.serviceUri + `/getWorkerTags`).map(json => (<TagDto[]>json['data']));
     }
 
     public getTag(id: string): Observable<Tag>{

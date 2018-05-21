@@ -56,7 +56,7 @@
             (click)="onCancelClick()">Cancel</button>
         
         <button mat-button 
-            [disabled]="!addJobForm.form.valid || !endDateIsNotBeforeStartDate()" 
+            [disabled]="!addJobForm.form.valid || !jobDaySelected()" 
             (click)="onOkClick()">Ok</button>
     </div>
 </form>

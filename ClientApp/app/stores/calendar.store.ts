@@ -92,7 +92,7 @@ export class CalendarStore {
         addJobModel.jobDays.forEach( date => {
             let dayView = dayViews.find( dv => dateTools.equal(dv.calendarDay.date, date));
             let job = new CalendarJob( addJobModel.id, addJobModel.number, addJobModel.name, addJobModel.notes );
-            job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.fromJobDay));
+            job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
 
             dayView.jobs.push( job );
         });
@@ -114,21 +114,34 @@ export class CalendarStore {
             if( index === -1 && dayIndex === -1 )
                 return;
 
+            //Job was added    
             if( index === -1 && dayIndex != -1 ){
                 let job = new CalendarJob( jobId, addJobModel.number, addJobModel.name, addJobModel.notes );
-                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.fromJobDay));
+                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
 
                 dv.jobs.push(job);
             }
+            //Job was removed
             else if(index != -1 && dayIndex === -1 ){
-                dv.jobs.splice( index, 1);
+                //Add workers to available
+                var job = dv.jobs.find( j => j.id == jobId);
+                
+                var workerIds = job.workers.map(worker => worker.id);
+
+                workerIds.forEach( workerId => {
+                    dv.makeWorkerAvailable(workerId);
+                });
+
+                //Remove Job    
+                dv.jobs.splice( index, 1);                
             }
+            //Job was edited
             else {
                 var job = dv.jobs.find( j => j.id == jobId);
                 job.number = addJobModel.number;
                 job.name = addJobModel.name;
                 job.notes = addJobModel.notes;
-                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.fromJobDay));
+                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
             }
         });
 
@@ -376,17 +389,17 @@ export class CalendarStore {
         let workersByJob: Map<string, Worker[]> = new Map<string,Worker[]>();
 
         copyFrom.jobs.forEach( j => jobs.push( new CalendarJob(j.id, j.number, j.name, j.notes)));
-        copyFrom.availableWorkers.forEach( w => availableWorkers.push( new Worker(w.id, w.firstName, w.lastName, w.email, w.phone)));
-        copyFrom.timeOffWorkers.forEach( w => timeOffWorkers.push(new Worker(w.id, w.firstName, w.lastName, w.email, w.phone)));
+        copyFrom.availableWorkers.forEach( w => availableWorkers.push( new Worker(w.id, w.firstName, w.lastName, w.email, w.phone, w.tags)));
+        copyFrom.timeOffWorkers.forEach( w => timeOffWorkers.push(new Worker(w.id, w.firstName, w.lastName, w.email, w.phone, w.tags)));
         copyFrom.tagsByJob.forEach((value, key) =>{
             let tags: Tag[] = [];
-            value.forEach( t => tags.push(new Tag(t.id, t.icon, t.description, t.color, t.fromJobDay)));
+            value.forEach( t => tags.push(new Tag(t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay)));
             tagsByJob.set(key, tags);
         });
 
         copyFrom.workersByJob.forEach( (value, key) => {
             let workers: Worker[] =[];
-            value.forEach( w => workers.push( new Worker( w.id, w.firstName, w.lastName, w.email, w.phone)));
+            value.forEach( w => workers.push( new Worker( w.id, w.firstName, w.lastName, w.email, w.phone, w.tags)));
             workersByJob.set(key, workers);
         })
 
@@ -423,7 +436,7 @@ export class CalendarStore {
 
         tags.forEach( t => {
             if( jobTags.findIndex( jt => jt.id == t.id ) == -1 )
-                jobTags.push( new Tag(t.id, t.icon, t.description, t.color, true) );
+                jobTags.push( new Tag(t.id, t.icon, t.description, t.color, t.tagType, true) );
         });
 
         job.jobTags = jobTags;
@@ -446,18 +459,22 @@ export class CalendarStore {
 
     public makeWorkerAvailable( workerId: string, date: Date ){
         var dayViews = this._dayViews.getValue();
-        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
+        var dayView = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
 
-        dv.makeWorkerAvailable(workerId);
+        if(dayView) {
+            dayView.makeWorkerAvailable(workerId);
+        }
 
         this._dayViews.next( dayViews );    
     }
 
     public addTimeOff( workerId: string, date: Date ){
         var dayViews = this._dayViews.getValue();
-        var dv = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
+        var dayView = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
 
-        dv.makeWorkerOff(workerId);
+        if(dayView) {
+            dayView.makeWorkerOff(workerId);
+        }
 
         this._dayViews.next( dayViews );
     }

@@ -3,14 +3,14 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import { List } from 'immutable';
 
 import { WorkerService } from '../services/worker.service';
-import { Worker, AddWorkerModel } from '../components/calendar/common/models';
+import { Worker, AddWorkerModel, WorkerDto } from '../components/calendar/common/models';
 
 @Injectable()
 export class WorkerStore{
 
-    private _workers : BehaviorSubject<List<Worker>> = new BehaviorSubject(List([]));
+    private _workers : BehaviorSubject<Worker[]> = new BehaviorSubject([]);
 
-    private _worker: BehaviorSubject<Worker> = new BehaviorSubject(new Worker('', '', '', '', ''));
+    private _worker: BehaviorSubject<Worker> = new BehaviorSubject(new Worker('', '', '', '', '', []));
 
     public errorMessage : string;
 
@@ -18,7 +18,7 @@ export class WorkerStore{
     
     public isLoading : BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    public readonly workers : Observable<List<Worker>> = this._workers.asObservable();
+    public readonly workers : Observable<Worker[]> = this._workers.asObservable();
 
     public readonly worker : Observable<Worker> = this._worker.asObservable();
 
@@ -62,8 +62,8 @@ export class WorkerStore{
         this.isLoading.next(true);
         this.hasError.next(false);
 
-        this.workerService.getWorkers().subscribe( result => {
-            this._workers.next(List(result));
+        this.workerService.getWorkers().subscribe( workerDtos => {
+            this._workers.next(workerDtos.map( workerDto => this.createWorker(workerDto)));
             this.isLoading.next(false);
         }, error => {
             this.isLoading.next(false);            
@@ -76,8 +76,8 @@ export class WorkerStore{
         this.isLoading.next(true);
         this.hasError.next(false);
 
-        this.workerService.getWorker(id).subscribe( result => {
-            this._worker.next(result);
+        this.workerService.getWorker(id).subscribe( workerDto => {
+            this._worker.next(this.createWorker(workerDto));
             this.isLoading.next(false);
         }, error => {
             this.isLoading.next(false);            
@@ -88,7 +88,18 @@ export class WorkerStore{
 
     public getAvailable(date: Date, end?: Date){
         this.workerService.getAvailable(date, end).subscribe( result => {
-            this._workers.next(List(result));
+            this._workers.next(result);
         })
+    }
+
+    private createWorker(workerDto: WorkerDto) : Worker {
+        return new Worker(
+            workerDto.id,
+            workerDto.firstName,
+            workerDto.lastName,
+            workerDto.email,
+            workerDto.phone,
+            workerDto.tags
+        );
     }
 }

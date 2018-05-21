@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Rx';
 import { SelectTagComponent } from '../tag/select-tag.component';
 import { Tag } from '../../models/tag/tag.model';
 import { ChangeViewDateEvent } from '../calendar/common/multi-datepicker.component';
+import { SelectJobTagComponent } from '../tag/selectJobTag.component';
 
 @Component({
     selector: 'ac-addJob',
@@ -64,13 +65,13 @@ export abstract class AddJobComponent {
         this.viewDate = event.newDate;
     }
 
-    public endDateIsNotBeforeStartDate() {
-        return this.endDate == null || this.startDate <= this.endDate;
+    public jobDaySelected() {
+        return this.jobDays.length > 0;
     }
 
     public selectTags(){
 
-        var selectTagsRef = this.dialog.open(SelectTagComponent, {
+        var selectTagsRef = this.dialog.open(SelectJobTagComponent, {
             data: {
                 selected: this.selectedTags
             }

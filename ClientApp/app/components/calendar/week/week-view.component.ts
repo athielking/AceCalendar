@@ -24,6 +24,7 @@ import { SelectTagComponent } from '../../tag/select-tag.component';
 import { JobStore } from '../../../stores/job.store';
 import { CopyDayRequest } from './week-cell.component';
 import { WeekViewPrintComponent } from './print/week-view-print.component';
+import { SelectJobTagComponent } from '../../tag/selectJobTag.component';
 
 @Component({
     selector: 'ac-week-view',
@@ -248,7 +249,7 @@ export class WeekViewComponent implements OnInit, OnChanges {
             return value.fromJobDay
         });
 
-        var dialogRef = this.dialog.open(SelectTagComponent, {
+        var dialogRef = this.dialog.open(SelectJobTagComponent, {
             data: {
                 selected: jobDayTags,
                 excluded: jobTags

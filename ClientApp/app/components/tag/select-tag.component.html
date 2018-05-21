@@ -24,7 +24,7 @@
                     </mat-select-trigger>
 
                     <mat-option *ngFor="let tag of tags" [value]="tag">
-                        <mat-icon [style.color]="tag.color">{{ tag.icon }}</mat-icon>{{tag.description}}
+                        <mat-icon [style.color]="tag.color" style="vertical-align: middle">{{ tag.icon }}</mat-icon>{{tag.description}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

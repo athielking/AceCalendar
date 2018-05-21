@@ -3,12 +3,12 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 import { TagService } from '../services/tag.service';
-import { Tag } from '../models/tag/tag.model';
+import { Tag, TagDto, TagType } from '../models/tag/tag.model';
 
 @Injectable()
 export class TagStore{
     private _tags : BehaviorSubject<Tag[]> = new BehaviorSubject([]);
-    private _tag: BehaviorSubject<Tag> = new BehaviorSubject(new Tag('','', '', '', false));
+    private _tag: BehaviorSubject<Tag> = new BehaviorSubject(new Tag('','', '', '', TagType.JobsAndWorkers, false));
 
     public errorMessage: string;
 
@@ -60,7 +60,35 @@ export class TagStore{
         this.hasError.next(false);
 
         this.tagService.getTags().subscribe( result => {
-            this._tags.next(result);
+            this._tags.next(result.map( tagDto => this.createTag(tagDto) ) );
+            this.isLoading.next(false);
+        }, error => {
+            this.isLoading.next(false);            
+            this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
+            this.hasError.next(true);
+        });
+    }
+    
+    public getJobTags(){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        this.tagService.getJobTags().subscribe( result => {
+            this._tags.next(result.map( tagDto => this.createTag(tagDto) ) );
+            this.isLoading.next(false);
+        }, error => {
+            this.isLoading.next(false);            
+            this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
+            this.hasError.next(true);
+        });
+    }
+
+    public getWorkerTags(){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        this.tagService.getWorkerTags().subscribe( result => {
+            this._tags.next(result.map( tagDto => this.createTag(tagDto) ) );
             this.isLoading.next(false);
         }, error => {
             this.isLoading.next(false);            
@@ -81,5 +109,16 @@ export class TagStore{
             this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
             this.hasError.next(true);
         });
+    }
+
+    private createTag(tagDto: TagDto): Tag {
+        return new Tag( 
+            tagDto.id,
+            tagDto.icon,
+            tagDto.description,
+            tagDto.color,
+            <TagType>tagDto.tagType,
+            tagDto.fromJobDay
+        );
     }
 }

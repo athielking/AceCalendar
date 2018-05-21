@@ -64,14 +64,14 @@ export class CalendarService{
 
                     let jobs: CalendarJob[] = dv.jobs.map( item => {
                         let job = new CalendarJob(item.id, item.number, item.name, item.notes);
-                        job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
-                        job.jobTags = item.jobTags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay));
+                        job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
+                        job.jobTags = item.jobTags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
 
                         return job;
                     });
 
-                    let availableWorkers: Worker[] = dv.availableWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
-                    let timeOffWorkers: Worker[] = dv.timeOffWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone));
+                    let availableWorkers: Worker[] = dv.availableWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
+                    let timeOffWorkers: Worker[] = dv.timeOffWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
 
                     dayViews.push( new DayView( getCalendarDay(d, date), jobs, availableWorkers, timeOffWorkers));
                 });
@@ -124,7 +124,8 @@ export class CalendarService{
                                 item.firstName, 
                                 item.lastName, 
                                 item.email, 
-                                item.phone);
+                                item.phone,
+                                item.tags);
                         }));
                     });
 
@@ -134,7 +135,7 @@ export class CalendarService{
                             return;
                         
                         tagsByJob.set( g, obj[key].tagsByJob[g].map( item => {
-                            return new Tag(item.id, item.icon, item.description, item.color, item.fromJobDay == 1 );
+                            return new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay == 1 );
                         }));
                     });
 
@@ -161,7 +162,8 @@ export class CalendarService{
                             item.firstName,
                             item.lastName,
                             item.email,
-                            item.phone
+                            item.phone, 
+                            item.tags
                         );
                     });
 
@@ -171,7 +173,8 @@ export class CalendarService{
                             item.firstName,
                             item.lastName,
                             item.email,
-                            item.phone
+                            item.phone,
+                            item.tags
                         );
                     });
 

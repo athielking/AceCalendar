@@ -37,7 +37,7 @@ export class WeekViewPhoneComponent implements OnInit {
     public isLoading: boolean = false;
     public showJobOption: string = null;
     public showingOptions: boolean = false;
-    private allWorkers: Worker = new Worker('', "All Workers", null, null, null);
+    private allWorkers: Worker = new Worker('', "All Workers", null, null, null, []);
 
     public workers: Worker[] = [];
 
@@ -84,7 +84,7 @@ export class WeekViewPhoneComponent implements OnInit {
         });
 
         this.workerStore.workers.subscribe( result => {
-            this.workers =  [this.allWorkers].concat(result.toArray());
+            this.workers =  [this.allWorkers].concat(result);
         });
 
         this.storageService.watchStorage().subscribe( key => {

@@ -28,7 +28,7 @@ export class AvailableWorkerPickerComponent implements OnInit, OnChanges{
 
     ngOnInit(){
         this.workerStore.workers.subscribe(result => {
-            this.data = result.toArray();
+            this.data = result;
             this.dataLoading = false;
         })
 

@@ -3,7 +3,7 @@ import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {TdDialogService,TdLoadingService} from '@covalent/core';
 
-import {Tag, TagIconList} from '../../models/tag/tag.model';
+import {Tag, TagIconList, TagType} from '../../models/tag/tag.model';
 import {TagStore} from '../../stores/tag.store';
 
 @Component({
@@ -19,6 +19,7 @@ export class AddTagComponent {
     public icon: string;
     public description: string;
     public color: string;
+    public tagType: TagType = TagType.JobsAndWorkers;
 
     constructor(
         private tagStore: TagStore,
@@ -31,7 +32,8 @@ export class AddTagComponent {
         this.editId = data.editId,
         this.icon = data.icon,
         this.description = data.description,
-        this.color = data.color
+        this.color = data.color,
+        this.tagType = data.tagType
     }
 
     public onCancelClick() {
@@ -49,7 +51,7 @@ export class AddTagComponent {
     private addTag() {
         this.toggleShowLoading(true);
 
-        var tag = new Tag('', this.icon, this.description, this.color, false);
+        var tag = new Tag('', this.icon, this.description, this.color, this.tagType, false);
 
         this.tagStore.addTag(tag).subscribe( result => {
             this.dialogRef.close();
@@ -63,10 +65,14 @@ export class AddTagComponent {
         } ); 
     }
 
+    public tagTypeCompare(o1, o2): boolean{
+        return (<TagType>o1) == (<TagType>o2);
+    }
+
     private editWorker() {
         this.toggleShowLoading(true);
 
-        var editTag = new Tag( this.editId, this.icon, this.description, this.color, false);
+        var editTag = new Tag( this.editId, this.icon, this.description, this.color, this.tagType, false);
 
         this.tagStore.editTag(editTag).subscribe( result => {
             this.dialogRef.close();

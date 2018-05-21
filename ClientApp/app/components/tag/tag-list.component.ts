@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
-import { BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
 
 
 import { TagStore } from '../../stores/tag.store';
-import { Tag } from '../../models/tag/tag.model';
+import { Tag, TagType } from '../../models/tag/tag.model';
 import { AddTagComponent } from '../../components/tag/add-tag.component';
 
 
@@ -15,15 +15,38 @@ import { AddTagComponent } from '../../components/tag/add-tag.component';
     templateUrl: './tag-list.component.html'
 })
 export class TagListComponent implements OnInit {
-    
+
     private tags: Tag[];
 
+    public currentFilter: string;
+
     public filteredTags: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
+
+    public hasFilteredTags: boolean;
+
+    public hasTags: boolean;
 
     public showErrorMessage: boolean;
     
     public errorMessage: string;
     
+    public tagTypeOptions: any[] = [{
+        name: 'All',
+        value: -1,
+      }, {
+        name: 'Jobs and Workers',
+        value: TagType.JobsAndWorkers,
+      }, {
+        name: 'Jobs Only',
+        value: TagType.Jobs,
+      },
+      {
+        name: 'Workers Only',
+        value: TagType.Workers,
+      }];
+
+    public tagTypeSortKey: number = this.tagTypeOptions[0].value;
+
     constructor(
         private tagStore: TagStore,
         private loadingService: TdLoadingService,
@@ -34,6 +57,10 @@ export class TagListComponent implements OnInit {
     } 
     
     public ngOnInit() {
+        this.filteredTags.subscribe( filteredTags => {
+            this.hasFilteredTags = filteredTags.length > 0;
+        });
+
         this.tagStore.isLoading.subscribe( result => {
             this.toggleShowLoading(result); 
         });
@@ -43,20 +70,32 @@ export class TagListComponent implements OnInit {
             this.errorMessage = this.tagStore.errorMessage;
         });
 
-        this.tagStore.tags.subscribe( result => {
-            this.tags = result;
+        this.tagStore.tags.subscribe( tags => {
+            this.tags = tags;
+            this.hasTags = tags.length > 0;
             this.filterTags();          
         });
 
         this.tagStore.getTags();
     }
 
-    public filterTags(displayName: string = '') {              
+    public filterByTagType(): void {
+        this.filterTags(this.currentFilter);
+    }
+
+    public filterTags(filter: string = '') {    
+        this.currentFilter = filter;
+
         this.filteredTags.next( 
             this.tags.filter( (tag: Tag) => {
-                return (tag.description).toLowerCase().indexOf(displayName.toLowerCase()) > -1;
+                return (tag.description).toLowerCase().indexOf(filter.toLowerCase()) > -1 && this.tagTypeMatchesCurrentFilter(tag);
         }));
-      }
+    }
+
+    public removeFilter(){
+        this.tagTypeSortKey = -1;
+        this.filterTags();
+    }
 
     public addTag(){
         this.showAddTagForm();
@@ -68,7 +107,8 @@ export class TagListComponent implements OnInit {
             tag.id,            
             tag.icon, 
             tag.description, 
-            tag.color
+            tag.color,
+            tag.tagType
         );
     }
 
@@ -99,7 +139,8 @@ export class TagListComponent implements OnInit {
         editId: string = '',
         icon: string = '',
         description: string = '',
-        color: string = ''
+        color: string = '',
+        tagType: TagType = TagType.JobsAndWorkers
     ) {
         let dialogRef = this.dialog.open(AddTagComponent, {
             disableClose: true,
@@ -109,8 +150,16 @@ export class TagListComponent implements OnInit {
                 icon: icon,
                 description: description,
                 color: color,
+                tagType: tagType
             }
         });
+    }
+
+    private tagTypeMatchesCurrentFilter(tag: Tag) : boolean {
+        if(this.tagTypeSortKey === -1)
+            return true;
+        
+        return tag.tagType === <TagType>this.tagTypeSortKey;
     }
 
     private toggleShowLoading(show:boolean) {

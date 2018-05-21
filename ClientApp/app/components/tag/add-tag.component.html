@@ -23,7 +23,10 @@
             </mat-form-field>
 
             <mat-form-field>
-                <input matInput #descriptionControl="ngModel" placeholder="Description" type="text" maxlength="25" name="description" [(ngModel)]="description">
+                <input matInput #descriptionControl="ngModel" placeholder="Description" type="text" maxlength="25" name="description" [(ngModel)]="description" required>
+                <mat-error align="start">
+                    <span [hidden]="!descriptionControl.errors?.required || descriptionControl.pristine" class="tc-red-600">Description is Required</span>
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field>
@@ -33,6 +36,13 @@
                 </mat-error>
             </mat-form-field>
 
+            <mat-form-field> 
+                <mat-select [(ngModel)]="tagType" placeholder="Show Tag On" [compareWith]="tagTypeCompare" name="tagType" required>
+                    <mat-option value=0>Jobs and Workers</mat-option>
+                    <mat-option value=1>Jobs Only</mat-option>
+                    <mat-option value=2>Workers Only</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
 
         <div class="mat-dialog-actions">

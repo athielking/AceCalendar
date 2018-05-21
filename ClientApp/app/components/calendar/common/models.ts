@@ -154,25 +154,37 @@ export class JobStartAndEndDate {
 }
 
 export class Worker implements IDisplayModel{
-    public timeOff: Date[] = [];
-    public jobs: CalendarJob[] = [];
-    
     public display: string;
-    constructor(public id: string,
-                public firstName: string,
-                public lastName: string,
-                public email: string,
-                public phone: string){
+
+    constructor(
+        public id: string,
+        public firstName: string,
+        public lastName: string,
+        public email: string,
+        public phone: string,
+        public tags: Tag[]
+    ){
         this.display = `${this.firstName} ${this.lastName}`;
     }
 }
+
+export class WorkerDto {
+    public id: string;
+    public firstName: string;
+    public lastName: string;
+    public email: string;
+    public phone: string;
+    public tags: Tag[];    
+}
+
 
 export class AddWorkerModel {
     constructor(
         public firstName: string,
         public lastName: string,
         public email: string,
-        public phone: string
+        public phone: string,
+        public tags: Tag[]
     ){
     }
 }

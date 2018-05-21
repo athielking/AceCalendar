@@ -11,7 +11,7 @@ import {TagStore} from '../../stores/tag.store';
     selector: 'ac-select-tag',
     templateUrl: './select-tag.component.html'
 })
-export class SelectTagComponent implements OnInit, OnDestroy {
+export abstract class SelectTagComponent implements OnInit, OnDestroy {
 
     public tags: Tag[];
     public excluded: Tag[];
@@ -47,7 +47,7 @@ export class SelectTagComponent implements OnInit, OnDestroy {
             this.toggleShowLoading(false);
         });
 
-        this.tagStore.getTags();
+        this.GetTags(this.tagStore);
     }
 
     public ngOnDestroy(){
@@ -76,6 +76,8 @@ export class SelectTagComponent implements OnInit, OnDestroy {
         return o1 && o2 && o1.id == o2.id;
     }
 
+    protected abstract GetTags(tagStore: TagStore);
+    
     private toggleShowLoading(show:boolean) {
         if (show) {
             this.loadingService.register('selectTagShowLoading');

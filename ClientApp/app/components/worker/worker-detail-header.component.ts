@@ -2,11 +2,13 @@ import {Component, OnInit, Input} from '@angular/core'
 import {ActivatedRoute, ParamMap, Router} from '@angular/router'
 import {TdLoadingService} from '@covalent/core';
 
-import {Worker} from '../calendar/common/models'
+import {Worker, AddWorkerModel} from '../calendar/common/models'
 import {WorkerStore} from '../../stores/worker.store';
 import { TdDialogService } from '@covalent/core';
 import { AddWorkerComponent } from './addWorker.component';
 import { MatDialog } from '@angular/material';
+import { Tag } from '../../models/tag/tag.model';
+import { SelectWorkerTagComponent } from '../tag/selectWorkerTag.component';
 
 @Component({
     selector: "ac-worker-detail-header",
@@ -23,6 +25,8 @@ export class WorkerDetailHeaderComponent implements OnInit{
 
     public phone: string;
 
+    private selectedTags: Tag[];
+    
     constructor(
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
@@ -46,8 +50,36 @@ export class WorkerDetailHeaderComponent implements OnInit{
             this.lastName = worker.lastName;
             this.email = worker.email;
             this.phone = worker.phone;
-            
+            this.selectedTags = worker.tags;
+
             this.toggleShowLoading(false);
+        });
+    }
+    public addWorkerTags(){
+
+        var selectTagsRef = this.dialog.open(SelectWorkerTagComponent, {
+            data: {
+                selected: this.selectedTags
+            }
+        });
+
+        selectTagsRef.afterClosed().subscribe( result => {
+            if(!result)
+                return;
+
+            this.selectedTags = selectTagsRef.componentInstance.selected;
+
+            var addWorkerModel = new AddWorkerModel(this.firstName, this.lastName, this.email, this.phone, this.selectedTags);
+            
+            this.workerStore.editWorker(this.workerId, addWorkerModel).subscribe( result => {
+                this.toggleShowLoading(false);
+            }, error => {
+                this.toggleShowLoading(false);
+                this.dialogService.openAlert({
+                    message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                    title: 'Unable to Update Worker Tags'
+                });
+            } );              
         });
     }
 
@@ -60,7 +92,8 @@ export class WorkerDetailHeaderComponent implements OnInit{
                 firstName: this.firstName,
                 lastName: this.lastName,
                 email: this.email,
-                phone: this.phone
+                phone: this.phone,
+                selectedTags: this.selectedTags
             }
         });
     }

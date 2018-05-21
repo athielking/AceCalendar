@@ -1,10 +1,25 @@
+export class TagDto {
+    public id: string;
+    public icon: string;
+    public description: string;
+    public color: string;
+    public tagType: number;
+    public fromJobDay: boolean;    
+}
+
 export class Tag {
-    constructor(public id: string,
-                public icon: string,
-                public description: string,
-                public color: string,
-                public fromJobDay: boolean){
-                }
+    public tagTypeString; string;
+
+    constructor(
+        public id: string,
+        public icon: string,
+        public description: string,
+        public color: string,
+        public tagType: TagType,
+        public fromJobDay: boolean
+    ){
+        this.tagTypeString = TagTypeStrings[this.tagType];
+    }
 }
 
 export const TagIconList : string[] = [
@@ -121,3 +136,11 @@ export const TagIconList : string[] = [
         'wb_iridescent','wb_sunny','wc','web','web_asset','weekend','whatshot','widgets','wifi','wifi_lock','wifi_tethering','work',
         'wrap_text','youtube_searched_for','zoom_in','zoom_out','zoom_out_map'
     ]
+
+    export enum TagType{
+        JobsAndWorkers = 0,
+        Jobs = 1,
+        Workers = 2
+    }
+
+    export const TagTypeStrings: string[] = ["Jobs and Workers", "Jobs Only", "Workers Only"];
