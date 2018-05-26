@@ -1,4 +1,4 @@
-<div *ngIf="!isReadonly" class="worker-card" draggable [dragData]="worker" [dragScope]="scope" (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)">
+<div *ngIf="!isReadonly" class="worker-card" [class.filtered]="worker.isFiltered" draggable [dragData]="worker" [dragScope]="scope" (onDragStart)="onDragStart($event)" (onDragEnd)="onDragEnd($event)">
     <span [class.worker-name-span-with-button]="!dragging" class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
 
     <div *ngIf="!dragging" class="worker-card-button-container">
@@ -28,5 +28,5 @@
 <!-- READONLY TEMPLATE -->
 
 <div *ngIf="isReadonly" class="worker-card worker-card-readonly">
-    <span class="worker-name-span">{{ worker.firstName }} {{ worker.lastName }}</span>
+    <span class="worker-name-span" [class.filtered]="worker.isFiltered">{{ worker.firstName }} {{ worker.lastName }}</span>
 </div>

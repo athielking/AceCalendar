@@ -45,6 +45,8 @@ export enum StorageKeys{
     showJobOption = "SHOW_JOB_OPTION",
     readonlyViewDate = "READONLY_VIEW_DATE",
     readonlySelectedTab = "READONLY_SELECTED_TAB",
+    jobFilter = "JOB_FILTER",
+    workerFilter = "WORKER_FILTER"
 }
 
 const DAYS_IN_WEEK: number = 7;

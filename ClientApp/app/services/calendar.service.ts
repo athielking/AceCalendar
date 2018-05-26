@@ -65,7 +65,7 @@ export class CalendarService{
                     let jobs: CalendarJob[] = dv.jobs.map( item => {
                         let job = new CalendarJob(item.id, item.number, item.name, item.notes);
                         job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
-                        job.jobTags = item.jobTags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
+                        job.tags = item.tags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
 
                         return job;
                     });
@@ -151,7 +151,7 @@ export class CalendarService{
                             cj.workers = workersByJob.get(item.id);
 
                         if( tagsByJob.has(item.id))
-                            cj.jobTags = tagsByJob.get(item.id);
+                            cj.tags = tagsByJob.get(item.id);
 
                         return cj;
                     });

@@ -1,12 +1,12 @@
-<div *ngIf="!isReadonly" class="job-card" droppable (onDrop)="onWorkerDropped($event)" [dropScope]="calendarDay.date.toString()">
+<div *ngIf="!isReadonly" class="job-card" [class.filtered]="calendarJob.isFiltered" droppable (onDrop)="onWorkerDropped($event)" [dropScope]="calendarDay.date.toString()">
 
     <div class="week-cell-job-header">
 
         <div style="display: flex; flex-direction:column" flex>
             <div>{{calendarJob.name}}</div>
             <div>{{calendarJob.number}}</div>
-            <div *ngIf="calendarJob.jobTags?.length > 0" class="week-cell-job-tags">
-                <ac-tag *ngFor="let tag of calendarJob.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
+            <div *ngIf="calendarJob.tags?.length > 0" class="week-cell-job-tags">
+                <ac-tag *ngFor="let tag of calendarJob.tags" class="material-icons md-18" [model]="tag"></ac-tag>
             </div>
         </div>
 

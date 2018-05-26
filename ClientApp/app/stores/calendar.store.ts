@@ -15,6 +15,7 @@ import { isSameDay, subDays } from 'date-fns';
 import { JobService } from '../services/job.service';
 import { StorageService } from '../services/storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
+import { TagFilter } from '../models/shared/filter.model';
 
 @Injectable()
 export class CalendarStore {
@@ -38,11 +39,23 @@ export class CalendarStore {
     public readonly phoneWeekData: Observable<DayView[]> = this._phoneDays.asObservable();
     public readonly dayData: Observable<DayView> = this._dayData.asObservable();
 
+    private jobFilter: TagFilter = new TagFilter();
+    private workerFilter: TagFilter = new TagFilter();
+    
     constructor(
         private calendarService: CalendarService,
         private jobService: JobService,
         private storageService: StorageService
     ) {
+
+        if(this.storageService.hasItem(StorageKeys.jobFilter))
+            this.jobFilter.fromJSON(this.storageService.getItem(StorageKeys.jobFilter));
+
+        if(this.storageService.hasItem(StorageKeys.workerFilter))
+            this.workerFilter.fromJSON(this.storageService.getItem(StorageKeys.workerFilter));
+
+        this.storageService.watchStorage().subscribe(key => this.handleStorageChange(key));
+
         this._lastViewDate = 
             storageService.hasItem(StorageKeys.viewDate) ?
             new Date(storageService.getItem(StorageKeys.viewDate)) :
@@ -92,7 +105,7 @@ export class CalendarStore {
         addJobModel.jobDays.forEach( date => {
             let dayView = dayViews.find( dv => dateTools.equal(dv.calendarDay.date, date));
             let job = new CalendarJob( addJobModel.id, addJobModel.number, addJobModel.name, addJobModel.notes );
-            job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
+            job.tags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
 
             dayView.jobs.push( job );
         });
@@ -117,7 +130,7 @@ export class CalendarStore {
             //Job was added    
             if( index === -1 && dayIndex != -1 ){
                 let job = new CalendarJob( jobId, addJobModel.number, addJobModel.name, addJobModel.notes );
-                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
+                job.tags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
 
                 dv.jobs.push(job);
             }
@@ -141,7 +154,7 @@ export class CalendarStore {
                 job.number = addJobModel.number;
                 job.name = addJobModel.name;
                 job.notes = addJobModel.notes;
-                job.jobTags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
+                job.tags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
             }
         });
 
@@ -261,6 +274,12 @@ export class CalendarStore {
         this.isDayLoading.next(true);
 
         this.calendarService.getRangeData(start, end, this._lastViewDate, idWorker).subscribe( result => {
+            
+            result.forEach( dv => {
+                dv.applyJobFilter(this.jobFilter);
+                dv.applyWorkerFilter(this.workerFilter);
+            });
+
             this._dayViews.next( result );
             
             this.isWeekLoading.next(false);
@@ -407,7 +426,7 @@ export class CalendarStore {
             if( workersByJob.has(j.id ))
                 j.workers = workersByJob.get(j.id);
             if(tagsByJob.has(j.id))
-                j.jobTags = tagsByJob.get(j.id);
+                j.tags = tagsByJob.get(j.id);
         });
 
         var copyTo = new DayView( calendarTools.getCalendarDay(dateTo, viewDate), jobs, availableWorkers, timeOffWorkers);
@@ -432,14 +451,14 @@ export class CalendarStore {
         let dv = dayViews.find( d => dateTools.equal( d.calendarDay.date, date ));
 
         let job = dv.jobs.find( j => j.id === jobId );
-        let jobTags = job.jobTags.filter( t => !t.fromJobDay);
+        let jobTags = job.tags.filter( t => !t.fromJobDay);
 
         tags.forEach( t => {
             if( jobTags.findIndex( jt => jt.id == t.id ) == -1 )
                 jobTags.push( new Tag(t.id, t.icon, t.description, t.color, t.tagType, true) );
         });
 
-        job.jobTags = jobTags;
+        job.tags = jobTags;
 
         this._dayViews.next(dayViews);
 
@@ -477,5 +496,24 @@ export class CalendarStore {
         }
 
         this._dayViews.next( dayViews );
+    }
+
+    private handleStorageChange(key: string){
+        
+        let dayViews = this._dayViews.getValue();
+
+        if(key == StorageKeys.jobFilter)
+        { 
+            this.jobFilter.fromJSON(this.storageService.getItem(StorageKeys.jobFilter));
+            dayViews.forEach( dv => dv.applyJobFilter(this.jobFilter));
+        }
+
+        if(key == StorageKeys.workerFilter )
+        {
+            this.workerFilter.fromJSON(this.storageService.getItem(StorageKeys.workerFilter));
+            dayViews.forEach( dv => dv.applyWorkerFilter(this.workerFilter));
+        }
+
+        this._dayViews.next(dayViews);
     }
 }

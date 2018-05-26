@@ -1,3 +1,4 @@
+
 export class TagDto {
     public id: string;
     public icon: string;
@@ -20,6 +21,10 @@ export class Tag {
     ){
         this.tagTypeString = TagTypeStrings[this.tagType];
     }
+}
+
+export interface ITaggedEntity{
+    tags: Tag[];
 }
 
 export const TagIconList : string[] = [

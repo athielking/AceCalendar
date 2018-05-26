@@ -1,0 +1,62 @@
+<h1 class="mat-dialog-title">Filter Options</h1>
+
+<div class="mat-dialog-content form-container">
+        
+    <mat-slide-toggle style="padding-bottom: 4px;" [(ngModel)]="jobFilter.enabled">Only show Jobs which</mat-slide-toggle>
+
+    <mat-form-field> 
+        <mat-select [disabled]="!jobFilter.enabled" [(ngModel)]="jobFilter.contains" placeholder="Contains Option" [compareWith]="filterContainsCompare">
+            <mat-option value=0>Contain</mat-option>
+            <mat-option value=1>Do Not Contain</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div layout="column" style="padding-bottom: 4px;">
+        <span>the following Job Tags</span>
+        <div layout="row">
+            <ac-tag *ngFor="let tag of jobFilter.tags" [model]="tag"></ac-tag>
+        </div>
+        <button [disabled]="!jobFilter.enabled" mat-raised-button color="primary" (click)="selectJobTags()">Select Job Tags</button>
+    </div>
+
+    <mat-form-field>
+        <mat-select [disabled]="!jobFilter.enabled" [(ngModel)]="jobFilter.operation" placeholder="Filter Operation" [compareWith]="filterOperationCompare">
+            <mat-option value=0>AND</mat-option>
+            <mat-option value=1>OR</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+
+    <mat-slide-toggle style="padding-top: 4px; padding-bottom: 4px" [(ngModel)]="workerFilter.enabled">Only show Workers which</mat-slide-toggle>
+
+    <mat-form-field> 
+        <mat-select [disabled]="!workerFilter.enabled" [(ngModel)]="workerFilter.contains" placeholder="Contains Option" [compareWith]="filterContainsCompare">
+            <mat-option value=0>Contain</mat-option>
+            <mat-option value=1>Do Not Contain</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div layout="column" style="padding-bottom: 4px">
+        <span>the following Worker Tags</span>
+        <div layout="row">
+            <ac-tag *ngFor="let tag of workerFilter.tags" [model]="tag"></ac-tag>
+        </div>
+        <button [disabled]="!workerFilter.enabled" mat-raised-button color="primary" (click)="selectJobTags()">Select Worker Tags</button>
+    </div>
+
+    <mat-form-field> 
+        <mat-select [disabled]="!workerFilter.enabled" [(ngModel)]="workerFilter.operation" placeholder="Filter Operation" [compareWith]="filterOperationCompare">
+            <mat-option value=0>AND</mat-option>
+            <mat-option value=1>OR</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+</div>
+
+<div class="mat-dialog-actions" style="display: flex; flex-direction:row">
+    <span flex></span>
+    <button mat-button (click)="onCloseClick()">
+        Close
+    </button>
+</div>
