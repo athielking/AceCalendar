@@ -29,15 +29,15 @@ export class DayView{
     }
 
     public applyJobFilter(filter: TagFilter){
-        this.jobs.forEach( job => job.isFiltered = filter.enabled && filter.matchesFilter(job));
+        this.jobs.forEach( job => job.isFiltered = filter.enabled && !filter.matchesFilter(job));
     }
 
     public applyWorkerFilter( filter: TagFilter ){
-        this.availableWorkers.forEach( worker => worker.isFiltered = filter.enabled && filter.matchesFilter(worker));
-        this.timeOffWorkers.forEach( worker => worker.isFiltered = filter.enabled && filter.matchesFilter(worker));
+        this.availableWorkers.forEach( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
+        this.timeOffWorkers.forEach( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
 
         this.jobs.forEach( job => {
-            job.workers.filter( worker => worker.isFiltered = filter.enabled && filter.matchesFilter(worker));
+            job.workers.filter( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
         })
     }
 

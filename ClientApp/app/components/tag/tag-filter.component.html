@@ -1,7 +1,7 @@
-<mat-select [(ngModel)]="tagFilter" [value]="tagFilter" [compareWith]="compareTags" (selectionChange)="selectionChanged()" placeholder= "Tag Filters" multiple>
+<mat-select [(ngModel)]="tagFilter" [value]="tagFilter" [compareWith]="compareTags" (selectionChange)="selectionChanged()" [placeholder]= "labelText" multiple>
     <mat-select-trigger>
         <div class="tag-filter-select-trigger-contents">
-            <span class="mat-select-placeholder">Tag Filters</span>
+            <span class="mat-select-placeholder">{{labelText}}</span>
             <div class="tag-filter-selected-tag-container">
                 <ac-tag *ngFor="let tag of tagFilter" class="material-icons md-20" [model]="tag"></ac-tag>
             </div>                    

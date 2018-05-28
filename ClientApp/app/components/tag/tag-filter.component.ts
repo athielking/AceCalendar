@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, Optional, EventEmitter, OnInit } from '@angular/core';
 
 import { Tag } from '../../models/tag/tag.model';
 import { TagStore } from '../../stores/tag.store';
@@ -12,27 +12,23 @@ import { MatSelectChange } from '@angular/material';
 export class TagFilterComponent {
 
     @Input() availableTags: Tag[];
-
-    @Output() tagFilterChanged: EventEmitter<TagFilterChangedEvent> = new EventEmitter<TagFilterChangedEvent>();
+    @Input() tagFilter: Tag[] = []
+    @Input() labelText: string = "Tag Filters"; 
+    @Output() tagFilterChange: EventEmitter<Tag[]> = new EventEmitter<Tag[]>();
     
-    public tagFilter: Tag[] = new Array<Tag>();
-
-    constructor(
+    constructor( 
     ) {
     } 
+
+    ngOnInit(){
+    }
 
     public compareTags(o1: Tag, o2: Tag): boolean{
         return o1 && o2 && o1.id == o2.id;
     }
     
     public selectionChanged($event: EventEmitter<MatSelectChange>) {
-        this.tagFilterChanged.emit( {
-            tagFilter: this.tagFilter
-        } );
+        this.tagFilterChange.emit( this.tagFilter );
     }
-}
-
-export interface TagFilterChangedEvent {
-    tagFilter: Tag[]
 }
 

@@ -35,7 +35,11 @@ export class TagFilter implements IFilter {
 
     public matchesFilter(entity: ITaggedEntity): boolean {
 
-        var matchesFilter = true;
+        var matchesFilter: boolean = this.operation == FilterOperation.And;
+
+        if(entity.tags.length == 0 && this.tags.length > 0)
+            return false;
+
         entity.tags.forEach( eTag => {
             let index = this.tags.findIndex( t => t.id == eTag.id );
 
@@ -43,16 +47,15 @@ export class TagFilter implements IFilter {
             matchesFilter = this.doOperation(matchesFilter, tagMatch )
         });
 
+        console.log(matchesFilter);
         return matchesFilter;
     }
 
     private doOperation(value1: boolean, value2: boolean): boolean {
 
-        switch(this.operation){
-            case FilterOperation.And:
-                return value1 && value2;
-            case FilterOperation.Or:
-                return value1 || value2;
-        }
+        if( this.operation == FilterOperation.And )
+            return value1 && value2;
+        if( this.operation == FilterOperation.Or )
+            return value1 || value2;
     }
 }

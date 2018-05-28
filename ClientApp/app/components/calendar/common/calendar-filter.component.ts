@@ -8,6 +8,9 @@ import { TagFilter, FilterOperation, FilterContains } from '../../../models/shar
 import { SelectJobTagComponent } from '../../tag/selectJobTag.component';
 import { SelectWorkerTagComponent } from '../../tag/selectWorkerTag.component';
 import { SelectTagComponent } from '../../tag/select-tag.component';
+import { TagStore } from '../../../stores/tag.store';
+import { Tag, TagType } from '../../../models/tag/tag.model';
+
 
 @Component({
   selector: 'ac-calendar-filter',
@@ -19,17 +22,36 @@ export class CalendarFilterComponent implements OnInit {
 	public jobFilter: TagFilter = new TagFilter();
 	public workerFilter: TagFilter = new TagFilter();
 
-	constructor(private storageService: StorageService,
+    private workerTags: Tag[] = [];
+    private jobTags: Tag[] = [];
+
+    constructor(private storageService: StorageService,
+                private tagStore: TagStore,
 				private matDialog: MatDialog,
 				private dialogRef: MatDialogRef<CalendarFilterComponent>) { }
 
   	ngOnInit(){
+
+        this.tagStore.tags.subscribe( tags => {
+
+            this.workerTags = [];
+            this.jobTags = [];
+
+            tags.forEach( t => {
+                if( t.tagType == TagType.Jobs || t.tagType == TagType.JobsAndWorkers)
+                    this.jobTags.push( t );
+                if( t.tagType == TagType.Workers || t.tagType == TagType.JobsAndWorkers)
+                    this.workerTags.push( t );
+            });
+        });
 
 		if(this.storageService.hasItem(StorageKeys.jobFilter))
             this.jobFilter.fromJSON(this.storageService.getItem(StorageKeys.jobFilter));
 
 		if(this.storageService.hasItem(StorageKeys.workerFilter))
             this.workerFilter.fromJSON(this.storageService.getItem(StorageKeys.workerFilter));
+
+        this.tagStore.getTags();
 	}
 
 	public selectJobTags(){

@@ -10,7 +10,7 @@
         <div class="month-job-details">
             <div *ngIf="showAllJobs" class="cal-card month-card"
                 [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Jobs - {{ getJobCount() }}</div>
                 <div class="cal-card-content">
                     <div *ngFor="let job of dayView.jobs">
                         <div layout="row" [class.filtered]="job.isFiltered">
@@ -27,14 +27,14 @@
             </div>
 
             <div *ngIf="showAvailableWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Available - {{dayView.availableWorkers.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Available - {{ getAvailableCount() }}</div>
                 <div class="cal-card-content">
                     <span *ngFor="let worker of dayView.availableWorkers" [class.filtered]="worker.isFiltered">{{ worker.firstName }} {{ worker.lastName }}</span>
                 </div>
             </div>
 
             <div *ngIf="showOffWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Time Off - {{dayView.timeOffWorkers.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Time Off - {{ getTimeOffCount() }}</div>
                 <div class="cal-card-content">
                     <span *ngFor="let worker of dayView.timeOffWorkers" [class.filtered]="worker.isFiltered">{{ worker.firstName }} {{ worker.lastName }}</span>
                 </div>
