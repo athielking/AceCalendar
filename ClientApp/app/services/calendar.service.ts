@@ -111,8 +111,19 @@ export class CalendarService{
                 
                     let workersByJob: Map<string, Worker[]> = new Map<string, Worker[]>();
                     let tagsByJob: Map<string, Tag[]> = new Map<string, Tag[]>();
+                    let tagsByWorker: Map<string, Tag[]>= new Map<string, Tag[]>();
 
-                    let guids = Object.keys(obj[key].workersByJob)
+                    let guids = Object.keys(obj[key].tagsByWorker);
+                    guids.forEach( g=> {
+                        if(!obj[key].tagsByWorker[g])
+                            return;
+                        
+                            tagsByWorker.set( g, obj[key].tagsByWorker[g].map( item => {
+                            return new Tag(item.id, item.icon, item.description, item.color, item.tagType, false );
+                        }));
+                    });
+
+                    guids = Object.keys(obj[key].workersByJob)
                     guids.forEach(g => {
 
                         if(!obj[key].workersByJob[g])
@@ -125,7 +136,7 @@ export class CalendarService{
                                 item.lastName, 
                                 item.email, 
                                 item.phone,
-                                item.tags);
+                                tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] );
                         }));
                     });
 
@@ -138,6 +149,8 @@ export class CalendarService{
                             return new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay == 1 );
                         }));
                     });
+
+                    
 
                     let jobs : CalendarJob[] = obj[key].jobs.map( item => {
     
@@ -163,7 +176,7 @@ export class CalendarService{
                             item.lastName,
                             item.email,
                             item.phone, 
-                            item.tags
+                            tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] 
                         );
                     });
 
@@ -174,7 +187,7 @@ export class CalendarService{
                             item.lastName,
                             item.email,
                             item.phone,
-                            item.tags
+                            tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] 
                         );
                     });
 

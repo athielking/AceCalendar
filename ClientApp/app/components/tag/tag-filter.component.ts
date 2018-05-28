@@ -11,9 +11,11 @@ import { MatSelectChange } from '@angular/material';
 })
 export class TagFilterComponent {
 
+    @Input() disabled: boolean = false;
     @Input() availableTags: Tag[];
     @Input() tagFilter: Tag[] = []
-    @Input() labelText: string = "Tag Filters"; 
+    @Input() labelText: string; 
+    @Input() placeholder: string = 'Tag Filters';
     @Output() tagFilterChange: EventEmitter<Tag[]> = new EventEmitter<Tag[]>();
     
     constructor( 

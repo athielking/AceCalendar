@@ -44,7 +44,7 @@
 
                     <span *ngIf="availableTags.length > 0" hide-xs class="md-sort-header" flex="20" layout="row" layout-align="center center" class="pad-left mat-body-1 tc-grey-500">
                         <span flex></span>
-                        <ac-tag-filter [availableTags]="availableTags" [(tagFilter)]="tagFilter">
+                        <ac-tag-filter [availableTags]="availableTags" [tagFilter]="tagFilter" (tagFilterChange)="onTagFilterChange($event)">
                         </ac-tag-filter>
                     </span>
                         

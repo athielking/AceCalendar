@@ -16,7 +16,7 @@ import { TagStore } from '../../stores/tag.store';
     selector: 'worker',
     templateUrl: './worker.component.html'
 })
-export class WorkerComponent implements OnInit, OnChanges {
+export class WorkerComponent implements OnInit {
     
     private workers: Worker[];
 
@@ -75,9 +75,9 @@ export class WorkerComponent implements OnInit, OnChanges {
         this.workerStore.getWorkers();
     }
     
-    ngOnChanges(changes: SimpleChanges){
-        if(changes.tagFilter)
-            this.filterWorkers(this.currentFilter);
+    onTagFilterChange(tagFilter: Tag[]){
+        this.tagFilter = tagFilter;
+        this.filterWorkers(this.currentFilter);
     }
 
     public filterWorkers(filter: string = '') {      

@@ -37,17 +37,19 @@ export class TagFilter implements IFilter {
 
         var matchesFilter: boolean = this.operation == FilterOperation.And;
 
+        if(!entity.tags)
+            return false;
+
         if(entity.tags.length == 0 && this.tags.length > 0)
             return false;
 
-        entity.tags.forEach( eTag => {
-            let index = this.tags.findIndex( t => t.id == eTag.id );
+        this.tags.forEach( tag => {
+            let index = entity.tags.findIndex( t => t.id == tag.id );
 
             let tagMatch = (this.contains == FilterContains.Contains && index > -1) || (this.contains == FilterContains.DoesNotContain && index == -1);
             matchesFilter = this.doOperation(matchesFilter, tagMatch )
         });
 
-        console.log(matchesFilter);
         return matchesFilter;
     }
 
