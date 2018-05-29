@@ -36,11 +36,8 @@ export class TagFilter implements IFilter {
     public matchesFilter(entity: ITaggedEntity): boolean {
 
         var matchesFilter: boolean = this.operation == FilterOperation.And;
-
-        if(!entity.tags)
-            return false;
-
-        if(entity.tags.length == 0 && this.tags.length > 0)
+        
+        if(!entity.tags || (entity.tags.length == 0 && this.tags.length > 0))
             return this.contains == FilterContains.DoesNotContain;
 
         this.tags.forEach( tag => {
