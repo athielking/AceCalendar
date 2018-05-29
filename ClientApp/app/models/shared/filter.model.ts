@@ -41,7 +41,7 @@ export class TagFilter implements IFilter {
             return false;
 
         if(entity.tags.length == 0 && this.tags.length > 0)
-            return false;
+            return this.contains == FilterContains.DoesNotContain;
 
         this.tags.forEach( tag => {
             let index = entity.tags.findIndex( t => t.id == tag.id );
