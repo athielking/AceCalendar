@@ -10,16 +10,16 @@
         <div class="month-job-details">
             <div *ngIf="showAllJobs" class="cal-card month-card"
                 [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Jobs - {{dayView.jobs.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Jobs - {{ getJobCount() }}</div>
                 <div class="cal-card-content">
                     <div *ngFor="let job of dayView.jobs">
-                        <div layout="row">
+                        <div layout="row" [class.filtered]="job.isFiltered">
                             <span style="padding-right: 4px"><strong>{{job.getDisplayString()}}</strong></span>
                             <span *ngIf="showJobTags">
-                                <ac-tag *ngFor="let tag of job.jobTags" class="material-icons md-18" [model]="tag"></ac-tag>
+                                <ac-tag *ngFor="let tag of job.tags" class="material-icons md-18" [model]="tag"></ac-tag>
                             </span>
                         </div>
-                        <div style="margin-left: 16px" *ngFor="let worker of job.workers">
+                        <div style="margin-left: 16px" *ngFor="let worker of job.workers" [class.filtered]="worker.isFiltered">
                             {{worker.firstName}} {{worker.lastName}}
                         </div>
                     </div>
@@ -27,16 +27,16 @@
             </div>
 
             <div *ngIf="showAvailableWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Available - {{dayView.availableWorkers.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Available - {{ getAvailableCount() }}</div>
                 <div class="cal-card-content">
-                    <span *ngFor="let worker of dayView.availableWorkers">{{ worker.firstName }} {{ worker.lastName }}</span>
+                    <span *ngFor="let worker of dayView.availableWorkers" [class.filtered]="worker.isFiltered">{{ worker.firstName }} {{ worker.lastName }}</span>
                 </div>
             </div>
 
             <div *ngIf="showOffWorkers" class="cal-card month-card" [class.out-month]="!dayView.calendarDay.inMonth">
-                <div class="cal-card-header" style="margin-top: 4px">Time Off - {{dayView.timeOffWorkers.length}}</div>
+                <div class="cal-card-header" style="margin-top: 4px">Time Off - {{ getTimeOffCount() }}</div>
                 <div class="cal-card-content">
-                    <span *ngFor="let worker of dayView.timeOffWorkers">{{ worker.firstName }} {{ worker.lastName }}</span>
+                    <span *ngFor="let worker of dayView.timeOffWorkers" [class.filtered]="worker.isFiltered">{{ worker.firstName }} {{ worker.lastName }}</span>
                 </div>
             </div>
         </div>
@@ -44,22 +44,22 @@
         <div layout="row">
 
             <button *ngIf="!showAllJobs" mat-icon-button color='primary' [matTooltip]="getJobsTooltip()" matTooltipPosition='right' [matMenuTriggerFor]="jobsMenu">
-                <mat-icon *ngIf="dayView.jobs.length == 0">business</mat-icon>
-                <td-notification-count *ngIf="dayView.jobs.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.jobs.length">
+                <mat-icon *ngIf="getJobCount() == 0">business</mat-icon>
+                <td-notification-count *ngIf="getJobCount() > 0" color="accent" positionX="after" positionY="top" [notifications]="getJobCount()">
                     <mat-icon>business</mat-icon>
                 </td-notification-count>
             </button>
 
             <button *ngIf="!showAvailableWorkers" mat-icon-button color='primary' [matTooltip]="getAvailableTooltip()" matTooltipPosition='right' [matMenuTriggerFor]="availableMenu">
-                <mat-icon *ngIf="dayView.availableWorkers.length == 0">people</mat-icon>
-                <td-notification-count *ngIf="dayView.availableWorkers.length > 0" color="accent" positionX="after" positionY="top" [notifications]="dayView.availableWorkers.length">
+                <mat-icon *ngIf="getAvailableCount() == 0">people</mat-icon>
+                <td-notification-count *ngIf="getAvailableCount() > 0" color="accent" positionX="after" positionY="top" [notifications]="getAvailableCount()">
                     <mat-icon>people</mat-icon>
                 </td-notification-count>
             </button>   
 
             <button *ngIf="!showOffWorkers" mat-icon-button color='primary' [matTooltip]="getOffTooltip()" matTooltipPosition='right' [matMenuTriggerFor]="offMenu">
-                <mat-icon *ngIf="dayView.timeOffWorkers.length == 0">perm_contact_calendar</mat-icon>
-                <td-notification-count *ngIf="dayView.timeOffWorkers.length > 0" color="warn" positionX="after" positionY="top" [notifications]="dayView.timeOffWorkers.length">
+                <mat-icon *ngIf="getTimeOffCount() == 0">perm_contact_calendar</mat-icon>
+                <td-notification-count *ngIf="getTimeOffCount() > 0" color="warn" positionX="after" positionY="top" [notifications]="getTimeOffCount()">
                     <mat-icon>perm_contact_calendar</mat-icon>
                 </td-notification-count>
             </button>
@@ -73,18 +73,18 @@
     </div>
 
     <mat-menu #availableMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-        <button mat-menu-item *ngIf="dayView.availableWorkers.length === 0">None</button>              
-        <button mat-menu-item *ngFor="let worker of dayView.availableWorkers" (click)="showDayDetails()">{{worker.firstName}} {{worker.lastName}}</button>
+        <button mat-menu-item *ngIf="getAvailableCount() === 0">None</button>              
+        <button mat-menu-item *ngFor="let worker of dayView.availableWorkers" [class.filtered]="worker.isFiltered" (click)="showDayDetails()">{{worker.firstName}} {{worker.lastName}}</button>
     </mat-menu>
 
     <mat-menu #offMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-        <button mat-menu-item *ngIf="dayView.timeOffWorkers.length === 0">None</button>        
-        <button mat-menu-item *ngFor="let worker of dayView.timeOffWorkers" (click)="showDayDetails()">{{worker.firstName}} {{worker.lastName}}</button>
+        <button mat-menu-item *ngIf="getTimeOffCount() === 0">None</button>        
+        <button mat-menu-item *ngFor="let worker of dayView.timeOffWorkers" [class.filtered]="worker.isFiltered" (click)="showDayDetails()">{{worker.firstName}} {{worker.lastName}}</button>
     </mat-menu>
 
     <mat-menu #jobsMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">
-        <button mat-menu-item *ngIf="dayView.jobs.length === 0">None</button>               
-        <button mat-menu-item *ngFor="let job of dayView.jobs" (click)="showDayDetails()">{{job.getDisplayString()}}</button>
+        <button mat-menu-item *ngIf="getJobCount() === 0">None</button>               
+        <button mat-menu-item *ngFor="let job of dayView.jobs" [class.filtered]="job.isFiltered" (click)="showDayDetails()">{{job.getDisplayString()}}</button>
     </mat-menu>
 
     <mat-menu #detailsMenu='matMenu' xPosition="after" yPosition="below" [overlapTrigger]="false">

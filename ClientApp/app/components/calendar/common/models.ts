@@ -1,8 +1,9 @@
 import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
 import * as calendarTools from '../../../components/calendar/common/calendar-tools';
-import {Tag} from '../../../models/tag/tag.model';
+import {Tag, ITaggedEntity} from '../../../models/tag/tag.model';
 import {Guid} from '../../../tools/guid';
+import { TagFilter } from '../../../models/shared/filter.model';
 
 export class MonthView{
     constructor(public header: CalendarDay[],
@@ -25,6 +26,19 @@ export class DayView{
     public refreshCalendarDay(viewDate: Date){
         var cd = calendarTools.getCalendarDay(this.calendarDay.date, viewDate);
         this.calendarDay = cd;
+    }
+
+    public applyJobFilter(filter: TagFilter){
+        this.jobs.forEach( job => job.isFiltered = filter.enabled && !filter.matchesFilter(job));
+    }
+
+    public applyWorkerFilter( filter: TagFilter ){
+        this.availableWorkers.forEach( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
+        this.timeOffWorkers.forEach( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
+
+        this.jobs.forEach( job => {
+            job.workers.filter( worker => worker.isFiltered = filter.enabled && !filter.matchesFilter(worker));
+        })
     }
 
     public makeWorkerAvailable( workerId: string ){
@@ -124,9 +138,11 @@ export class CalendarDay {
     }
 }
 
-export class CalendarJob implements IDisplayModel{
+export class CalendarJob implements ITaggedEntity {
+    
+    public isFiltered: boolean = false;
     public workers: Worker[] = [];
-    public jobTags: Tag[] = [];
+    public tags: Tag[] = [];
     
     public display: string;
 
@@ -153,8 +169,9 @@ export class JobStartAndEndDate {
     }
 }
 
-export class Worker implements IDisplayModel{
+export class Worker implements IDisplayModel, ITaggedEntity{
     public display: string;
+    public isFiltered: boolean = false;
 
     constructor(
         public id: string,
@@ -168,7 +185,7 @@ export class Worker implements IDisplayModel{
     }
 }
 
-export class WorkerDto {
+export class WorkerDto implements ITaggedEntity {
     public id: string;
     public firstName: string;
     public lastName: string;

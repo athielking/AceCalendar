@@ -151,7 +151,7 @@ export class DayViewComponent implements OnInit, OnDestroy {
                     jobName: event.job.name,
                     notes: event.job.notes,
                     jobDays: result,
-                    selectedTags: event.job.jobTags     
+                    selectedTags: event.job.tags     
                 }
             });
         }, error => {

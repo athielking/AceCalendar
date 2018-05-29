@@ -90,6 +90,7 @@ import { AuthInterceptor } from './tools/authInterceptor';
 import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
 import { TagFilterComponent } from "./components/tag/tag-filter.component";
+import { CalendarFilterComponent } from './components/calendar/common/calendar-filter.component';
 
 
 @NgModule({
@@ -153,7 +154,8 @@ import { TagFilterComponent } from "./components/tag/tag-filter.component";
 
     //Auth
     LoginComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    CalendarFilterComponent
   ],
   entryComponents: [
     WeekViewPrintComponent,
@@ -171,7 +173,8 @@ import { TagFilterComponent } from "./components/tag/tag-filter.component";
     SelectJobTagComponent,
     SelectWorkerTagComponent,
     AddOrganizationComponent,
-    AddUserComponent
+    AddUserComponent,
+    CalendarFilterComponent
   ],
   imports: [
     HttpClientModule,

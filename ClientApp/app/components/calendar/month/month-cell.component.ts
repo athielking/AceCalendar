@@ -65,16 +65,28 @@ import { CalendarStore } from '../../../stores/calendar.store';
                               this.storageService.getItem(StorageKeys.monthViewShowTags) == 'true'
     }
 
+    public getJobCount(){
+        return this.dayView.jobs.filter(j=> !j.isFiltered).length;
+    }
+
+    public getAvailableCount(){
+        return this.dayView.availableWorkers.filter( w => !w.isFiltered).length;
+    }
+
+    public getTimeOffCount(){
+        return this.dayView.timeOffWorkers.filter( w => !w.isFiltered).length;
+    }
+
     public getJobsTooltip(){
-      return this.dayView.jobs.length.toString() + " Jobs";
+      return this.getJobCount().toString() + " Jobs";
     }
 
     public getAvailableTooltip(){
-      return this.dayView.availableWorkers.length.toString() + " Available Workers";
+      return this.getAvailableCount().toString() + " Available Workers";
     }
 
     public getOffTooltip(){
-      return this.dayView.timeOffWorkers.length.toString() + " Off Workers";
+      return this.getTimeOffCount().toString() + " Off Workers";
     }
 
     public showDayDetails(){

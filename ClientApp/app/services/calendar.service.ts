@@ -65,7 +65,7 @@ export class CalendarService{
                     let jobs: CalendarJob[] = dv.jobs.map( item => {
                         let job = new CalendarJob(item.id, item.number, item.name, item.notes);
                         job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
-                        job.jobTags = item.jobTags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
+                        job.tags = item.tags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
 
                         return job;
                     });
@@ -111,8 +111,19 @@ export class CalendarService{
                 
                     let workersByJob: Map<string, Worker[]> = new Map<string, Worker[]>();
                     let tagsByJob: Map<string, Tag[]> = new Map<string, Tag[]>();
+                    let tagsByWorker: Map<string, Tag[]>= new Map<string, Tag[]>();
 
-                    let guids = Object.keys(obj[key].workersByJob)
+                    let guids = Object.keys(obj[key].tagsByWorker);
+                    guids.forEach( g=> {
+                        if(!obj[key].tagsByWorker[g])
+                            return;
+                        
+                            tagsByWorker.set( g, obj[key].tagsByWorker[g].map( item => {
+                            return new Tag(item.id, item.icon, item.description, item.color, item.tagType, false );
+                        }));
+                    });
+
+                    guids = Object.keys(obj[key].workersByJob)
                     guids.forEach(g => {
 
                         if(!obj[key].workersByJob[g])
@@ -125,7 +136,7 @@ export class CalendarService{
                                 item.lastName, 
                                 item.email, 
                                 item.phone,
-                                item.tags);
+                                tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] );
                         }));
                     });
 
@@ -139,6 +150,8 @@ export class CalendarService{
                         }));
                     });
 
+                    
+
                     let jobs : CalendarJob[] = obj[key].jobs.map( item => {
     
                         var cj = new CalendarJob(
@@ -151,7 +164,7 @@ export class CalendarService{
                             cj.workers = workersByJob.get(item.id);
 
                         if( tagsByJob.has(item.id))
-                            cj.jobTags = tagsByJob.get(item.id);
+                            cj.tags = tagsByJob.get(item.id);
 
                         return cj;
                     });
@@ -163,7 +176,7 @@ export class CalendarService{
                             item.lastName,
                             item.email,
                             item.phone, 
-                            item.tags
+                            tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] 
                         );
                     });
 
@@ -174,7 +187,7 @@ export class CalendarService{
                             item.lastName,
                             item.email,
                             item.phone,
-                            item.tags
+                            tagsByWorker.has(item.id) ? tagsByWorker.get(item.id) : [] 
                         );
                     });
 

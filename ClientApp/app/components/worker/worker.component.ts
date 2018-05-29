@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { BehaviorSubject } from 'rxjs/Rx';
@@ -11,7 +11,6 @@ import { AddWorkerComponent } from './addWorker.component';
 import { SelectWorkerTagComponent } from '../tag/selectWorkerTag.component';
 import { Tag } from '../../models/tag/tag.model';
 import { TagStore } from '../../stores/tag.store';
-import { TagFilterChangedEvent } from '../tag/tag-filter.component';
 
 @Component({
     selector: 'worker',
@@ -76,9 +75,8 @@ export class WorkerComponent implements OnInit {
         this.workerStore.getWorkers();
     }
     
-    public tagFilterChanged(event: TagFilterChangedEvent){
-        this.tagFilter = event.tagFilter;
-
+    onTagFilterChange(tagFilter: Tag[]){
+        this.tagFilter = tagFilter;
         this.filterWorkers(this.currentFilter);
     }
 

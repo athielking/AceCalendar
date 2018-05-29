@@ -18,8 +18,12 @@ export class TagStore{
 
     public readonly tags : Observable<Tag[]> = this._tags.asObservable();
     public readonly tag: Observable<Tag> = this._tag.asObservable();
+    public readonly workerTags: Observable<Tag[]>;
+    public readonly jobTags: Observable<Tag[]>;
     
     constructor(private tagService: TagService){
+        this.workerTags = this._tags.map( tags => tags.filter( t => t.tagType == TagType.Workers || t.tagType == TagType.JobsAndWorkers ));
+        this.jobTags = this._tags.map( tags => tags.filter( t => t.tagType == TagType.Jobs || t.tagType == TagType.JobsAndWorkers ));
     }
 
     public addTag(tag: Tag){

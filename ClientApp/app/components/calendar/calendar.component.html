@@ -1,3 +1,11 @@
+<div style="position: absolute; right: 0; margin-right: 30px;margin-top:4px; font-size: 14px; z-index: 9999;">
+    <button mat-icon-button color="primary" matTooltip="Filter Calendar" (click)="showFilter()">
+        <mat-icon>filter_list</mat-icon>
+    </button>
+    <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
+        Clear Filter
+    </button>
+</div>
 <mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
            
     <mat-tab label="Month View">
@@ -11,3 +19,5 @@
     </mat-tab>
 
 </mat-tab-group>
+
+

@@ -25,6 +25,7 @@ import { JobStore } from '../../../stores/job.store';
 import { CopyDayRequest } from './week-cell.component';
 import { WeekViewPrintComponent } from './print/week-view-print.component';
 import { SelectJobTagComponent } from '../../tag/selectJobTag.component';
+import { TagFilter } from '../../../models/shared/filter.model';
 
 @Component({
     selector: 'ac-week-view',
@@ -80,7 +81,7 @@ export class WeekViewComponent implements OnInit, OnChanges {
         });
 
         this.calendarStore.weekData.subscribe( result => {
-            this.weekData = result;     
+            this.weekData = result;
         });
     }
 
@@ -169,7 +170,7 @@ export class WeekViewComponent implements OnInit, OnChanges {
                     jobName: event.job.name,
                     notes: event.job.notes,
                     jobDays: result,
-                    selectedTags: event.job.jobTags     
+                    selectedTags: event.job.tags     
                 }
             });
         }, error => {
@@ -241,11 +242,11 @@ export class WeekViewComponent implements OnInit, OnChanges {
 
     public onDayJobTagRequested( event: DayJobTagRequestedEvent ){
 
-        var jobTags = event.job.jobTags.filter( value => {
+        var jobTags = event.job.tags.filter( value => {
             return !value.fromJobDay
         });
 
-        var jobDayTags = event.job.jobTags.filter( value => {
+        var jobDayTags = event.job.tags.filter( value => {
             return value.fromJobDay
         });
 

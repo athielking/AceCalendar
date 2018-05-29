@@ -1,0 +1,52 @@
+<h1 class="mat-dialog-title">Filter Options</h1>
+
+<div class="mat-dialog-content form-container" style="max-width: 500px">
+        
+    <mat-slide-toggle style="padding-bottom: 4px;" [(ngModel)]="jobFilter.enabled">Only show Jobs which</mat-slide-toggle>
+
+    <mat-form-field> 
+        <mat-select [disabled]="!jobFilter.enabled" [(ngModel)]="jobFilter.contains" placeholder="Contains Option" [compareWith]="filterContainsCompare">
+            <mat-option value=0>Contain</mat-option>
+            <mat-option value=1>Do Not Contain</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <ac-tag-filter [disabled]='!jobFilter.enabled' [labelText]="'The Following Job Tags'" [availableTags]="tagStore.jobTags | async" [(tagFilter)]="jobFilter.tags">
+    </ac-tag-filter>
+
+    <mat-form-field>
+        <mat-select [disabled]="!jobFilter.enabled" [(ngModel)]="jobFilter.operation" placeholder="Filter Operation" [compareWith]="filterOperationCompare">
+            <mat-option value=0>AND</mat-option>
+            <mat-option value=1>OR</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-divider></mat-divider>
+
+    <mat-slide-toggle style="padding-top: 4px; padding-bottom: 4px" [(ngModel)]="workerFilter.enabled">Only show Workers which</mat-slide-toggle>
+
+    <mat-form-field> 
+        <mat-select [disabled]="!workerFilter.enabled" [(ngModel)]="workerFilter.contains" placeholder="Contains Option" [compareWith]="filterContainsCompare">
+            <mat-option value=0>Contain</mat-option>
+            <mat-option value=1>Do Not Contain</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <ac-tag-filter [disabled]='!workerFilter.enabled' [labelText]="'The Following Worker Tags'" [availableTags]="tagStore.workerTags | async" [(tagFilter)]="workerFilter.tags">
+    </ac-tag-filter>
+    
+    <mat-form-field> 
+        <mat-select [disabled]="!workerFilter.enabled" [(ngModel)]="workerFilter.operation" placeholder="Filter Operation" [compareWith]="filterOperationCompare">
+            <mat-option value=0>AND</mat-option>
+            <mat-option value=1>OR</mat-option>
+        </mat-select>
+    </mat-form-field>
+    
+</div>
+
+<div class="mat-dialog-actions" style="display: flex; flex-direction:row">
+    <span flex></span>
+    <button mat-button (click)="onCloseClick()">
+        Close
+    </button>
+</div>

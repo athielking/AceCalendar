@@ -49,7 +49,8 @@ export class MonthViewComponent implements OnInit {
 	}
 
 	public onChangeView(event: ViewChangeRequest) {
-		this.changeViewDate.emit(event.viewDate);
+        this.changeViewDate.emit(event.viewDate);
+        this.handleDateChanged(event.viewDate);
 		this.changeSelectedView.emit(event.view);
 	}
 
