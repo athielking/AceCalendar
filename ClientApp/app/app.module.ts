@@ -91,6 +91,7 @@ import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
 import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
 import { TagFilterComponent } from "./components/tag/tag-filter.component";
 import { CalendarFilterComponent } from './components/calendar/common/calendar-filter.component';
+import { SignalrService } from "./services/signalr.service";
 
 
 @NgModule({
@@ -219,6 +220,7 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
     JwtHelper,
     AuthGuardEditor,
     AuthGuardAdmin,
+    SignalrService,
     //Stores
     OrganizationStore,
     CalendarStore,

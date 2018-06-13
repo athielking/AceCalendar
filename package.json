@@ -25,18 +25,19 @@
     "@angular/platform-browser": "^5.1.1",
     "@angular/platform-browser-dynamic": "^5.1.1",
     "@angular/router": "^5.1.1",
+    "@aspnet/signalr": "^1.0.0",
     "@covalent/core": "^1.0.0-rc.1",
+    "angular2-text-mask": "8.0.0",
     "bootstrap": "^4.0.0-beta.2",
     "core-js": "^2.5.3",
     "date-fns": "^1.29.0",
     "immutable": "^3.8.2",
-    "ng-drag-drop": "^4.0.0",
     "jquery": "^3.3.1",
+    "ng-drag-drop": "^4.0.0",
     "ngx-bootstrap": "^2.0.1",
     "popper.js": "^1.13.0",
     "rxjs": "^5.5.5",
-    "zone.js": "^0.8.18",
-    "angular2-text-mask": "8.0.0"
+    "zone.js": "^0.8.18"
   },
   "devDependencies": {
     "@angular/cli": "1.6.1",
