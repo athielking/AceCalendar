@@ -7,6 +7,7 @@ import {Organization} from '../../models/admin/organization.model'
 import {User} from '../../models/admin/user.model'
 import {OrganizationStore} from '../../stores/organization.store';
 import { AddUserComponent } from './add-user.component';
+import { SignalrService } from '../../services/signalr.service';
 
 @Component({
     selector: "ac-organization-detail",
@@ -29,15 +30,20 @@ export class OrganizationDetailComponent implements OnInit{
                 public organizationStore: OrganizationStore,
                 public dialog: MatDialog,
                 private dialogService: TdDialogService,
-                private loadingService: TdLoadingService){
+                private loadingService: TdLoadingService,
+                private signalrService: SignalrService){
     }
 
     public ngOnInit(){
         this.toggleShowLoading(true);
 
+        this.signalrService.connect();
+
         this.route.paramMap
-            .subscribe( (params: ParamMap) => 
-                this.organizationStore.getOrganization(params.get('id')));
+            .subscribe( (params: ParamMap) => {
+                this.organizationStore.getOrganization(params.get('id'));
+                this.signalrService.addToGroup(params.get('id'));
+            });
 
         this.organizationStore.organization.subscribe(org => {
             this.organization = org;
@@ -45,6 +51,7 @@ export class OrganizationDetailComponent implements OnInit{
             
             this.toggleShowLoading(false);
         });
+        
     }
 
     private toggleShowLoading(show:boolean) {

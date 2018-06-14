@@ -16,9 +16,7 @@ import { JobService } from '../services/job.service';
 import { StorageService } from '../services/storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { TagFilter } from '../models/shared/filter.model';
-import { WebSocketSubject } from 'rxjs/observable/dom/WebSocketSubject';
 import { SignalrService } from '../services/signalr.service';
-import { ORGANIZATION_ID } from '../services/auth.service';
 
 @Injectable()
 export class CalendarStore {
@@ -28,7 +26,6 @@ export class CalendarStore {
     private _dayViews: BehaviorSubject<DayView[]> = new BehaviorSubject([]);
     private _phoneDays: BehaviorSubject<DayView[]> = new BehaviorSubject([]);
     private _dayData: BehaviorSubject<DayView> = new BehaviorSubject(undefined);
-    private _socket: WebSocketSubject<string>;
 
     public hasError: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public errorMessage: BehaviorSubject<string> = new BehaviorSubject('');
@@ -50,7 +47,7 @@ export class CalendarStore {
         private calendarService: CalendarService,
         private jobService: JobService,
         private storageService: StorageService,
-        private signalrService: SignalrService,
+        private signalRService: SignalrService,
     ) {
 
         if(this.storageService.hasItem(StorageKeys.jobFilter))
@@ -100,9 +97,6 @@ export class CalendarStore {
         var weekAfterEnd = dateFns.endOfWeek(dateFns.addWeeks(dateFns.startOfWeek(this._lastViewDate), 1));
         end = dateTools.greaterThan(weekAfterEnd, end) ? weekAfterEnd : end;
 
-        this.signalrService.connect();
-        this.signalrService.addToGroup(this.storageService.getItem(ORGANIZATION_ID));
-        
         this.getDataForRange( start, end );
     }
 
@@ -523,5 +517,26 @@ export class CalendarStore {
         }
 
         this._dayViews.next(dayViews);
+    }
+
+    private handleServerDataUpdated(date: Date){
+
+        var dayViews = this._dayViews.getValue();
+
+        //the date that was update isn't cached. 
+        let dayIndex =  dayViews.findIndex( dv => dv.calendarDay.date == date );
+        if( dayIndex == -1 )
+            return;
+
+        this.calendarService.getDayData(date).subscribe( result => {
+            
+            result.forEach( dv => {
+                dv.applyJobFilter(this.jobFilter);
+                dv.applyWorkerFilter(this.workerFilter);
+            });
+
+            dayViews[dayIndex] = result[0];
+            this._dayViews.next( dayViews );
+        });    
     }
 }
