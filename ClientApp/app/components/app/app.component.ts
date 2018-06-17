@@ -21,6 +21,7 @@ import {
 
 import { AuthService } from "../../services/auth.service";
 import { ChangePasswordComponent } from '../login/change-password.component';
+import { SignalrService } from '../../services/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -34,13 +35,17 @@ export class AppComponent {
   public menuOpen: boolean = true;
   public isMobile: boolean;
 
-  constructor(private authService: AuthService, 
+  constructor(private authService: AuthService,
+              private signalRService: SignalrService,
               private dialog: MatDialog ) {
+
     this.authorized = !this.authService.loginRequired();
     this.loggedInUser = this.authService.getLoggedInUser();
     
     if(window.screen.width <= 576)
       this.isMobile = true;
+
+    this.signalRService.connect();
   }
 
   public toggleMenu(){

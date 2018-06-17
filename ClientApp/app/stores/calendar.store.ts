@@ -89,6 +89,8 @@ export class CalendarStore {
             return data;
         });
 
+        this.signalRService.dataUpdated.subscribe( value => this.handleServerDataUpdated(value));
+
         var start = dateFns.startOfWeek( dateFns.startOfMonth( this._lastViewDate ));
         var weekBeforeStart = dateFns.subWeeks( dateFns.startOfWeek(this._lastViewDate), 1);
         start = dateTools.lessThan( weekBeforeStart, start ) ? weekBeforeStart : start;
@@ -519,24 +521,24 @@ export class CalendarStore {
         this._dayViews.next(dayViews);
     }
 
-    private handleServerDataUpdated(date: Date){
+    private handleServerDataUpdated(dayViews: DayView[]){
 
-        var dayViews = this._dayViews.getValue();
-
-        //the date that was update isn't cached. 
-        let dayIndex =  dayViews.findIndex( dv => dv.calendarDay.date == date );
-        if( dayIndex == -1 )
+        if(!dayViews)
             return;
-
-        this.calendarService.getDayData(date).subscribe( result => {
             
-            result.forEach( dv => {
-                dv.applyJobFilter(this.jobFilter);
-                dv.applyWorkerFilter(this.workerFilter);
-            });
+        var cached = this._dayViews.getValue();
 
-            dayViews[dayIndex] = result[0];
-            this._dayViews.next( dayViews );
-        });    
+        dayViews.forEach( dv => {
+            let cIndex = cached.findIndex( c => dateTools.equal(c.calendarDay.date, dv.calendarDay.date));
+            if(cIndex == -1)
+                return;
+
+            dv.applyJobFilter(this.jobFilter);
+            dv.applyWorkerFilter(this.workerFilter);
+
+            cached[cIndex] = dv;
+        });
+
+        this._dayViews.next(cached);
     }
 }

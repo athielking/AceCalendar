@@ -7,7 +7,7 @@ import * as dateFns from 'date-fns';
 import { environment } from '../../environments/environment';
 import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
 import { getCalendarDay } from '../components/calendar/common/calendar-tools';
-import {Tag} from '../models/tag/tag.model';
+import { Tag } from '../models/tag/tag.model';
 
 enum ApiMethod{
     Month = "getMonth",
@@ -94,10 +94,10 @@ export class CalendarService{
             httpStr = httpStr + `&idWorker=${idWorker}`;
 
         return this.httpClient.get(httpStr)
-            .map(response => this._mapDayViewResponse(viewDate, response));
+            .map(response => this.mapDayViewResponse(viewDate, response));
     }
 
-    private _mapDayViewResponse(viewDate: Date, response: any){
+    public mapDayViewResponse(viewDate: Date, response: any){
         let daymap : Map<Date, DayView> = new Map<Date, DayView>();
                 let dayViews : DayView[] = [];
 
@@ -201,6 +201,4 @@ export class CalendarService{
 
                 return dayViews;
     }
-
-    
 }
