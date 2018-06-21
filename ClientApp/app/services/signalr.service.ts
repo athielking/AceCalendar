@@ -5,10 +5,10 @@ import { Observable, BehaviorSubject } from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 import { CalendarService } from './calendar.service';
+import { AuthService } from './auth.service';
 import { StorageService } from './storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { DayView } from '../components/calendar/common/models';
-import { ORGANIZATION_ID } from './auth.service';
 
 @Injectable()
 export class SignalrService {
@@ -23,10 +23,10 @@ export class SignalrService {
     public dataUpdated: Observable<DayView[]> = this._dataUpdated.asObservable();
 
     constructor(private calendarService: CalendarService,
+                private authService: AuthService,
                 private storageService: StorageService){
 
         this._hubUrl = environment.webServiceUrl + '/ws';
-        
     }
 
     public connect() : Observable<boolean> {
@@ -42,9 +42,7 @@ export class SignalrService {
             this._connected.next(true);
 
             this.registerHandlers();
-
-            if(this.storageService.hasItem(ORGANIZATION_ID))
-                this.addToGroup(this.storageService.getItem(ORGANIZATION_ID));
+            this.addToGroup(this.authService.getOrganizationId());
 
         }, error => {
             this._connected.next(false);

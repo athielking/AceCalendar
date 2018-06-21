@@ -11,7 +11,6 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 export const TOKEN_NAME: string = 'jwt_token';
 export const TOKEN_EXPIRATION: string = 'jwt_token_expiration';
 export const LOGGED_IN_USER: string = 'logged_in_user';
-export const ORGANIZATION_ID: string = 'organization_id';
 
 @Injectable()
 export class AuthService {
@@ -45,7 +44,6 @@ export class AuthService {
                     this.setToken( result["token"] );
                     this.setTokenExpiration( result["expiration"] );
                     this.setLoggedInUser( result["user"])
-                    this.setOrganizationId( result["organizationId"]);
                     onSuccess();               
                 },
                 error => {
@@ -63,7 +61,6 @@ export class AuthService {
             this.setToken( result["token"] );
             this.setTokenExpiration( result["expiration"]);
             this.setLoggedInUser(result["user"]);
-            this.setOrganizationId( result["organizationId"]);
         });
 
         return obs.shareReplay();
@@ -81,7 +78,6 @@ export class AuthService {
                     this.clearToken();
                     this.clearTokenExpiration();
                     this.clearLoggedInUser();
-                    this.clearOrganizationId();
                     onSuccess();                 
                 },
                 error => {
@@ -154,17 +150,5 @@ export class AuthService {
 
     private setLoggedInUser(token: string): void {
         localStorage.setItem(LOGGED_IN_USER, token);
-    }
-
-    private clearOrganizationId(): void {
-        localStorage.removeItem(ORGANIZATION_ID);
-    }
-
-    public getOrganizationId(): string {
-        return localStorage.getItem(ORGANIZATION_ID);
-    }
-
-    private setOrganizationId(token: string): void {
-        localStorage.setItem(ORGANIZATION_ID, token);
-    }
+    }  
 }
