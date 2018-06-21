@@ -17,10 +17,12 @@ import {
   MatSidenavContent,
   MatNavList,
   MatDialog,
+  MatIconRegistry,
 } from '@angular/material';
 
 import { AuthService } from "../../services/auth.service";
 import { ChangePasswordComponent } from '../login/change-password.component';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -34,10 +36,17 @@ export class AppComponent {
   public menuOpen: boolean = true;
   public isMobile: boolean;
 
-  constructor(private authService: AuthService, 
-              private dialog: MatDialog ) {
+  constructor(
+    private authService: AuthService, 
+    private dialog: MatDialog,
+    private _iconRegistry: MatIconRegistry,
+    private _domSanitizer: DomSanitizer
+  ) {
     this.authorized = !this.authService.loginRequired();
     this.loggedInUser = this.authService.getLoggedInUser();
+    
+    this._iconRegistry.addSvgIconInNamespace('assets', 'AceLogoDark',
+    this._domSanitizer.bypassSecurityTrustResourceUrl('assets/AceLogoDark.svg'));
     
     if(window.screen.width <= 576)
       this.isMobile = true;
@@ -61,5 +70,9 @@ export class AppComponent {
         //alert with error?        
       }
     );
+  }
+
+  getOrganizationRoute(){
+    return `/organization/${this.authService.getOrganizationId()}`  
   }
 }

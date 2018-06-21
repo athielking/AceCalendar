@@ -34,12 +34,14 @@
                 <mat-nav-list td-sidenav-content>
                     <a mat-list-item routerLink="/calendar">
                         <mat-icon matListIcon>today</mat-icon>Calendar</a>
-                    <a mat-list-item routerLink="/worker">
+                    <a *ngIf="authService.isSubscriptionActive() || authService.isAdmin()" mat-list-item routerLink="/worker">
                         <mat-icon matListIcon>people</mat-icon>Workers</a>
-                    <a mat-list-item routerLink="/tag">
+                    <a *ngIf="authService.isSubscriptionActive() || authService.isAdmin()" mat-list-item routerLink="/tag">
                         <mat-icon matListIcon>label_outline</mat-icon>Tags</a>
                     <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/organization">
                         <mat-icon matListIcon>public</mat-icon>Organizations</a>
+                    <a *ngIf="authService.isEditor()" mat-list-item [routerLink]="getOrganizationRoute()">
+                            <mat-icon matListIcon>public</mat-icon>My Organization</a>
                 </mat-nav-list>  
                 
                 <!-- View Outlet -->

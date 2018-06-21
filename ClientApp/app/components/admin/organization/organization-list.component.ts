@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
-
-import { OrganizationStore } from '../../stores/organization.store';
-import { Organization } from '../../models/admin/organization.model';
-import { AddOrganizationComponent } from '../../components/admin/add-organization.component';
+import { Organization } from '../../../models/admin/organization.model';
+import { OrganizationStore } from '../../../stores/organization.store';
+import { AddOrganizationComponent } from './add-organization.component';
 
 @Component({
     selector: 'ac-organization-list',
@@ -57,7 +56,11 @@ export class OrganizationListComponent implements OnInit {
       }
 
     public addOrganization(){
-        this.showAddTagForm();
+        let dialogRef = this.dialog.open(AddOrganizationComponent, {
+            disableClose: true,
+            data: { 
+            }
+        });
     }
 
     public deleteOrganization(orgId: string){
@@ -80,21 +83,6 @@ export class OrganizationListComponent implements OnInit {
                     });
             }
           });
-    }
-
-    private showAddTagForm(
-        isEdit: boolean = false,
-        editId: string = '',
-        name: string = ''
-    ) {
-        let dialogRef = this.dialog.open(AddOrganizationComponent, {
-            disableClose: true,
-            data: { 
-                isEdit: isEdit,
-                editId: editId,
-                name: name
-            }
-        });
     }
 
     private toggleShowLoading(show:boolean) {

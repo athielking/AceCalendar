@@ -2,9 +2,9 @@ import {Component, Inject} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {TdDialogService,TdLoadingService} from '@covalent/core';
-
-import {Organization} from '../../models/admin/organization.model';
-import {OrganizationStore} from '../../stores/organization.store';
+import { OrganizationStore } from '../../../stores/organization.store';
+import { Organization } from '../../../models/admin/organization.model';
+import { SaveOrganizationRequest } from '../../../models/admin/saveOrganizationRequest.Model';
 
 @Component({
     selector: 'ac-add-organization',
@@ -16,8 +16,12 @@ export class AddOrganizationComponent {
     private editId: string;
 
     public name: string;
-    public description: string;
-    public color: string;
+    public email: string;
+    public address: string;
+    public addressLine2: string;
+    public city: string;
+    public state: string;
+    public zip: string;
 
     constructor(
         private organizationStore: OrganizationStore,
@@ -28,7 +32,13 @@ export class AddOrganizationComponent {
     ) { 
         this.isEdit = data.isEdit,
         this.editId = data.editId,
-        this.name = data.name
+        this.name = data.name,
+        this.email = data.email,
+        this.address = data.address,
+        this.addressLine2 = data.addressLine2,
+        this.city = data.city,
+        this.state = data.state,
+        this.zip = data.zip
     }
 
     public onCancelClick() {
@@ -42,12 +52,28 @@ export class AddOrganizationComponent {
             this.addOrganization();
     }
 
+    public stateIsValid() {
+        return /^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/.test(this.state ? this.state.toUpperCase() : "" );
+    }
+
+    public zipIsValid() {
+        return /^[0-9]{5}$/.test(this.zip);
+    }
+
     private addOrganization() {
         this.toggleShowLoading(true);
 
-        var org = new Organization('', this.name);
+        var saveOrganizationRequest = new SaveOrganizationRequest(
+            this.name,
+            this.email,
+            this.address,
+            this.addressLine2,
+            this.city,
+            this.state.toUpperCase(),
+            this.zip
+        );
 
-        this.organizationStore.addOrganization(org).subscribe( result => {
+        this.organizationStore.addOrganization(saveOrganizationRequest).subscribe( result => {
             this.dialogRef.close();
             this.toggleShowLoading(false);
         }, error => {
@@ -62,9 +88,16 @@ export class AddOrganizationComponent {
     private editOrganization() {
         this.toggleShowLoading(true);
 
-        var org = new Organization( this.editId, this.name );
-
-        this.organizationStore.editOrganization(org).subscribe( result => {
+        var saveOrganizationRequest = new SaveOrganizationRequest(
+            this.name,
+            this.email,
+            this.address,
+            this.addressLine2,
+            this.city,
+            this.state.toUpperCase(),
+            this.zip
+        );
+        this.organizationStore.editOrganization(this.editId, saveOrganizationRequest).subscribe( result => {
             this.dialogRef.close();
             this.toggleShowLoading(false);
         }, error => {

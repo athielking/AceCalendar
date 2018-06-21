@@ -5,11 +5,11 @@
 <mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
     <div *tdLoading="'showOrganizationsLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
     
-        <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true" (searchDebounce)="filterTags($event)"></td-search-box>
+        <td-search-box class="push-left push-right" placeholder="search" [alwaysVisible]="true" (searchDebounce)="filterOrganizations($event)"></td-search-box>
         <mat-divider></mat-divider>
         <mat-list class="will-load">
 
-            <td-message *ngIf="showErrorMessage" label="Error Getting Tags" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+            <td-message *ngIf="showErrorMessage" label="Error Getting Organizations" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
             
             <div class="md-padding" *ngIf="(filteredOrganizations | async)?.length === 0" layout="row" layout-align="center center">
                 <h3>No Organizations to display.</h3>
@@ -26,7 +26,7 @@
                         </button>
                         <mat-menu x-position="before" #menu="matMenu">
                             <button mat-menu-item [routerLink]="['/organization', organization.id]">
-                                <mat-icon>edit</mat-icon> Edit
+                                <mat-icon>public</mat-icon> View
                             </button>
                            
                             <button mat-menu-item (click)="deleteOrganization(organization.id)">
@@ -41,7 +41,7 @@
     </div>
 </mat-card>
 
-<a mat-fab color="accent" matTooltip="Add new Organization" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
+<a mat-fab color="accent" matTooltip="Add New Organization" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
     (click)="addOrganization()">
     <mat-icon>add</mat-icon>
 </a>

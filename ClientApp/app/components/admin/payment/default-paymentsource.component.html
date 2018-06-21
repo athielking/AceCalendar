@@ -1,0 +1,55 @@
+<mat-card>
+
+    <td-message *ngIf="showErrorMessage" label="Error Getting Default Payment Method" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+    
+    <div *ngIf="!showErrorMessage"> 
+
+        <mat-card-title>
+            
+            <div layout="row">
+                <span>Default Payment Method</span>
+            </div>
+
+        </mat-card-title>
+
+        <mat-divider></mat-divider>
+
+        <div *tdLoading="'defaultPaymentSourceShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+        
+            <mat-card-content>
+                <div *ngIf="defaultPaymentSource">
+              
+                    <mat-list>
+                        <mat-list-item >
+                            <mat-icon color="accent" style="font-size: 40px" matListAvatar>credit_card</mat-icon>
+                            <h1 matLine>{{defaultPaymentSource.brand}} {{defaultPaymentSource.last4}}</h1>
+                            <p matLine>Expires: {{defaultPaymentSource.expirationMonth}}/{{defaultPaymentSource.expirationYear}}</p>
+                            <span flex></span>
+                            <span>
+                                <button mat-icon-button (click)="deleteDefaultPaymentSource()">
+                                    <mat-icon matTooltip="Delete">delete</mat-icon> 
+                                </button>
+                            </span>
+                        </mat-list-item>
+
+                    </mat-list>
+
+                    <div layout="row" layout-align="start center">
+                        <button mat-button class="text-upper push-top" (click)="addPaymentSource()">Change Payment Method</button>
+                    </div>
+                </div>
+
+                <div *ngIf="!defaultPaymentSource" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                    <mat-icon matListAvatar class="text-super push-bottom">credit_card</mat-icon>
+                    <h2>None Attached</h2>
+                    <h3>There are no payment methods attached to your Organization</h3>
+                    <button mat-raised-button color="accent" class="text-upper" (click)="addPaymentSource()">Add Payment Method</button>
+                </div>
+
+            </mat-card-content>
+
+        </div>
+
+    </div>
+
+</mat-card>

@@ -57,7 +57,9 @@
                 <mat-select [(value)]="userRole" placeholder="Role">
                     <mat-option value="Readonly">Read Only</mat-option>
                     <mat-option value="User">User</mat-option>
-                    <mat-option value="Admin">Administrator</mat-option>
+                    <mat-option value="Organization Admin">Organization Administrator</mat-option>
+                    <mat-option *ngIf="authService.isAdmin()" value="Admin">Site Administrator</mat-option>
+                                        
                 </mat-select>
             </mat-form-field> 
 

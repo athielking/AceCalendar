@@ -8,4 +8,14 @@ export class User{
                 public role: string,
                 public password: string){
                 }
+
+    public isEditingUser(): boolean{
+        return this.role == Roles.Admin || this.role == Roles.User;
+    }
+}
+
+export enum Roles{
+    User = 'User',
+    Readonly = "Readonly",
+    Admin = "Admin"
 }

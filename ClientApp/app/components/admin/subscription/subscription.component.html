@@ -1,0 +1,43 @@
+
+<div *ngIf="subscription && subscription.isActive" layout="column">
+    <span style="font-size: 16px; font-weight:700; margin-bottom: 16px">{{subscription.productName}}</span>
+    <div class="label-and-value">
+        <span class="label">Status:</span>
+        <span class="value">{{subscription.status}}</span>
+    </div>
+    <div *ngIf="!subscription.cancelAtPeriodEnd" class="label-and-value">
+        <span class="label">Next Bill:</span>
+        <span class="value">{{subscription.periodEndDate | date: 'MM/dd/yyyy'}}</span>
+    </div>
+    <div *ngIf="subscription.cancelAtPeriodEnd" class="label-and-value">
+        <span class="label">Subscription Cancelled:</span>
+        <span class="value">Active through {{subscription.periodEndDate | date: 'MM/dd/yyyy'}}</span>
+    </div>
+    <div class="label-and-value">
+        <span class="label">Licensed Users:</span>
+        <span class="value">{{subscription.licenseQuantity}}</span>
+    </div>
+    <div class="label-and-value">
+        <span class="label">Per License Amount:</span>
+        <span class="value">
+            {{subscription.planAmount / 100 | currency}} every {{subscription.billingScheme}}</span>
+    </div>
+    <div *ngIf="!subscription.cancelAtPeriodEnd" class="total label-and-value">
+        <span class="label">Total Cost:</span>
+        <span class="value">
+            {{subscription.planAmount *subscription.licenseQuantity / 100 | currency}} every {{subscription.billingScheme}}</span>
+    </div>
+</div>
+
+<div *ngIf="!subscription" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+    <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+    <h2>No Subscription</h2>
+    <h3>No Subscriptions Found</h3>
+    <button mat-raised-button color="accent" class="text-upper" (click)="setupSubscription()">Setup Subscription</button>
+</div>
+
+<div *ngIf="subscription && !subscription.isActive" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+    <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+    <h2>Subscription Not Active</h2>
+    <button mat-raised-button color="accent" class="text-upper" (click)="setupSubscription()">Reactivate Subscription</button>
+</div>

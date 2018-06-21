@@ -38,3 +38,24 @@
 .filtered {
     display: none !important;
 }
+
+.label-and-value{
+    display: flex;
+    flex-direction: row;
+
+    .label{
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .value{
+        margin-left: 4px;
+    }
+}
+
+.mat-input-element:disabled {
+    color: rgba(0, 0, 0, 0.70) !important;
+}
+
+.mat-card-title {
+    overflow: hidden;
+}

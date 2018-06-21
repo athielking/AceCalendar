@@ -1,0 +1,61 @@
+<h1 style="margin-bottom: 0px;" class="mat-dialog-title">Activate Subscription</h1>
+
+<td-message *ngIf="showProductPlanErrorMessage" label="Error Getting Product Plans" sublabel="{{productPlanErrorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+
+<td-message *ngIf="showDefaultPaymentSourceErrorMessage" label="Error Getting Default Payment Method" sublabel="{{defaultPaymentSourceErrorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+
+<div *tdLoading="'activateSubscriptionShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <!--  
+        //If there are days left in the trial give a message that they will not be billed until the end of their trial.
+        //Give a different message if there are not any days left.
+
+        //Have them select their payment source. 
+
+        //If there is no default payment source only give them the option to set it
+        
+        //If there is a default payment source let them pick it or change it
+    -->
+	<form #subscriptionForm="ngForm" style="width: 350px">
+		<div class="mat-dialog-content form-container">
+            
+            <mat-radio-group class="subscription-radio-group" name="subscription-group" [(ngModel)]="selectedPlanId" required>
+                <mat-radio-button style="margin-bottom: 20px; margin-top: 20px;" class="subscription-radio" *ngFor="let productPlan of productPlans" [value]="productPlan.id">
+                    <strong>{{productPlan.name}}</strong> - {{productPlan.amount / 100 | currency}} every {{productPlan.billingScheme}}
+                </mat-radio-button>
+            </mat-radio-group>
+
+            <mat-form-field *ngIf="defaultPaymentSource"> 
+                <mat-select [compareWith]="comparePaymentSources" [(ngModel)]="subscriptionPaymentSource" placeholder="Payment Method" name="subscriptionPaymentSource">
+                    <mat-option value="0">{{defaultPaymentSource.brand}} {{defaultPaymentSource.last4}}</mat-option>
+                    <mat-option value="1">Other Payment Method</mat-option>                                        
+                </mat-select>
+            </mat-form-field> 
+
+            <div [hidden]="subscriptionPaymentSource != 1" >
+                <mat-form-field style="width: 100%" >
+                    <input matInput placeholder="Card Information" Name type="text" name="cardInformation" disabled>    
+                    <div id="card-info" #cardInfo style="margin-top: 8px"></div>
+                    <mat-hint align="start">
+                        <span [hidden]="!showErrorMessage" class="tc-red-600">{{errorMessage}}</span>
+                    </mat-hint>
+                </mat-form-field> 
+            </div>
+
+            <p *ngIf="currentSubscriptionDetails" class="md-caption">There are {{currentSubscriptionDetails.daysLeft}} days left on the trial subscription. Your payment method will not be charged until the trial period is up.</p>
+
+            <p class="md-caption">Subscriptions can be canceled at any time.</p>
+		</div>
+
+		<div class="mat-dialog-actions">
+			<span flex></span>
+			<button mat-button 
+				(click)="onCancelClick()">Cancel</button>
+			
+            <button mat-button 
+                [disabled]="!subscriptionForm.form.valid"
+				(click)="onOkClick()">Ok</button>
+		</div>
+	</form>
+
+</div>

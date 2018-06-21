@@ -1,0 +1,73 @@
+<h1 class="mat-dialog-title">{{isEdit ? 'Edit' : 'Add'}} Organization</h1>
+
+<div *tdLoading="'addOrganizationShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <form #addOrganizationForm="ngForm">   
+        <div class="mat-dialog-content form-container">         
+
+            <mat-form-field *ngIf="!isEdit">
+                <input matInput #nameControl="ngModel" placeholder="Organization Name" type="text" maxlength="200" name="name" [(ngModel)]="name" required>
+                <mat-error align="start">
+                    <span [hidden]="!nameControl.errors?.required || nameControl.pristine" class="tc-red-600">Name is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="isEdit">
+                <input matInput #nameControlReadonly="ngModel" placeholder=Organization Name type="text" name="nameReadonly" [(ngModel)]="name" disabled>    
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #emailControl="ngModel" placeholder="Email" type="text" maxlength="200" name="email" [(ngModel)]="email" required email>
+                <mat-error align="start">
+                    <span [hidden]="!emailControl.errors?.email || emailControl.errors?.required" class="tc-red-600">Please Enter a Valid Email Address</span>
+                    <span [hidden]="!emailControl.errors?.required || emailControl.pristine" class="tc-red-600">Email is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #addressControl="ngModel" placeholder="Address" type="text" maxlength="200" name="address" [(ngModel)]="address" required>
+                <mat-error align="start">
+                    <span [hidden]="!addressControl.errors?.required || addressControl.pristine" class="tc-red-600">Address is Required</span>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput #addressLine2Control="ngModel" placeholder="Address Line 2" type="text" maxlength="200" name="addressLine2" [(ngModel)]="addressLine2">
+            </mat-form-field>
+
+            <div>
+                <mat-form-field>
+                    <input matInput #cityControl="ngModel" placeholder="City" type="text" maxlength="50" name="city" [(ngModel)]="city" required>
+                    <mat-error align="start">
+                        <span [hidden]="!cityControl.errors?.required || cityControl.pristine" class="tc-red-600">City is Required</span>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput #stateControl="ngModel" placeholder="State" type="text" maxlength="2" name="state" [(ngModel)]="state" style="text-transform:uppercase" required>
+                    <mat-hint align="start">
+                        <span [hidden]="stateIsValid() || !stateControl.touched" class="tc-red-600">Please Enter a Valid State</span>                  
+                    </mat-hint>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput #zipControl="ngModel" placeholder="Zip" type="text" maxlength="5" name="zip" [(ngModel)]="zip" required>
+                    <mat-hint align="start">
+                        <span [hidden]="zipIsValid() || !zipControl.touched" class="tc-red-600">Please Enter a Valid Zip</span>                  
+                    </mat-hint>
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <div class="mat-dialog-actions">
+            <span flex></span>
+            <button mat-button 
+                (click)="onCancelClick()">Cancel</button>
+            
+            <button mat-button 
+                [disabled]="!addOrganizationForm.form.valid || !zipIsValid() || !stateIsValid()" 
+                (click)="onOkClick()">Ok</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,54 @@
+<div *tdLoading="'organizationDetailHeaderShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+    
+        <mat-card>
+            <td-message *ngIf="showErrorMessage" label="Error Getting Organization" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+            
+            <div *ngIf="!showErrorMessage">          
+                <mat-card-title>
+                    <div style="display: flex; flex-direction:row">
+                        
+                        <div style="display: flex; flex-direction:column" flex>
+                            <span>{{organizationName}}</span>
+                        </div>
+        
+                        <span flex></span>
+                        <span>
+                            <button mat-icon-button [mat-menu-trigger-for]="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu x-position="before" #menu="matMenu">
+                                <button mat-menu-item (click)="editOrganization()">
+                                    <mat-icon>edit</mat-icon> Edit
+                                </button>
+                            </mat-menu>
+                        </span>
+                    </div>
+                </mat-card-title>
+                
+                <mat-divider></mat-divider>
+        
+                <mat-card-content>
+                    <div class="mat-dialog-content form-container">
+    
+                        <mat-form-field>
+                            <input matInput #emailControl="ngModel" placeholder="Email" type="text" name="email" [(ngModel)]="email" disabled>    
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput #addressControl="ngModel" placeholder="Address" type="text" name="address" [(ngModel)]="addressLine1" disabled>    
+                        </mat-form-field>
+    
+                        <mat-form-field *ngIf="addressLine2">
+                            <input matInput #addressLine2Control="ngModel" placeholder="Address Line 2" type="text" name="addressLine2" [(ngModel)]="addressLine2" disabled>
+                        </mat-form-field>
+
+                        <mat-form-field>
+                            <input matInput #cityStateZipControl="ngModel" placeholder="City, State, Zip" type="text" name="cityStateZip" [(ngModel)]="cityStateZip" disabled>    
+                        </mat-form-field>
+
+                    </div>           
+                </mat-card-content>
+            </div>
+
+        </mat-card>
+    </div>

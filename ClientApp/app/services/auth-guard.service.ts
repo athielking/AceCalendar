@@ -34,3 +34,19 @@ export class AuthGuardAdmin implements CanActivate{
         }
     }
 }
+
+@Injectable()
+export class AuthGuardOrganizationAdmin implements CanActivate{
+    
+    constructor(private authService: AuthService, private router: Router){
+    }
+
+    public canActivate(): boolean {
+        if( this.authService.isOrganizationAdmin())
+            return true;
+        else{
+            this.router.navigate(['calendar-readonly']);
+            return false;
+        }
+    }
+}

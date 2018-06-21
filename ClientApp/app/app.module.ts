@@ -61,11 +61,11 @@ import { TagListComponent } from "./components/tag/tag-list.component";
 import { SelectJobTagComponent } from "./components/tag/selectJobTag.component";
 import { SelectWorkerTagComponent } from "./components/tag/selectWorkerTag.component";
 
-
-import { OrganizationListComponent } from './components/admin/organization-list.component';
-import { OrganizationDetailComponent } from './components/admin/organization-detail.component';
-import { AddOrganizationComponent } from './components/admin/add-organization.component';
-import { AddUserComponent} from './components/admin/add-user.component';
+import { OrganizationListComponent } from './components/admin/organization/organization-list.component';
+import { OrganizationDetailComponent } from './components/admin/organization/organization-detail.component';
+import { AddOrganizationComponent } from './components/admin/organization/add-organization.component';
+import { OrganizationDetailHeaderComponent } from './components/admin/organization/organization-detail-header.component'; 
+//import { AddUserComponent} from './components/admin/add-user.component';
 import { LoginComponent } from "./components/login/login.component";
 import { ChangePasswordComponent } from './components/login/change-password.component';
 import { JwtHelper } from './services/jwtHelper.service';
@@ -77,6 +77,9 @@ import { AuthService } from "./services/auth.service";
 import { TagService } from "./services/tag.service";
 import { OrganizationService } from './services/organization.service';
 import { UserService } from './services/user.service';
+import { DefaultPaymentSourceComponent } from './components/admin/payment/default-paymentsource.component';
+import { AddPaymentSourceComponent } from './components/admin/payment/add-paymentsource.component';
+import { ActivateSubscriptionComponent } from './components/admin/subscription/activate-subscription.component';
 
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
@@ -87,10 +90,15 @@ import { WorkerJobsStore } from './stores/workerJobs.store';
 import { OrganizationStore } from './stores/organization.store';
 
 import { AuthInterceptor } from './tools/authInterceptor';
-import { AuthGuardEditor, AuthGuardAdmin } from "./services/auth-guard.service";
+import { AuthGuardEditor, AuthGuardAdmin, AuthGuardOrganizationAdmin } from "./services/auth-guard.service";
 import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
 import { TagFilterComponent } from "./components/tag/tag-filter.component";
 import { CalendarFilterComponent } from './components/calendar/common/calendar-filter.component';
+import { SubscriptionComponent } from './components/admin/subscription/subscription.component';
+import { OrganizationSubscriptionComponent } from './components/admin/subscription/organization-subscription.component';''
+
+// import { SetupSubscriptionComponent } from './components/admin/subscription/setup-subscription.component';
+import { SubscriptionGuard } from "./services/subscription-guard.service";
 
 
 @NgModule({
@@ -148,14 +156,19 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
     OrganizationListComponent,
     OrganizationDetailComponent,
     AddOrganizationComponent,
-    AddUserComponent,
-
+    //AddUserComponent,
+    OrganizationDetailHeaderComponent,
+    OrganizationSubscriptionComponent,
+    DefaultPaymentSourceComponent,
+    AddPaymentSourceComponent,
+    ActivateSubscriptionComponent,
     DayViewComponent,
 
     //Auth
     LoginComponent,
     ChangePasswordComponent,
-    CalendarFilterComponent
+    CalendarFilterComponent,
+    SubscriptionComponent
   ],
   entryComponents: [
     WeekViewPrintComponent,
@@ -173,8 +186,10 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
     SelectJobTagComponent,
     SelectWorkerTagComponent,
     AddOrganizationComponent,
-    AddUserComponent,
-    CalendarFilterComponent
+    //AddUserComponent,
+    CalendarFilterComponent,
+    AddPaymentSourceComponent,
+    ActivateSubscriptionComponent
   ],
   imports: [
     HttpClientModule,
@@ -195,14 +210,14 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
     CovalentMenuModule, CovalentDataTableModule, CovalentMessageModule, CovalentChipsModule,
     RouterModule.forRoot([
       { path: '', redirectTo: 'calendar', pathMatch: 'full'},
-      { path: 'calendar', component: CalendarComponent, canActivate: [AuthGuardEditor] },
+      { path: 'calendar', component: CalendarComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] },
       { path: 'calendar-readonly', component: CalendarReadonlyComponent },      
-      { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor] }, 
-      { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor]},    
-      { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor] }, 
-      { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor] },
+      { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] }, 
+      { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor, SubscriptionGuard]},    
+      { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] }, 
+      { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] },
       { path: 'organization', component: OrganizationListComponent, canActivate: [AuthGuardAdmin] },
-      { path: 'organization/:id', component: OrganizationDetailComponent, canActivate: [AuthGuardAdmin] },
+      { path: 'organization/:id', component: OrganizationDetailComponent, canActivate: [AuthGuardOrganizationAdmin] },
       { path: "**", redirectTo: 'calendar' }
     ])
   ],
@@ -218,7 +233,9 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
     UserService,
     JwtHelper,
     AuthGuardEditor,
+    AuthGuardOrganizationAdmin,
     AuthGuardAdmin,
+    SubscriptionGuard,
     //Stores
     OrganizationStore,
     CalendarStore,

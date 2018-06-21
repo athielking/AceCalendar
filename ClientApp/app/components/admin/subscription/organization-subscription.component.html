@@ -1,0 +1,85 @@
+<mat-card>
+    
+    <td-message *ngIf="showErrorMessage" label="Error Getting  Subscription" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+
+    <div *ngIf="!showErrorMessage"> 
+
+        <mat-card-title>
+            
+            <div layout="row">
+                <span>Subscription Information</span>
+            </div>
+
+        </mat-card-title>
+
+        <mat-divider></mat-divider>
+
+        <div *tdLoading="'organizationSubscriptionShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+        
+            <mat-card-content style="overflow:hidden;white-space: nowrap;">
+                <div *ngIf="subscriptionDetails" layout="column">
+
+                    <div layout="row" layout-align="start none" class="tc-grey-700 mat-typography">
+
+                        <mat-icon style="height:200px;width:200px;" hide-xs hide-sm hide-md svgIcon="assets:AceLogoDark"></mat-icon>
+                        <mat-icon style="height:120px;width:100px;margin-right:5px" hide-xs hide-gt-md svgIcon="assets:AceLogoDark"></mat-icon>
+                        
+                        <div layout="column" layout-align="center start">
+                            <h1 style="margin-bottom: 0px">{{subscriptionDetails.productName}}</h1>
+
+                            <h3 *ngIf="subscriptionDetails.isTrial" style="margin-bottom: 0px">Status: <span class="tc-light-green-600">Trialing</span><span *ngIf="!subscriptionDetails.cancelAtPeriodEnd" class="tc-light-green-600">*</span></h3>
+                            <h3 *ngIf="!subscriptionDetails.isActive && !subscriptionDetails.isTrial" style="margin-bottom: 0px">Status: <span class="tc-red-600">Inactive</span></h3>
+                            <h3 *ngIf="subscriptionDetails.isActive" style="margin-bottom: 0px">Status: <span class="tc-light-green-600">Active</span><span *ngIf="subscriptionDetails.cancelAtPeriodEnd" class="tc-light-green-600">*</span></h3>
+                            
+                            <p *ngIf="!subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isTrial" class="md-caption">*Your subscription will begin immediately following the trial period.</p>
+                            <p *ngIf="subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isActive" class="md-caption">*Your subscription will end after the current billing period.</p>                            
+
+                            <h3 *ngIf="subscriptionDetails.isTrial" style="margin-bottom: 0px">Days Left of Trial: {{subscriptionDetails.daysLeft}}</h3>
+
+                            <h3 *ngIf="subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isActive" style="margin-bottom: 0px">Days Left of Subscription: {{subscriptionDetails.daysLeft}}</h3>
+                            <h3 *ngIf="subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isActive" style="margin-bottom: 0px">End of Subscription: {{subscriptionDetails.currentPeriodEnd | date: 'MM/dd/yyyy'}}</h3>
+
+                            <h3 *ngIf="!subscriptionDetails.cancelAtPeriodEnd" style="margin-bottom: 0px">Next Bill: {{subscriptionDetails.currentPeriodEnd | date: 'MM/dd/yyyy'}}</h3>
+
+                            <h3 *ngIf="!subscriptionDetails.cancelAtPeriodEnd" style="margin-bottom: 0px">Payment Method: <span *ngIf="subscriptionDetails.hasDefaultPaymentMethod">{{subscriptionDetails.defaultPaymentMethod}}</span><span *ngIf="!subscriptionDetails.hasDefaultPaymentMethod" class="tc-red-600">None</span></h3>                            
+
+                            <button *ngIf="subscriptionDetails.cancelAtPeriodEnd" style="margin-top: 6px" mat-raised-button color="accent" class="text-upper" (click)="activateSubscription()">Activate Subscription</button>                            
+                            
+                            <button *ngIf="!subscriptionDetails.cancelAtPeriodEnd" style="margin-top: 6px; margin-left: -16px;" mat-button class="text-upper push-top" (click)="cancelSubscription()">Cancel Subscription</button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="!subscriptionDetails && hadTrial" layout="column">
+
+                        <div layout="row" layout-align="start none" class="tc-grey-700 mat-typography">
+    
+                            <mat-icon style="height:200px;width:200px;" hide-xs hide-sm hide-md svgIcon="assets:AceLogoDark"></mat-icon>
+                            <mat-icon style="height:120px;width:100px;margin-right:5px" hide-xs hide-gt-md svgIcon="assets:AceLogoDark"></mat-icon>
+                            
+                            <div layout="column" layout-align="center start">
+                                <h1 style="margin-bottom: 0px">Ace Calendar</h1>
+    
+                                <h3 style="margin-bottom: 0px">Status: <span class="tc-red-600">Inactive</span></h3>
+
+                                <button style="margin-top: 6px" mat-raised-button color="accent" class="text-upper" (click)="activateSubscription()">Create Subscription</button>                    
+    
+                            </div>
+                        </div>
+                    </div>
+
+                <div *ngIf="!subscriptionDetails && !hadTrial" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                    <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+                    <h2>No Subscription</h2>
+                    <h3>No Subscriptions Found</h3>
+                    <button mat-raised-button color="accent" class="text-upper" (click)="startTrial()">Start Free Trial</button>
+                </div>
+
+            </mat-card-content>
+
+        </div>
+
+    </div> 
+
+</mat-card>

@@ -1,0 +1,164 @@
+<mat-toolbar>
+    <span>Manage Organization</span>
+</mat-toolbar>
+
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    <div flex-gt-sm="100">
+        <ac-organization-detail-header></ac-organization-detail-header> 
+    </div>
+</div>
+
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    
+    <div flex-gt-sm="50">
+        <ac-organization-subscription></ac-organization-subscription>
+    </div>
+
+    <div flex-gt-sm="50">    
+        <ac-default-paymentsource></ac-default-paymentsource>
+    </div>
+    
+</div> 
+    
+
+<!-- <div *tdLoading="'organizationDetailShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+
+    <div class="organization-grid"> -->
+        <!--Subscription Info -->
+        <!-- <mat-card>
+            <mat-card-title>
+                <div layout="row">
+                    <span>Subscription Information</span>
+                    <span flex></span>
+                    <button *ngIf="organization.subscription" mat-icon-button  [mat-menu-trigger-for]="subMenu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu x-position="before" #subMenu="matMenu">
+                        <button mat-menu-item (click)="editSubscription()">
+                            <mat-icon>edit</mat-icon> Edit Subscription
+                        </button>
+                        <button *ngIf="organization.subscription && !organization.subscription.cancelAtPeriodEnd" 
+                            mat-menu-item (click)="cancelSubscription()">
+                            <mat-icon>delete</mat-icon> Cancel Subscription
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <ac-subscription [subscription]="organization.subscription" (setupSubscriptionClicked)="setupSubscription()"></ac-subscription>
+            </mat-card-content>
+        </mat-card> -->
+
+        <!--Payment Info -->
+        <!-- <mat-card>
+            <mat-card-title>
+                <div layout="row">
+                    <span>Payment Information</span>
+                    <span flex></span>
+                    <button mat-icon-button matTooltip="Add Payment Source" (click)="addPaymentSource()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <mat-list class="will-load">
+
+                    <td-message *ngIf="showErrorMessage" label="Error Getting Organization" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+
+                    <div *ngIf="(paymentSources)?.length === 0" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                        <mat-icon matListAvatar class="text-super push-bottom">credit_card</mat-icon>
+                        <h2>No Payment Sources</h2>
+                        <button mat-raised-button color="accent" class="text-upper" (click)="addPaymentSource()">Add Payment Source</button>
+                    </div>
+
+                    <ng-template let-source let-last="last" ngFor [ngForOf]="paymentSources">
+                        <mat-list-item>
+                            <mat-icon *ngIf="source.isDefault" matTooltip="Default Payment Method" color="accent" matListAvatar>{{source.icon}}</mat-icon>
+                            <mat-icon *ngIf="!source.isDefault" matListAvatar>{{source.icon}}</mat-icon>
+                            <h3 matLine>{{ source.display }}</h3>
+                            <p matLine>Ending In: {{source.last4}}</p>
+                            <p *ngIf="source.exp_month" matLine>Expires: {{source.exp_month}}/{{source.exp_year}}</p>
+                            <span flex></span>
+                            <span>
+                                <button mat-icon-button [mat-menu-trigger-for]="menu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu x-position="before" #menu="matMenu">
+                                    <button *ngIf="!source.isDefault" mat-menu-item (click)="editPaymentSource(source)">
+                                        <mat-icon>edit</mat-icon> Make Default
+                                    </button>
+
+                                    <button mat-menu-item (click)="deletePaymentSource(source)">
+                                        <mat-icon>delete</mat-icon> Delete
+                                    </button>
+                                </mat-menu>
+                            </span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="!last" matInset></mat-divider>
+                    </ng-template>
+                </mat-list>
+            </mat-card-content>
+        </mat-card> -->
+
+        <!--Users -->
+        <!-- <mat-card>
+            <mat-card-title>
+                <div style="display: flex; flex-direction:row">
+                    <span>Users</span>
+                    <span flex></span>
+                    <span *ngIf="organization.subscription">
+                        {{organization.getEditingUserCount()}} of {{organization.subscription.licenseQuantity}} Licenses Used
+                    </span>
+                </div>
+            </mat-card-title>
+
+            <mat-divider></mat-divider>
+
+            <mat-card-content>
+                <mat-list class="will-load">
+
+                    <td-message *ngIf="showErrorMessage" label="Error Getting Tags" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+
+                    <div class="md-padding" *ngIf="(userData)?.length === 0" layout="row" layout-align="center center">
+                        <h3>No users to display.</h3>
+                    </div>
+
+                    <ng-template let-user let-last="last" ngFor [ngForOf]="userData">
+                        <mat-list-item>
+                            <mat-icon matListAvatar>person</mat-icon>
+                            <h3 matLine>{{ user.userName }}</h3>
+                            <span style="text-align: right">{{ user.role }}</span>
+                            <p matLine>{{user.firstName}} {{user.lastName}}</p>
+                            <span flex></span>
+                            <span>
+                                <button mat-icon-button [mat-menu-trigger-for]="menu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu x-position="before" #menu="matMenu">
+                                    <button mat-menu-item (click)="editUser(user)">
+                                        <mat-icon>edit</mat-icon> Edit
+                                    </button>
+
+                                    <button mat-menu-item (click)="deleteUser(user)">
+                                        <mat-icon>delete</mat-icon> Delete
+                                    </button>
+                                </mat-menu>
+                            </span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="!last" matInset></mat-divider>
+                    </ng-template>
+                </mat-list>
+                <div layout="row">
+                    <span flex></span>
+                    <a mat-fab color="accent" matTooltip="Add new User" matTooltipPosition="before" (click)="addUser()">
+                        <mat-icon>add</mat-icon>
+                    </a>
+                </div>
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+
+</div> -->

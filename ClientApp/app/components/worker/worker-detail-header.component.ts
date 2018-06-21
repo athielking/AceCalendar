@@ -55,6 +55,7 @@ export class WorkerDetailHeaderComponent implements OnInit{
             this.toggleShowLoading(false);
         });
     }
+    
     public addWorkerTags(){
 
         var selectTagsRef = this.dialog.open(SelectWorkerTagComponent, {

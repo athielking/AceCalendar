@@ -95,12 +95,27 @@ export class AuthService {
 
     public isEditor(){
         let token = this.jwtHelper.decode(this.getToken());
-        return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User';
+        return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User' ||  token[IdentityClaimTypes.Role] == 'Organization Admin';
     }
 
     public isAdmin(){
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin';
+    }
+
+    public isOrganizationAdmin(){
+        let token = this.jwtHelper.decode(this.getToken());
+        return token[IdentityClaimTypes.Role] == 'Organization Admin' || token[IdentityClaimTypes.Role] == 'Admin';
+    }
+
+    public getOrganizationId(){
+        let token = this.jwtHelper.decode(this.getToken());
+        return token["OrganizationId"];
+    }
+
+    public isSubscriptionActive(){
+        let token = this.jwtHelper.decode(this.getToken());
+        return token["SubscriptionActive"] == "True";
     }
 
     private clearToken(): void {

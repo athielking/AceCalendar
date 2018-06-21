@@ -1,0 +1,35 @@
+<h1 class="mat-dialog-title">Setup Subscription</h1>
+
+	<form #subscriptionForm="ngForm" style="width: 350px">
+		<div class="mat-dialog-content form-container">
+      
+			<mat-radio-group class="subscription-radio-group" name="subscription-group" [(ngModel)]="selectedPlanId" (change)="subscriptionChanged($event)" required>
+        <mat-radio-button class="subscription-radio" *ngFor="let plan of organizationStore.productPlans | async" [value]="plan.id">
+            <strong>{{plan.name}}</strong> - {{plan.amount / 100 | currency}} every {{plan.billingScheme}}
+        </mat-radio-button>
+      </mat-radio-group>
+    
+      <mat-form-field style="margin-top: 8px"> 
+          <input matInput #licenseControl="ngModel" placeholder="Number of Users" type="number" min="1" name="licenseQuantity" [(ngModel)]="licenseQuantity" required>
+          <mat-hint align="start">
+              <span [hidden]="!licenseControl.errors?.required || licenseControl.pristine" class="tc-red-600">Required</span>
+          </mat-hint>
+      </mat-form-field>
+
+      <div *ngIf="selectedPlan" class="total label-and-value">
+          <span class="label">Total Subscription Cost:</span>
+          <span class="value">
+              {{selectedPlan.amount * licenseQuantity / 100 | currency}} every {{selectedPlan.billingScheme}}</span>
+      </div>
+		</div>
+
+		<div class="mat-dialog-actions">
+			<span flex></span>
+			<button mat-button 
+				(click)="onCancelClick()">Cancel</button>
+			
+      <button mat-button
+        [disabled]="!subscriptionForm.form.valid"   
+				(click)="onOkClick()">Ok</button>
+		</div>
+	</form>
