@@ -76,7 +76,10 @@ export class DayView{
 
         let jobTo = this.jobs.find( j => j.id === calendarJob.id );
         if( !jobTo )
+        {
+            console.log("Failed to add worker.  Job with id " + calendarJob.id + " not found");
             return;
+        }
 
         let removed: Worker;
         if( this.workerIsAvailable(workerId)){
@@ -87,6 +90,10 @@ export class DayView{
         }
         else{
             var jobFrom = this.findJobForWorker(workerId);
+            
+            if(!jobFrom)
+                console.log("Failed to find Job Moving From for worker " + workerId );
+
             removed = this._removeWorker(workerId, jobFrom.workers);
         }
 
@@ -120,7 +127,10 @@ export class DayView{
         var index = removeFrom.findIndex(w => w.id === workerId);
 
         if(index == -1)
+        {
+            console.log("Failed to remove worker " + workerId + " from collection");
             return;
+        }
 
         return removeFrom.splice(index, 1)[0]
     }

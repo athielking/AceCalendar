@@ -44,7 +44,6 @@ export class AuthService {
                     this.setToken( result["token"] );
                     this.setTokenExpiration( result["expiration"] );
                     this.setLoggedInUser( result["user"])
-
                     onSuccess();               
                 },
                 error => {
@@ -79,7 +78,6 @@ export class AuthService {
                     this.clearToken();
                     this.clearTokenExpiration();
                     this.clearLoggedInUser();
-                    
                     onSuccess();                 
                 },
                 error => {
@@ -152,5 +150,5 @@ export class AuthService {
 
     private setLoggedInUser(token: string): void {
         localStorage.setItem(LOGGED_IN_USER, token);
-    }
+    }  
 }

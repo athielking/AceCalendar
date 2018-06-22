@@ -16,6 +16,7 @@ import { JobService } from '../services/job.service';
 import { StorageService } from '../services/storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { TagFilter } from '../models/shared/filter.model';
+import { SignalrService } from '../services/signalr.service';
 
 @Injectable()
 export class CalendarStore {
@@ -45,7 +46,8 @@ export class CalendarStore {
     constructor(
         private calendarService: CalendarService,
         private jobService: JobService,
-        private storageService: StorageService
+        private storageService: StorageService,
+        private signalRService: SignalrService,
     ) {
 
         if(this.storageService.hasItem(StorageKeys.jobFilter))
@@ -86,6 +88,8 @@ export class CalendarStore {
 
             return data;
         });
+
+        this.signalRService.dataUpdated.subscribe( value => this.handleServerDataUpdated(value));
 
         var start = dateFns.startOfWeek( dateFns.startOfMonth( this._lastViewDate ));
         var weekBeforeStart = dateFns.subWeeks( dateFns.startOfWeek(this._lastViewDate), 1);
@@ -515,5 +519,26 @@ export class CalendarStore {
         }
 
         this._dayViews.next(dayViews);
+    }
+
+    private handleServerDataUpdated(dayViews: DayView[]){
+
+        if(!dayViews)
+            return;
+            
+        var cached = this._dayViews.getValue();
+
+        dayViews.forEach( dv => {
+            let cIndex = cached.findIndex( c => dateTools.equal(c.calendarDay.date, dv.calendarDay.date));
+            if(cIndex == -1)
+                return;
+
+            dv.applyJobFilter(this.jobFilter);
+            dv.applyWorkerFilter(this.workerFilter);
+
+            cached[cIndex] = dv;
+        });
+
+        this._dayViews.next(cached);
     }
 }

@@ -99,6 +99,7 @@ import { OrganizationSubscriptionComponent } from './components/admin/subscripti
 
 // import { SetupSubscriptionComponent } from './components/admin/subscription/setup-subscription.component';
 import { SubscriptionGuard } from "./services/subscription-guard.service";
+import { SignalrService } from "./services/signalr.service";
 
 
 @NgModule({
@@ -236,6 +237,7 @@ import { SubscriptionGuard } from "./services/subscription-guard.service";
     AuthGuardOrganizationAdmin,
     AuthGuardAdmin,
     SubscriptionGuard,
+    SignalrService,
     //Stores
     OrganizationStore,
     CalendarStore,

@@ -23,6 +23,7 @@ import {
 import { AuthService } from "../../services/auth.service";
 import { ChangePasswordComponent } from '../login/change-password.component';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SignalrService } from '../../services/signalr.service';
 
 @Component({
   selector: 'app-root',
@@ -39,6 +40,7 @@ export class AppComponent {
   constructor(
     private authService: AuthService, 
     private dialog: MatDialog,
+    private signalRService: SignalrService,
     private _iconRegistry: MatIconRegistry,
     private _domSanitizer: DomSanitizer
   ) {
@@ -50,6 +52,8 @@ export class AppComponent {
     
     if(window.screen.width <= 576)
       this.isMobile = true;
+
+    this.signalRService.connect();
   }
 
   public toggleMenu(){
