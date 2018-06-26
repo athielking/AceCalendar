@@ -58,8 +58,8 @@ export class JobListComponent {
                 jobNumber: '',
                 jobName: '',
                 notes: '',
-                startDate: this.dayView.calendarDay.date,
-                endDate: null       
+                jobDays: [this.dayView.calendarDay.date],
+                viewDate: this.dayView.calendarDay.date        
             }
         });
     }

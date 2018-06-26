@@ -48,6 +48,7 @@ export abstract class AddJobComponent {
         this.jobDays = data.jobDays ? data.jobDays : [],
         this.selectedTags = data.selectedTags ? data.selectedTags.filter( value => !value.fromJobDay) : [];
         this.jobDayTags = data.selectedTags ? data.selectedTags.filter( value => value.fromJobDay) : [];        
+        this.viewDate = data.viewDate ? data.viewDate : new Date();
     }
 
     public onCancelClick() {

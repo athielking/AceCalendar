@@ -56,7 +56,8 @@ export class WeekCellJobComponent {
 
     public editJob(job: CalendarJob) {
         this.editJobRequested.emit({
-            job: job
+            job: job,
+            date: this.calendarDay.date
         });
     } 
 
@@ -97,7 +98,8 @@ export interface WorkerAddedJobEvent {
 }
 
 export interface EditJobRequestedEvent {
-    job: CalendarJob
+    job: CalendarJob,
+    date: Date
 }
 
 export interface DayJobTagRequestedEvent {

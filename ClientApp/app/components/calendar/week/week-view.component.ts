@@ -170,7 +170,8 @@ export class WeekViewComponent implements OnInit, OnChanges {
                     jobName: event.job.name,
                     notes: event.job.notes,
                     jobDays: result,
-                    selectedTags: event.job.tags     
+                    selectedTags: event.job.tags,
+                    viewDate: event.date
                 }
             });
         }, error => {
