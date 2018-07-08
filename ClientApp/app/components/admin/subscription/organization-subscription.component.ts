@@ -52,7 +52,7 @@ export class OrganizationSubscriptionComponent implements OnInit{
             this.subscriptionDetails = subscriptionDetails;                 
         });
 
-        this.organizationStore.defaultPaymentSource.subscribe(defaultPaymentSource => {         
+        this.organizationStore.defaultPaymentSourceUpdated.subscribe(defaultPaymentSource => {         
             this.getSubscriptionDetails();                
         });
     }

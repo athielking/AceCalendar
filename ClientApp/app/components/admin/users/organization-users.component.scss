@@ -1,0 +1,9 @@
+::ng-deep .mat-select-value{
+    padding-right: 10px;  
+}
+
+::ng-deep .mat-divider[matInset] {
+    width: -webkit-calc(100% - 72px) !important;
+    width:    -moz-calc(100% - 72px) !important;
+    width:         calc(100% - 72px) !important;
+}

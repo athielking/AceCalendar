@@ -289,7 +289,7 @@ export class CalendarStore {
             this.isWeekLoading.next(false);
             this.isMonthLoading.next(false);
             this.isDayLoading.next(false);
-        });
+        }, error => this.handleError(error) );
     }
 
     private getCacheStart(lastViewDate: Date, newViewDate: Date): Date {
@@ -356,7 +356,7 @@ export class CalendarStore {
 
             this._dayViews.next(newCache);
             this._isCacheLoading.next(false);
-        });
+        }, error => this.handleError(error));
     }
 
     public moveWorkerToJob(viewDate: Date, worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
@@ -475,7 +475,7 @@ export class CalendarStore {
 
         this.hasError.next(true)
         if( error.message )
-            this.errorMessage.next( error.message );
+        this.errorMessage.next( error.message );
         else if( error.error && error.error.errorMessage )
             this.errorMessage.next( error.error.errorMessage );
     }

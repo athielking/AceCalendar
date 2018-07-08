@@ -46,7 +46,7 @@ export class WorkerComponent implements OnInit {
     ) {
     } 
     
-    public ngOnInit() {
+    public ngOnInit() { 
         this.filteredWorkers.subscribe( filteredWorkers => {
             this.hasFilteredWorkers = filteredWorkers.length > 0;
         });

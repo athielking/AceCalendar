@@ -5,10 +5,11 @@ import { environment } from '../../environments/environment';
 import { OrganizationService } from '../services/organization.service';
 import { UserService } from '../services/user.service';
 import { Organization } from '../models/admin/organization.model';
-import { User } from '../models/admin/user.model';
 import { PaymentSource, ProductPlan, SetProductPlanRequest, DefaultPaymentSourceInformation, Subscription, SubscriptionDetails } from '../models/admin/stripe.model';
 import { OrganizationDetails } from '../models/admin/organizationDetails.model';
 import { SaveOrganizationRequest } from '../models/admin/saveOrganizationRequest.Model';
+import { UserGridModel } from '../models/admin/userGridModel';
+import { AddUserModel, EditUserModel } from '../models/admin/user.model';
 
 @Injectable()
 export class OrganizationStore{
@@ -19,7 +20,9 @@ export class OrganizationStore{
     private _organizationDetails: BehaviorSubject<OrganizationDetails> = new BehaviorSubject(new OrganizationDetails());
     private _defaultPaymentSource: BehaviorSubject<DefaultPaymentSourceInformation> = new BehaviorSubject(new DefaultPaymentSourceInformation());
     private _subscriptionDetails: BehaviorSubject<SubscriptionDetails> = new BehaviorSubject(new SubscriptionDetails());
-    
+    private _organizationUserData: BehaviorSubject<UserGridModel[]> = new BehaviorSubject([]);
+    private _defaultPaymentSourceUpdated: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
     public errorMessage: string;
 
     public hasError: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -27,13 +30,15 @@ export class OrganizationStore{
     public isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     public readonly organizations : Observable<Organization[]> = this._organizations.asObservable();
-    // public readonly organization: Observable<Organization> = this._organization.asObservable();
     public readonly productPlans: Observable<ProductPlan[]> = this._productPlans.asObservable();
 
     public readonly organizationDetails: Observable<OrganizationDetails> = this._organizationDetails.asObservable();
     public readonly defaultPaymentSource: Observable<DefaultPaymentSourceInformation> = this._defaultPaymentSource.asObservable();
     public readonly subscriptionDetails: Observable<SubscriptionDetails> = this._subscriptionDetails.asObservable();
-         
+    public readonly organizationUsersData: Observable<UserGridModel[]> = this._organizationUserData.asObservable();
+
+    public readonly defaultPaymentSourceUpdated : Observable<boolean> = this._defaultPaymentSourceUpdated.asObservable();
+
     constructor(
         private organizationService: OrganizationService,
         private userService: UserService
@@ -85,7 +90,14 @@ export class OrganizationStore{
     }
 
     public deleteDefaultPaymentSource(organizationId: string){
-        return this.organizationService.deleteDefaultPaymentSource(organizationId);
+        var observable = this.organizationService.deleteDefaultPaymentSource(organizationId);
+        
+        observable.subscribe( () => {
+            this._defaultPaymentSourceUpdated.next(true);
+        }, error => {
+        });
+
+        return observable;
     }
  
     public cancelSubscription(organizationId: string){
@@ -97,11 +109,25 @@ export class OrganizationStore{
     }
 
     public updateDefaultPaymentSource(organizationId: string, sourceToken: any){
-        return this.organizationService.updateDefaultPaymentSource(organizationId, sourceToken);
+        var observable = this.organizationService.updateDefaultPaymentSource(organizationId, sourceToken);
+        
+        observable.subscribe( () => {
+            this._defaultPaymentSourceUpdated.next(true);
+        }, error => {
+        });
+
+        return observable;
     }
 
     public addPaymentSource(organizationId: string, sourceToken: any){
-        return this.organizationService.addCardPaymentSource(organizationId, sourceToken);
+        var observable = this.organizationService.addCardPaymentSource(organizationId, sourceToken);
+        
+        observable.subscribe( () => {
+            this._defaultPaymentSourceUpdated.next(true);
+        }, error => {
+        });
+
+        return observable;
     }
 
     public organizationHadTrial(organizationId: string){
@@ -121,20 +147,6 @@ export class OrganizationStore{
             this.hasError.next(true);
         });
     }
-
-    // public getOrganization(id: string){
-    //     this.isLoading.next(true);
-    //     this.hasError.next(false);
-
-    //     this.organizationService.getOrganization(id).subscribe( result => {
-    //         this._organization.next(result);
-    //         this.isLoading.next(false);
-    //     }, error => {
-    //         this.isLoading.next(false);            
-    //         this.errorMessage = error.error['errorMessage'] ? error.error['errorMessage'] : error.message;          
-    //         this.hasError.next(true);
-    //     });
-    // }
     
     public getOrganizationDetails(organizationId: string){
         var observable = this.organizationService.getOrganizationDetails(organizationId);
@@ -158,58 +170,51 @@ export class OrganizationStore{
         return observable;
     }
 
-    // public addUser(user: User){
-    //     var obs = this.userService.addUser(user);
+    public addUserToOrganization(organizationId: string, user: AddUserModel){
+        var observable = this.userService.addUserToOrganization(organizationId, user);
+        
+        observable.subscribe( () => {
+            this.getOrganizationUsersData(organizationId);
+        }, error => {
+        });
 
-    //     obs.subscribe( response => {
-    //         this.getOrganization(user.organizationId);
-    //     }, error => {});
+        return observable;
+    }
 
-    //     return obs;
-    // }
+    public editUser(organizationId: string, user: EditUserModel){
+        var observable = this.userService.editUser(organizationId, user);
+        
+        observable.subscribe( () => {
+            this.getOrganizationUsersData(organizationId);
+        }, error => {
+        });
 
-    // public editUser(user: User){
-    //     var obs = this.userService.editUser(user);
+        return observable;
+    }
 
-    //     obs.subscribe( response => {
-    //         this.getOrganization(user.organizationId);
-    //     }, error => {});
+    public getOrganizationUsersData(organizationId: string ){
 
-    //     return obs;
-    // }
+        var observable = this.organizationService.getOrganizationUsers(organizationId);
+        
+        observable.subscribe( organizationUserData => {
+            this._organizationUserData.next(organizationUserData);
+        }, error => {
+        });
 
-    // public deleteUser(user: User){
+        return observable;
+    }
 
-    //     var obs = this.userService.deleteUser(user.id);
+    public deleteUser(userId: string){
+        var observable = this.userService.deleteUser(userId);
+        
+        observable.subscribe( () => {
+            var organizationUserData = this._organizationUserData.getValue().filter(user => user.id !== userId);
+            this._organizationUserData.next(organizationUserData);
+        }, error => {
+        });
 
-    //     obs.subscribe( response => {
-    //         this.getOrganization(user.organizationId);
-    //     });
-
-    //     return obs;
-    // }
-
-    // public deleteCardPaymentSource(organization: string, cardId: string){
-    //     var obs = this.organizationService.deleteCardPaymentSource(organization, cardId);
-
-    //     var sub = obs.subscribe( result => {
-    //         this.getOrganization(organization);
-    //     }, error => {
-    //     }, () => {sub.unsubscribe()});
-
-    //     return obs;
-    // }
-
-    // public setDefaultPaymentSource(organizationId: string, cardId: string){
-    //     var obs = this.organizationService.setDefaultPaymentSource( organizationId, cardId);
-
-    //     var sub = obs.subscribe(result => {
-    //         this.getOrganization(organizationId);
-    //     }, error => {
-    //     }, () => {sub.unsubscribe});
-
-    //     return obs;
-    // }
+        return observable;
+    }
 
     public getProductPlans(){
         var observable = this.organizationService.getProductPlans();

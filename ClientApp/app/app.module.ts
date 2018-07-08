@@ -65,7 +65,7 @@ import { OrganizationListComponent } from './components/admin/organization/organ
 import { OrganizationDetailComponent } from './components/admin/organization/organization-detail.component';
 import { AddOrganizationComponent } from './components/admin/organization/add-organization.component';
 import { OrganizationDetailHeaderComponent } from './components/admin/organization/organization-detail-header.component'; 
-//import { AddUserComponent} from './components/admin/add-user.component';
+import { AddUserComponent } from "./components/admin/users/add-user.component";
 import { LoginComponent } from "./components/login/login.component";
 import { ChangePasswordComponent } from './components/login/change-password.component';
 import { JwtHelper } from './services/jwtHelper.service';
@@ -80,6 +80,8 @@ import { UserService } from './services/user.service';
 import { DefaultPaymentSourceComponent } from './components/admin/payment/default-paymentsource.component';
 import { AddPaymentSourceComponent } from './components/admin/payment/add-paymentsource.component';
 import { ActivateSubscriptionComponent } from './components/admin/subscription/activate-subscription.component';
+import { OrganizationSubscriptionComponent } from './components/admin/subscription/organization-subscription.component';
+import { OrganizationUsersComponent } from './components/admin/users/organization-users.component';
 
 import { CalendarStore } from './stores/calendar.store';
 import { WorkerStore } from './stores/worker.store';
@@ -94,10 +96,7 @@ import { AuthGuardEditor, AuthGuardAdmin, AuthGuardOrganizationAdmin } from "./s
 import { WeekViewPrintComponent } from "./components/calendar/week/print/week-view-print.component";
 import { TagFilterComponent } from "./components/tag/tag-filter.component";
 import { CalendarFilterComponent } from './components/calendar/common/calendar-filter.component';
-import { SubscriptionComponent } from './components/admin/subscription/subscription.component';
-import { OrganizationSubscriptionComponent } from './components/admin/subscription/organization-subscription.component';''
 
-// import { SetupSubscriptionComponent } from './components/admin/subscription/setup-subscription.component';
 import { SubscriptionGuard } from "./services/subscription-guard.service";
 import { SignalrService } from "./services/signalr.service";
 
@@ -157,9 +156,10 @@ import { SignalrService } from "./services/signalr.service";
     OrganizationListComponent,
     OrganizationDetailComponent,
     AddOrganizationComponent,
-    //AddUserComponent,
+    AddUserComponent,
     OrganizationDetailHeaderComponent,
     OrganizationSubscriptionComponent,
+    OrganizationUsersComponent,
     DefaultPaymentSourceComponent,
     AddPaymentSourceComponent,
     ActivateSubscriptionComponent,
@@ -169,7 +169,6 @@ import { SignalrService } from "./services/signalr.service";
     LoginComponent,
     ChangePasswordComponent,
     CalendarFilterComponent,
-    SubscriptionComponent
   ],
   entryComponents: [
     WeekViewPrintComponent,
@@ -187,7 +186,7 @@ import { SignalrService } from "./services/signalr.service";
     SelectJobTagComponent,
     SelectWorkerTagComponent,
     AddOrganizationComponent,
-    //AddUserComponent,
+    AddUserComponent,
     CalendarFilterComponent,
     AddPaymentSourceComponent,
     ActivateSubscriptionComponent

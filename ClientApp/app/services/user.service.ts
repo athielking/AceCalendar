@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
-import { User } from '../models/admin/user.model';
+import { AddUserModel, EditUserModel } from '../models/admin/user.model';
 
 @Injectable()
 export class UserService{
@@ -15,12 +15,12 @@ export class UserService{
         this.serviceUri = `${environment.webServiceUrl}/api/user`
     }
 
-    public addUser( user: User){ 
-        return this.httpClient.post( this.serviceUri, user ).shareReplay();
+    public addUserToOrganization( organizationId: string, user: AddUserModel){ 
+        return this.httpClient.post(this.serviceUri + `/addUserToOrganization/${organizationId}`, user).shareReplay();    
     }
 
-    public editUser( user: User ){
-        return this.httpClient.put( this.serviceUri + `/${user.id}`, user).shareReplay();
+    public editUser( organizationId: string, user: EditUserModel ){
+        return this.httpClient.put( this.serviceUri + `/editOrganizationUser/${organizationId}`, user).shareReplay();
     }
 
     public deleteUser( id: string ){

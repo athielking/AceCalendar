@@ -1,0 +1,107 @@
+<mat-card>
+    
+    <td-message *ngIf="showErrorMessage" label="Error Getting Users" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+
+    <div *ngIf="!showErrorMessage"> 
+
+            <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+
+                <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+                    <span class="mat-title">Users</span>
+                </span>
+                
+                <td-search-box #searchBox backIcon="arrow_back" [(ngModel)]="currentFilter" class="push-right-sm" placeholder="Search here" (searchDebounce)="filterUsers($event)" flex>
+                </td-search-box>
+        
+            </div>        
+
+        <mat-divider></mat-divider>
+
+        <div *tdLoading="'organizationUsersShowLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
+        
+            <mat-card-content>
+
+                <div *ngIf="!hasUsers" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                    <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+                    <h2>No Users</h2>
+                    <h3>You have not created any users</h3>
+                    <button mat-raised-button color="accent" class="text-upper" (click)="addUser()">Create User</button>
+                </div>
+              
+                <div *ngIf="hasUsers && !hasFilteredUsers"layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                    <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+                    <h2>No Users</h2>
+                    <h3>There are no users with your applied filters</h3>
+                    <button mat-raised-button color="accent" class="text-upper" (click)="removeFilter()">Remove Filters</button>
+                </div>
+
+                <mat-list *ngIf="hasFilteredUsers"class="will-load">
+
+                    <mat-list-item>
+                        <mat-icon matListAvatar>apps</mat-icon>
+    
+                        <h3 matLine>Username</h3>
+    
+                        <span flex></span>
+    
+                        <span hide-xs class="md-sort-header" flex="35" layout="row" layout-align="center center" class="pad-left mat-body-1 tc-grey-500">
+                            <span flex></span>
+                            <mat-select flex="100" [(ngModel)]="roleSortKey" style="text-align: right">
+                                <mat-option *ngFor="let role of userRoles" [value]="role.value" (click)="filterByRole()">
+                                    {{role.name}}
+                                </mat-option>
+                            </mat-select>
+                        </span>
+                            
+                        <span hide-xs>
+                            <button mat-icon-button disabled>
+                            </button>
+                        </span>
+        
+                    </mat-list-item>
+        
+                    <mat-divider></mat-divider>
+
+                    <ng-template let-user let-last="last" ngFor [ngForOf]="usersDataPage">
+                        <mat-list-item>
+                            <mat-icon matListAvatar>person</mat-icon>
+                            <h3 matLine>{{ user.username }}</h3>
+                            <span style="text-align: right">{{ user.role }}</span>
+                            <p matLine>{{user.firstName}} {{user.lastName}}</p>
+                            <span flex></span>
+                            <span>
+                                <button mat-icon-button [mat-menu-trigger-for]="menu">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu x-position="before" #menu="matMenu">
+                                    <button mat-menu-item (click)="editUser(user)">
+                                        <mat-icon>edit</mat-icon> Edit
+                                    </button>
+
+                                    <button mat-menu-item (click)="deleteUser(user)">
+                                        <mat-icon>delete</mat-icon> Delete
+                                    </button>
+                                </mat-menu>
+                            </span>
+                        </mat-list-item>
+                        <mat-divider *ngIf="!last" matInset></mat-divider>
+                    </ng-template>
+                </mat-list>
+                        
+                <td-paging-bar #pagingBarLinks pageLinkCount="5" [firstLast]="false" [pageSize]="pageSize" [total]="usersDataCount" (change)="pageChanged($event)">
+                    <span hide-xs>{{pagingBarLinks.range}} of {{pagingBarLinks.total}}</span>
+                </td-paging-bar>
+
+                <div layout="row">
+                    <span flex></span>
+                    <a mat-fab color="accent" matTooltip="Add new User" matTooltipPosition="before" (click)="addUser()">
+                        <mat-icon>add</mat-icon>
+                    </a>
+                </div>
+            </mat-card-content>                
+
+        </div>
+
+    </div> 
+
+</mat-card>

@@ -12,22 +12,24 @@
 
 </mat-toolbar>
 
-<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
-
 <td-message *ngIf="calendarStore.hasError | async" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
 
-<div class="week-grid" *ngIf="!showErrorMessage">
+<div *ngIf="!calendarStore.hasError | async">
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
-    <ac-week-cell 
-        class="week-jobs"
-        *ngFor="let dayView of weekData" 
-        [dayView]="dayView">         
-    </ac-week-cell>
-
-    <ac-job-list 
-        *ngFor="let dayView of weekData" 
-        [dayView]="dayView"
-        [isPast]="dayView.calendarDay.isPast"
-        [isReadonly]="true">
-    </ac-job-list>
+    <div class="week-grid" *ngIf="!showErrorMessage">
+    
+        <ac-week-cell 
+            class="week-jobs"
+            *ngFor="let dayView of weekData" 
+            [dayView]="dayView">         
+        </ac-week-cell>
+    
+        <ac-job-list 
+            *ngFor="let dayView of weekData" 
+            [dayView]="dayView"
+            [isPast]="dayView.calendarDay.isPast"
+            [isReadonly]="true">
+        </ac-job-list>
+    </div>
 </div>
