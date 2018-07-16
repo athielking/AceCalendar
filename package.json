@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "build-stg": "ng build --env=stg --aot=false --deploy-url=/app --base-href=/app",
+    "build-stg": "ng build --env=stg --aot=false",
     "build-prod": "ng build --prod --aot=false",
     "test": "ng test",
     "lint": "ng lint",

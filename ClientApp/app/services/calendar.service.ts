@@ -1,13 +1,11 @@
-import { Injectable, keyframes } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as ParseDate from 'date-fns/parse';
 import * as dateFns from 'date-fns';
 
 import { environment } from '../../environments/environment';
-import { Worker, CalendarJob, DayView } from '../components/calendar/common/models';
-import { getCalendarDay } from '../components/calendar/common/calendar-tools';
+import { Worker, CalendarJob, DayView, CalendarDay } from '../components/calendar/common/models';
 import { Tag } from '../models/tag/tag.model';
+import { CalendarModel, CalendarUser, EditCalendarModel } from '../models/calendar/calendar.model';
 
 enum ApiMethod{
     Month = "getMonth",
@@ -46,38 +44,68 @@ export class CalendarService{
         return this.httpClient.post(httpStr,{}).shareReplay();
     }
 
-    private _getData2(date: Date, idWorker: string, type: ApiMethod){
-        let httpStr = this.api+ `${type}?date=${date.toISOString()}`;
-        if(idWorker)
-            httpStr = httpStr + `&idWorker=${idWorker}`;
+    public getCalendarsForOrganization(){
+        return this.httpClient.get(this.api).map( response => {
+            return this.mapCalendarResponse(response['records']);
+        });
+    }
 
-        return this.httpClient.get(httpStr)
-            .map(response => {
+    public mapCalendarResponse( data: any ) : CalendarModel[]{
+        return data.map( item => {
+            return new CalendarModel(item.id, item.calendarName, item.organizationId, item.inactive == 'True');
+        });
+    }
 
-                let obj = response["data"];
-                //let keys = Object.keys(obj);
-                let dayViews: DayView[] = [];
+    public getCalendar( id: string ){
+        let httpStr = this.api + id;
+        return this.httpClient.get(httpStr).map( response => {
+            return new CalendarModel( response['data'].id, response['data'].calendarName, response['data'].organizationId, response['data'].inactive == 'True');
+        })
+    }
 
-                obj.forEach( dv => {
-                    let ymd = dv.date.substr(0, dv.date.indexOf("T")).split("-");
-                    let d: Date = new Date(+ymd[0], (+ymd[1])-1, +ymd[2]);
+    public getCalendarUsers(id: string){
+        let httpStr = this.api + `users/${id}`;
 
-                    let jobs: CalendarJob[] = dv.jobs.map( item => {
-                        let job = new CalendarJob(item.id, item.number, item.name, item.notes);
-                        job.workers = item.workers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
-                        job.tags = item.tags.map( item => new Tag(item.id, item.icon, item.description, item.color, item.tagType, item.fromJobDay));
+        return this.httpClient.get(httpStr).map( response => {
+            return response['records'].map( item => {
+                return new CalendarUser( item.id, item.calendarId, item.userId);
+            })
+        });
+    }
 
-                        return job;
-                    });
+    public assignUsersToCalendar(id: string, users: string[]){
+        let httpStr = this.api + `users/${id}`;
 
-                    let availableWorkers: Worker[] = dv.availableWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
-                    let timeOffWorkers: Worker[] = dv.timeOffWorkers.map( item => new Worker(item.id, item.firstName, item.lastName, item.email, item.phone, item.tags));
+        return this.httpClient.post(httpStr, users).shareReplay().map( response => {
+            return response['records'].map( item => {
+                return new CalendarUser( item.id, item.calendarId, item.userId);
+            })
+        });
+    }
 
-                    dayViews.push( new DayView( getCalendarDay(d, date), jobs, availableWorkers, timeOffWorkers));
-                });
+    public deleteUserFromCalendar(id: string, userId: string){
+        let httpStr = this.api + `user/${id}/${userId}`;
 
-                return dayViews;
-            });
+        return this.httpClient.delete(httpStr).shareReplay().map( response => {
+            return response['records'].map( item => {
+                return new CalendarUser( item.id, item.calendarId, item.userId);
+            })
+        });
+    }
+
+    public addCalendar( calendar: CalendarModel ){
+        return this.httpClient.post(this.api, calendar).shareReplay();
+    }
+
+    public editCalendar( calendarId: string, editCalendarModel: EditCalendarModel){
+        return this.httpClient.put(this.api + `/${calendarId}`, editCalendarModel).shareReplay();
+    }
+
+    public deleteCalendar( id: string){
+        let httpStr = this.api + id;
+        return this.httpClient.delete(httpStr).shareReplay().map( response => {
+            return this.mapCalendarResponse(response['records']);
+        });
     }
 
     private _getData(date: Date, type: ApiMethod, idWorker: string = null, end: Date = null, viewDate: Date = null ){
@@ -191,7 +219,7 @@ export class CalendarService{
                         );
                     });
 
-                    let dv = new DayView(getCalendarDay( d, viewDate ), jobs, workers, offWorkers );
+                    let dv = new DayView( new CalendarDay(d, viewDate ), jobs, workers, offWorkers );
                     dv.workersByJob = workersByJob;
                     dv.tagsByJob = tagsByJob;
 

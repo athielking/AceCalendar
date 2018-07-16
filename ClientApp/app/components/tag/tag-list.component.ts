@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
-import { BehaviorSubject, Observable } from 'rxjs/Rx';
+import { BehaviorSubject } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material';
 
 
 import { TagStore } from '../../stores/tag.store';
 import { Tag, TagType } from '../../models/tag/tag.model';
 import { AddTagComponent } from '../../components/tag/add-tag.component';
+import { StorageService } from '../../services/storage.service';
+import { StorageKeys } from '../calendar/common/calendar-tools';
 
 
 @Component({
@@ -49,14 +50,21 @@ export class TagListComponent implements OnInit {
 
     constructor(
         private tagStore: TagStore,
+        private storageService: StorageService,
         private loadingService: TdLoadingService,
         private dialog: MatDialog,
         private dialogService: TdDialogService,
-        private router: Router
     ) {
     } 
     
     public ngOnInit() {
+        this.storageService.watchStorage().subscribe( key => {
+            if( key != StorageKeys.selectedCalendar)
+                return;
+            
+            this.tagStore.getTags();
+        })
+
         this.filteredTags.subscribe( filteredTags => {
             this.hasFilteredTags = filteredTags.length > 0;
         });

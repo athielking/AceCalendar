@@ -17,6 +17,8 @@ import { StorageService } from '../services/storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { TagFilter } from '../models/shared/filter.model';
 import { SignalrService } from '../services/signalr.service';
+import { CalendarModel, CalendarUser, EditCalendarModel } from '../models/calendar/calendar.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Injectable()
 export class CalendarStore {
@@ -27,6 +29,10 @@ export class CalendarStore {
     private _phoneDays: BehaviorSubject<DayView[]> = new BehaviorSubject([]);
     private _dayData: BehaviorSubject<DayView> = new BehaviorSubject(undefined);
 
+    private _calendars: BehaviorSubject<CalendarModel[]> = new BehaviorSubject([]);
+    private _calendar: BehaviorSubject<CalendarModel> = new BehaviorSubject<CalendarModel>(undefined);
+    private _calendarUsers: BehaviorSubject<CalendarUser[]> = new BehaviorSubject([]);
+    
     public hasError: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public errorMessage: BehaviorSubject<string> = new BehaviorSubject('');
 
@@ -34,11 +40,16 @@ export class CalendarStore {
     public isMonthLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isWeekLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
     public isDayLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);    
+    public isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     public readonly monthData: Observable<DayView[]>;
     public readonly weekData: Observable<DayView[]>;
     public readonly phoneWeekData: Observable<DayView[]> = this._phoneDays.asObservable();
     public readonly dayData: Observable<DayView> = this._dayData.asObservable();
+
+    public readonly calendars: Observable<CalendarModel[]> = this._calendars.asObservable();
+    public readonly calendar: Observable<CalendarModel> = this._calendar.asObservable();
+    public readonly calendarUsers: Observable<CalendarUser[]> = this._calendarUsers.asObservable();
 
     private jobFilter: TagFilter = new TagFilter();
     private workerFilter: TagFilter = new TagFilter();
@@ -99,7 +110,8 @@ export class CalendarStore {
         var weekAfterEnd = dateFns.endOfWeek(dateFns.addWeeks(dateFns.startOfWeek(this._lastViewDate), 1));
         end = dateTools.greaterThan(weekAfterEnd, end) ? weekAfterEnd : end;
 
-        this.getDataForRange( start, end );
+        if(this.storageService.hasItem(StorageKeys.selectedCalendar))
+            this.getDataForRange( start, end );
     }
 
     public addJob(addJobModel: AddJobModel){
@@ -111,7 +123,8 @@ export class CalendarStore {
             let job = new CalendarJob( addJobModel.id, addJobModel.number, addJobModel.name, addJobModel.notes );
             job.tags = addJobModel.tags.map( t => new Tag( t.id, t.icon, t.description, t.color, t.tagType, t.fromJobDay));
 
-            dayView.jobs.push( job );
+            if(dayView)
+                dayView.jobs.push( job );
         });
 
         this._dayViews.next(dayViews);
@@ -292,6 +305,12 @@ export class CalendarStore {
         }, error => this.handleError(error) );
     }
 
+    public clearCache(){
+        this.hasError.next(false);
+        this.errorMessage.next('');
+        this._dayViews.next([]);
+    }
+
     private getCacheStart(lastViewDate: Date, newViewDate: Date): Date {
         let weekBeforeStart = dateFns.subWeeks( dateFns.startOfWeek(newViewDate), 1);
         let viewMonthStart = dateFns.startOfWeek( dateFns.startOfMonth( newViewDate ) );
@@ -433,7 +452,7 @@ export class CalendarStore {
                 j.tags = tagsByJob.get(j.id);
         });
 
-        var copyTo = new DayView( calendarTools.getCalendarDay(dateTo, viewDate), jobs, availableWorkers, timeOffWorkers);
+        var copyTo = new DayView( new CalendarDay(dateTo, viewDate), jobs, availableWorkers, timeOffWorkers);
         copyTo.tagsByJob = tagsByJob;
         copyTo.workersByJob = workersByJob;
 
@@ -470,16 +489,6 @@ export class CalendarStore {
         return obs;
     }
 
-    private handleError(error: any){
-        console.log(error);
-
-        this.hasError.next(true)
-        if( error.message )
-        this.errorMessage.next( error.message );
-        else if( error.error && error.error.errorMessage )
-            this.errorMessage.next( error.error.errorMessage );
-    }
-
     public makeWorkerAvailable( workerId: string, date: Date ){
         var dayViews = this._dayViews.getValue();
         var dayView = dayViews.find( dv => dateTools.equal( dv.calendarDay.date, date));
@@ -502,6 +511,133 @@ export class CalendarStore {
         this._dayViews.next( dayViews );
     }
 
+    public getCalendarsForOrganization(){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        var sub = this.calendarService.getCalendarsForOrganization()
+            .subscribe(result => {
+                this._calendars.next(result);
+                this.isLoading.next(false);
+            }, error => {
+                this.isLoading.next(false);
+                this.handleError(error);
+            }, () => {sub.unsubscribe();})
+    }
+
+    public addCalendarRecord( organizationId: string, calendarName: string){
+
+        var model = new CalendarModel('', calendarName, organizationId, false);
+        var obs = this.calendarService.addCalendar(model);
+
+        var sub = obs.subscribe( result => {
+            model = new CalendarModel(result['data'].id, result['data'].calendarName, result['data'].organizationId, result['data'].inactive);
+            let records = this._calendars.getValue();
+            records.push( model );
+
+            this._calendars.next( records );
+        }, error => this.handleError(error), () => sub.unsubscribe())
+
+        return obs;
+    }
+
+    public editCalendarRecord(calendarId: string, calendarName: string) {
+        var editCalendarModel = new EditCalendarModel(calendarName);
+
+        var obs = this.calendarService.editCalendar(calendarId, editCalendarModel);
+
+        var sub = obs.subscribe( result => {
+            var calendar = this._calendar.getValue();
+
+            calendar.calendarName = editCalendarModel.calendarName;
+            
+            this._calendar.next( calendar );
+        }, error => this.handleError(error), () => sub.unsubscribe())
+
+        return obs;
+    }
+
+    public deleteCalendarRecord(id: string){
+        var obs = this.calendarService.deleteCalendar(id);
+
+        var sub = obs.subscribe(result => {
+            this._calendars.next(result);
+            this.isLoading.next(false);
+        }, error => {
+            this.isLoading.next(false);
+            this.handleError(error);
+        }, () => {sub.unsubscribe();})
+
+        return obs;
+    }
+
+    public getCalendarRecord( id: string ){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        var sub = this.calendarService.getCalendar(id)
+            .subscribe( result => {
+                this._calendar.next(result);
+                this.isLoading.next(false);
+            }, error => {
+                this.isLoading.next(false);
+                this.handleError(error);
+            }, () => {sub.unsubscribe();})
+    }
+
+    public getCalendarUsers(id: string){
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        var sub = this.calendarService.getCalendarUsers(id)
+            .subscribe( result => {
+                this._calendarUsers.next(result);
+                this.isLoading.next(false);
+            }, error => {
+                this.isLoading.next(false);
+                this.handleError(error);
+            }, () => {sub.unsubscribe()})
+    }
+
+    public assignUsersToCalendar(id: string, users: string[])
+    {
+        this.isLoading.next(true);
+        this.hasError.next(false);
+
+        var obs = this.calendarService.assignUsersToCalendar(id, users);
+        var sub = obs.subscribe( result => {
+                this._calendarUsers.next(result);
+                this.isLoading.next(false);
+            }, error => {
+                this.isLoading.next(false);
+                this.handleError(error);
+            }, () => {sub.unsubscribe()})
+        
+        return obs;
+    }
+
+    public deleteUserFromCalendar(id: string, userId: string)
+    {
+        var sub = this.calendarService.deleteUserFromCalendar(id, userId)
+            .subscribe( result => {
+                this._calendarUsers.next(result);
+                this.isLoading.next(false);
+            }, error => {
+                this.isLoading.next(false);
+                this.handleError(error);
+            }, () => {sub.unsubscribe()});
+    }
+
+    private handleError(error: any){
+        console.log(error);
+
+        this.hasError.next(true)
+        if( error.message )
+        this.errorMessage.next( error.message );
+        else if( error.error && error.error.errorMessage )
+            this.errorMessage.next( error.error.errorMessage );
+    }
+
     private handleStorageChange(key: string){
         
         let dayViews = this._dayViews.getValue();
@@ -519,6 +655,28 @@ export class CalendarStore {
         }
 
         this._dayViews.next(dayViews);
+
+        if(key == StorageKeys.selectedCalendar)
+        {
+            if(!this.storageService.hasItem(key))
+                return;
+                
+            var start = dateFns.startOfWeek( dateFns.startOfMonth( this._lastViewDate ));
+            var weekBeforeStart = dateFns.subWeeks( dateFns.startOfWeek(this._lastViewDate), 1);
+            start = dateTools.lessThan( weekBeforeStart, start ) ? weekBeforeStart : start;
+            
+            var end = dateFns.endOfWeek(dateFns.endOfMonth(this._lastViewDate));
+            var weekAfterEnd = dateFns.endOfWeek(dateFns.addWeeks(dateFns.startOfWeek(this._lastViewDate), 1));
+            end = dateTools.greaterThan(weekAfterEnd, end) ? weekAfterEnd : end;
+
+            this.getDataForRange(start, end);
+        }
+
+        if(key == StorageKeys.tokenName)
+        {
+            if(!this.storageService.hasItem(StorageKeys.tokenName))
+                this.clearCache();
+        }
     }
 
     private handleServerDataUpdated(dayViews: DayView[]){

@@ -31,7 +31,10 @@
             </div>       
             <td-layout-manage-list [opened]="menuOpen && authService.isEditor() && !isMobile" mode="side">
                 <!-- Side Nav -->
-                <mat-nav-list td-sidenav-content>
+                
+                <mat-nav-list td-sidenav-content style="padding-top: 0px;">
+                    <ac-calendar-selector></ac-calendar-selector>
+
                     <a mat-list-item routerLink="/calendar">
                         <mat-icon matListIcon>today</mat-icon>Calendar</a>
                     <a *ngIf="authService.isSubscriptionActive() || authService.isAdmin()" mat-list-item routerLink="/worker">
@@ -42,6 +45,11 @@
                         <mat-icon matListIcon>public</mat-icon>Organizations</a>
                     <a *ngIf="authService.isOrganizationAdmin()" mat-list-item [routerLink]="getOrganizationRoute()">
                         <mat-icon matListIcon>public</mat-icon>My Organization</a>
+                    <a *ngIf="authService.isSubscriptionActive() || authService.isOrganizationAdmin()" 
+                        mat-list-item routerLink="/calendar-records">
+                        <mat-icon matListIcon>event_available</mat-icon>Organization Calendars
+                    </a>
+                    
                 </mat-nav-list>  
                 
                 <!-- View Outlet -->

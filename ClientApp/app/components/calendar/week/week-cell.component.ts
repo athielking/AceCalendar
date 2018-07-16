@@ -7,7 +7,7 @@ import * as dateTools from '../../../tools/dateTools';
 @Component({
     selector: 'ac-week-cell',
     templateUrl: './week-cell.component.html',
-    styleUrls: ['../common/calendar-card.scss']
+    styleUrls: ['../common/calendar-card.scss', './week-cell.component.scss']
 })
 export class WeekCellComponent implements OnInit {
     @Input() dayView: DayView;

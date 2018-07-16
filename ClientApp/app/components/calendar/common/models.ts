@@ -1,4 +1,8 @@
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
+import * as getDay from 'date-fns/get_day';
+import * as isSameDay from 'date-fns/is_same_day';
+import * as isSameMonth from 'date-fns/is_same_month';
+import * as startOfDay from 'date-fns/start_of_day';
+
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
 import * as calendarTools from '../../../components/calendar/common/calendar-tools';
 import {Tag, ITaggedEntity} from '../../../models/tag/tag.model';
@@ -24,7 +28,7 @@ export class DayView{
                 }
 
     public refreshCalendarDay(viewDate: Date){
-        var cd = calendarTools.getCalendarDay(this.calendarDay.date, viewDate);
+        var cd = new CalendarDay(this.calendarDay.date, viewDate);
         this.calendarDay = cd;
     }
 
@@ -137,14 +141,23 @@ export class DayView{
 }
 
 export class CalendarDay {
-    constructor(public date:Date,
-                public isToday: boolean,
-                public isPast: boolean,
-                public isFuture: boolean,
-                public isWeekend: boolean,
-                public inMonth: boolean,
-                public cssClass?: string
-            ){
+    public isToday: boolean;
+    public isPast: boolean;
+    public isFuture: boolean;
+    public isWeekend: boolean;
+    public inMonth: boolean;
+    public cssClass: string;
+
+    constructor( public date: Date, viewDate: Date){
+        viewDate = startOfDay(viewDate);
+        const today : Date = startOfDay(new Date());
+    
+        this.isToday = isSameDay(date, today);
+        this.isPast = date < today;
+        this.isFuture = date > today;
+        this.isWeekend = getDay(date) ==  calendarTools.DAYS_OF_WEEK.SATURDAY || 
+            getDay(date) == calendarTools.DAYS_OF_WEEK.SUNDAY;
+        this.inMonth = isSameMonth(date, viewDate);
     }
 }
 

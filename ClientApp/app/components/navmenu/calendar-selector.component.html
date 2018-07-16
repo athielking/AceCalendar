@@ -1,0 +1,14 @@
+<mat-toolbar *ngIf="calendars.length > 0">
+    <span flex></span> 
+        <span *ngIf="selectedCalendar">{{selectedCalendar.calendarName}}</span>
+        <span *ngIf="!selectedCalendar">Select Calendar</span>
+        <button mat-icon-button [matMenuTriggerFor]="calendarMenu">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <span flex></span>   
+        <mat-menu #calendarMenu="matMenu">
+            <button *ngFor="let calendar of calendars" mat-menu-item (click)="selectCalendar(calendar)">
+                <span>{{calendar.calendarName}}</span>
+            </button>
+        </mat-menu>
+</mat-toolbar>

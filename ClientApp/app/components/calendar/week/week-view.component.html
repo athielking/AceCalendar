@@ -1,5 +1,11 @@
-<mat-toolbar layout-align="center">
+<div *ngIf="!calendarSelected" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+    <mat-icon matListAvatar class="text-super push-bottom">today</mat-icon>
+    <h2>No Calendar Selected</h2>
+    <h3>Please Select a calendar to work in.  If none are available talk to your Organization Administrator to be added to one</h3>
+</div>
 
+<mat-toolbar *ngIf="calendarSelected" layout-align="center">
+    
     <button mat-icon-button [disabled]="isLoading" (click)="viewDateBack()">
         <mat-icon>chevron_left</mat-icon>
     </button>
@@ -24,12 +30,12 @@
     </div>
 </mat-toolbar>
 
-<td-message *ngIf="calendarStore.hasError | async" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
+<td-message *ngIf="(calendarStore.hasError | async)" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
     
-<div *ngIf="!calendarStore.hasError | async">
-    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div *ngIf="!(calendarStore.hasError | async)">
+    <mat-progress-bar *ngIf="isLoading && calendarSelected" mode="indeterminate"></mat-progress-bar>
     
-    <div class="week-grid" *ngIf="!showErrorMessage">
+    <div class="week-grid" *ngIf="!showErrorMessage && calendarSelected">
     
         <ac-week-cell 
             class="week-jobs"

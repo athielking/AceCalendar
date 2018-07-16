@@ -1,15 +1,16 @@
-import { Component, Input, Output, OnInit, OnChanges, SimpleChanges, EventEmitter, ViewChild } from '@angular/core'
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { MatDialog } from '@angular/material'
-import { Observable } from 'rxjs/Rx';
+import * as startOfWeek from 'date-fns/start_of_week';
+import * as addDays from 'date-fns/add_days';
 
-import { getWeekHeaderDays } from '../../calendar/common/calendar-tools'
-import { MonthView, CalendarDay, DayView, CalendarViews } from '../../calendar/common/models'
+import { CalendarDay, CalendarViews } from '../../calendar/common/models'
 import { MonthDisplayOptionsComponent } from './month-displayOptions.component';
 import { CalendarStore } from '../../../stores/calendar.store';
 import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';
 import { MonthViewDateComponent } from './month-view-date.component';
+import { StorageKeys } from '../common/calendar-tools';
 
 @Component({
 	selector: 'ac-month-view',
@@ -25,8 +26,9 @@ export class MonthViewComponent implements OnInit {
 	@ViewChild(MonthViewDateComponent) monthViewDate: MonthViewDateComponent;
 
 	private isLoading: Boolean = false;
-	private header: CalendarDay[];
-
+    private header: CalendarDay[];
+    
+    public calendarSelected: boolean = false;
 	public showErrorMessage: boolean;
 	public errorMessage: string;
 
@@ -35,12 +37,19 @@ export class MonthViewComponent implements OnInit {
 		private loadingService: TdLoadingService,
 		private dialog: MatDialog,
 		private storageService: StorageService) {
+
+            this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
 	}
 
 	ngOnInit() {
 		this.calendarStore.isMonthLoading.subscribe(result => {
 			this.isLoading = result;
-		});
+        });
+        
+        this.storageService.watchStorage().subscribe( key => {
+            if(key == StorageKeys.selectedCalendar)
+                this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
+        })
 	}
 
 	public onChangeViewDate(date: Date) {
@@ -60,8 +69,20 @@ export class MonthViewComponent implements OnInit {
 
 	private handleDateChanged(date: Date) {
 
-		this.header = getWeekHeaderDays({ viewDate: date, excluded: [] });
+		this.header = this.getWeekHeaderDays( date );
 		this.calendarStore.getDataForMonth(date);
+	}
+
+	private getWeekHeaderDays(date){
+		const start: Date = startOfWeek(this.viewDate);
+		const days: CalendarDay[] = [];
+
+		for (let i: number = 0; i < 7; i++) {
+			const date: Date = addDays(start, i);
+			days.push(new CalendarDay( date, this.viewDate ));
+		}
+
+		return days;
 	}
 
 }

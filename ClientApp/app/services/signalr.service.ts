@@ -43,6 +43,12 @@ export class SignalrService {
 
             this.registerHandlers();
             this.addToGroup(this.authService.getOrganizationId());
+            
+            if(this.storageService.hasItem(StorageKeys.selectedCalendar))
+                this.addToGroup(this.storageService.getItem(StorageKeys.selectedCalendar));
+            
+            this.addToGroup(this.authService.getLoggedInUser());
+
 
         }, error => {
             this._connected.next(false);
@@ -51,16 +57,17 @@ export class SignalrService {
         return this.connected;
     }
 
-    public addToGroup(organizationId: string){
+    public addToGroup(groupId: string){
         let sub = this.connected.subscribe( result => {
             if(result)
-                this._hubConnection.invoke("AddToGroup", organizationId).catch(err => console.error(err.message));
+                this._hubConnection.invoke("AddToGroup", groupId).catch(err => console.error(err.message));
         }, null, ()=> {sub.unsubscribe()});
     }
 
     private registerHandlers(){
         this._hubConnection.on("AddedToGroup", (id: string) => this.addedToGroup(id));
         this._hubConnection.on("DataUpdated", (data: any) => this.onDataUpdated(data));
+        this._hubConnection.on("UserDataUpdated", (data: any) => this.onUserDataUpdated(data));
     }
 
     private addedToGroup(organizationId: string){
@@ -74,5 +81,14 @@ export class SignalrService {
         var dayViews = this.calendarService.mapDayViewResponse(viewDate, {data: data});
 
         this._dataUpdated.next(dayViews);
+    }
+
+    private onUserDataUpdated(data: any){
+        var calendars = this.calendarService.mapCalendarResponse(data);
+        this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
+
+        var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
+        if( calendars.findIndex( c => c.id == selected) == -1 )
+            this.storageService.removeItem(StorageKeys.selectedCalendar);
     }
 }

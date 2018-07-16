@@ -1,4 +1,10 @@
-<mat-toolbar layout-align="center">
+<div *ngIf="!calendarSelected" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+    <mat-icon matListAvatar class="text-super push-bottom">today</mat-icon>
+    <h2>No Calendar Selected</h2>
+    <h3>Please Select a calendar to work in.  If none are available talk to your Organization Administrator to be added to one</h3>
+</div>
+
+<mat-toolbar *ngIf="calendarSelected" layout-align="center">
     
     <ac-month-view-date [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
 
@@ -9,9 +15,9 @@
     </div>
 </mat-toolbar>
 
-<td-message *ngIf="calendarStore.hasError | async" label="Error Getting Month of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>  
+<td-message *ngIf="(calendarStore.hasError | async) && calendarSelected" label="Error Getting Month of Data" [sublabel]="(calendarStore.errorMessage | async)" color="warn" icon="error" class="error-message"></td-message>  
 
-<div *ngIf="!calendarStore.hasError | async">
+<div *ngIf="!(calendarStore.hasError | async) && calendarSelected">
     <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
     <div class="month-grid" *ngIf="!showErrorMessage">

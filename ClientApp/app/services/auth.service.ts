@@ -6,11 +6,9 @@ import { LoginModel } from '../components/login/loginModel';
 import { JwtHelper } from './jwtHelper.service';
 import { IdentityClaimTypes } from '../tools/identityClaimTypes';
 import { ChangePasswordModel } from '../models/auth/changePasswordModel';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-
-export const TOKEN_NAME: string = 'jwt_token';
-export const TOKEN_EXPIRATION: string = 'jwt_token_expiration';
-export const LOGGED_IN_USER: string = 'logged_in_user';
+import { StorageService } from './storage.service';
+import { CalendarModel } from '../models/calendar/calendar.model';
+import { StorageKeys } from '../components/calendar/common/calendar-tools';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +16,8 @@ export class AuthService {
     private serviceUri: string;
     
     constructor(private httpClient: HttpClient,
-                private jwtHelper: JwtHelper) {
+                private jwtHelper: JwtHelper,
+                private storageService: StorageService) {
         this.serviceUri = `${environment.webServiceUrl}/api/auth`
     }
 
@@ -29,7 +28,6 @@ export class AuthService {
         return token === null || token.length == 0 || tokenExpiration === null || tokenExpiration < new Date();
     }
 
-    
     public login(
         loginModel: LoginModel, 
         onSuccess: () => any,
@@ -43,7 +41,17 @@ export class AuthService {
                 result => {
                     this.setToken( result["token"] );
                     this.setTokenExpiration( result["expiration"] );
-                    this.setLoggedInUser( result["user"])
+                    this.setLoggedInUser( result["user"]);
+                    
+                    var calendars = result['calendars'].map( item => {
+                        return new CalendarModel(item.id, item.calendarName, item.OrganizationId, item.inactive == 'True');
+                    })
+                    this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
+                    
+                    var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
+                    if( calendars.length > 0 && calendars.findIndex( c => c.id == selected) == -1)
+                        this.storageService.setItem(StorageKeys.selectedCalendar, calendars[0].id);
+
                     onSuccess();               
                 },
                 error => {
@@ -78,6 +86,9 @@ export class AuthService {
                     this.clearToken();
                     this.clearTokenExpiration();
                     this.clearLoggedInUser();
+
+                    this.storageService.removeItem(StorageKeys.selectedCalendar);
+                    
                     onSuccess();                 
                 },
                 error => {
@@ -117,38 +128,38 @@ export class AuthService {
     }
 
     private clearToken(): void {
-        localStorage.removeItem(TOKEN_NAME);
+        this.storageService.removeItem(StorageKeys.tokenName);
     }
 
     private getToken(): string {
-        return localStorage.getItem(TOKEN_NAME);
+        return this.storageService.getItem(StorageKeys.tokenName);
     }
 
     private setToken(token: string): void {
-        localStorage.setItem(TOKEN_NAME, token);
+        this.storageService.setItem(StorageKeys.tokenName, token);
     }
 
     private clearTokenExpiration(): void {
-        localStorage.removeItem(TOKEN_EXPIRATION);
+        this.storageService.removeItem(StorageKeys.tokenExpiration);
     }
 
     private getTokenExpiration(): Date {
-        return new Date(localStorage.getItem(TOKEN_EXPIRATION));
+        return new Date(this.storageService.getItem(StorageKeys.tokenExpiration));
     }
 
     private setTokenExpiration(tokenExpiration: Date): void {
-        localStorage.setItem(TOKEN_EXPIRATION, tokenExpiration.toString());
+        this.storageService.setItem(StorageKeys.tokenExpiration, tokenExpiration.toString());
     }
 
     private clearLoggedInUser(): void {
-        localStorage.removeItem(LOGGED_IN_USER);
+        this.storageService.removeItem(StorageKeys.loggedInUser);
     }
 
     public getLoggedInUser(): string {
-        return localStorage.getItem(LOGGED_IN_USER);
+        return this.storageService.getItem(StorageKeys.loggedInUser);
     }
 
     private setLoggedInUser(token: string): void {
-        localStorage.setItem(LOGGED_IN_USER, token);
+        this.storageService.setItem(StorageKeys.loggedInUser, token);
     }  
 }

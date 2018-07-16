@@ -1,0 +1,20 @@
+<mat-toolbar>
+    <span>Manage Calendar Record</span>
+</mat-toolbar>
+
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    <div flex-gt-sm="100">
+        <ac-calendar-record-header></ac-calendar-record-header> 
+    </div>
+</div>
+    
+<div flex layout-gt-sm="row" tdMediaToggle="gt-xs" layout-wrap [mediaClasses]="['push-sm']">
+    
+    <div flex-gt-sm="50">
+        <ac-calendar-record-users [userType]="'editing'"></ac-calendar-record-users>
+    </div>
+
+    <div flex-gt-sm="50">    
+        <ac-calendar-record-users [userType]="'readonly'"></ac-calendar-record-users>
+    </div>        
+</div>

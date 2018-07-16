@@ -198,8 +198,7 @@ export class OrganizationStore{
         
         observable.subscribe( organizationUserData => {
             this._organizationUserData.next(organizationUserData);
-        }, error => {
-        });
+        }, error => this.handleError(error));
 
         return observable;
     }

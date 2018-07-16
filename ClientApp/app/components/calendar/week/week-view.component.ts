@@ -38,6 +38,8 @@ export class WeekViewComponent implements OnInit, OnChanges {
     @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
     public isLoading = false;
+    public calendarSelected = false;
+
     protected weekData: DayView[];
     
     public startOfWeek: Date;
@@ -60,7 +62,9 @@ export class WeekViewComponent implements OnInit, OnChanges {
         private datePipe: DatePipe) {
 
             if(this.storageService.hasItem(StorageKeys.addWorkerOption))
-                this.workerAddOption= +this.storageService.getItem(StorageKeys.addWorkerOption);    
+                this.workerAddOption= +this.storageService.getItem(StorageKeys.addWorkerOption);
+
+            this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);    
     }
 
     public addWorkerOptionCompare(o1, o2): boolean{
@@ -83,6 +87,11 @@ export class WeekViewComponent implements OnInit, OnChanges {
         this.calendarStore.weekData.subscribe( result => {
             this.weekData = result;
         });
+
+        this.storageService.watchStorage().subscribe( key => {
+            if(key == StorageKeys.selectedCalendar)
+                this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
+        })
     }
 
     public ngOnChanges( changes: SimpleChanges ){

@@ -11,6 +11,8 @@ import { AddWorkerComponent } from './addWorker.component';
 import { SelectWorkerTagComponent } from '../tag/selectWorkerTag.component';
 import { Tag } from '../../models/tag/tag.model';
 import { TagStore } from '../../stores/tag.store';
+import { StorageService } from '../../services/storage.service';
+import { StorageKeys } from '../calendar/common/calendar-tools';
 
 @Component({
     selector: 'worker',
@@ -39,6 +41,7 @@ export class WorkerComponent implements OnInit {
     constructor(
         private workerStore: WorkerStore,
         private loadingService: TdLoadingService,
+        private storageService: StorageService,
         private dialog: MatDialog,
         private dialogService: TdDialogService,
         private tagStore: TagStore,
@@ -46,7 +49,16 @@ export class WorkerComponent implements OnInit {
     ) {
     } 
     
-    public ngOnInit() { 
+    public ngOnInit() {
+        
+        this.storageService.watchStorage().subscribe( key => {
+            if(key != StorageKeys.selectedCalendar)
+                return;
+
+            this.workerStore.getWorkers();
+            this.tagStore.getWorkerTags();
+        });
+
         this.filteredWorkers.subscribe( filteredWorkers => {
             this.hasFilteredWorkers = filteredWorkers.length > 0;
         });
@@ -71,7 +83,6 @@ export class WorkerComponent implements OnInit {
         });
 
         this.tagStore.getWorkerTags();
-
         this.workerStore.getWorkers();
     }
     

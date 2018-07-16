@@ -1,17 +1,22 @@
 <div class="cal-card"
     [class.is-past] = "dayView.calendarDay.isPast">
-    <div class="cal-card-title">
-        {{ dayView.calendarDay?.date | date:'d' }}
-    </div>
-
     
-    <div layout="row">
-        <div class="cal-card-subtitle" flex>
-            {{ dayView.calendarDay?.date | date:'EEEE' }}
+    <div class="week-cell-h">
+        
+        <div class="week-cell-day" flex>
+            {{ dayView.calendarDay?.date | date:'EEE' }}
         </div>
-        <div style="margin-top: -10px;">
+
+        <div layout="row">
+    
+            <div class="week-cell-day-header" flex>
+                {{ dayView.calendarDay?.date | date:'d' }}
+            </div>
+
             <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>more_vert</mat-icon></button>
+            
         </div>
+
     </div>
     
     <mat-menu x-position="before" #menu="matMenu">

@@ -13,7 +13,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { MatButtonModule, MatListModule, MatIconModule, MatCardModule, MatMenuModule, MatInputModule, MatButtonToggleModule,
   MatProgressSpinnerModule, MatProgressBarModule, MatSelectModule, MatSlideToggleModule, MatDialogModule, MatSnackBarModule, MatToolbarModule,
   MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule, MatGridListModule,
-  MatDatepickerModule, MatNativeDateModule, MatSliderModule, MatAutocompleteModule, MatChipsModule } from '@angular/material';
+  MatDatepickerModule, MatNativeDateModule, MatSliderModule, MatAutocompleteModule, MatChipsModule, MatCheckboxModule } from '@angular/material';
 
 import { CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule,
   CovalentStepsModule, CovalentLoadingModule, CovalentDialogsModule, CovalentSearchModule, CovalentPagingModule,
@@ -43,7 +43,7 @@ import { AddJobToDayViewComponent } from "./components/job/addJobToDayViewCompon
 import { JobNotesComponent } from "./components/job/jobNotes.component";
 import { SimpleJobCardComponent } from './components/job/simple-job-card.component';
 
-import { NavMenuComponent } from './components/navmenu/navmenu.component';
+import { CalendarSelectorComponent } from './components/navmenu/calendar-selector.component';
 import { MonthViewComponent } from './components/calendar/month/month-view.component';
 import { MonthViewDateComponent } from './components/calendar/month/month-view-date.component';
 import { MonthCellComponent } from './components/calendar/month/month-cell.component';
@@ -99,12 +99,16 @@ import { CalendarFilterComponent } from './components/calendar/common/calendar-f
 
 import { SubscriptionGuard } from "./services/subscription-guard.service";
 import { SignalrService } from "./services/signalr.service";
-
+import { CalendarRecordListComponent } from './components/calendar/record/calendar-record-list.component';
+import { CalendarRecordDetailComponent } from "./components/calendar/record/calendar-record-detail.component";
+import { CalendarRecordDetailHeaderComponent } from "./components/calendar/record/calendar-record-detail-header.component";
+import { CalendarRecordUsersComponent } from "./components/calendar/record/calendar-record-users.component";
+import { CalendarRecordSelectUsersComponent } from "./components/calendar/record/calendar-record-select-users.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
+    CalendarSelectorComponent,
     CalendarComponent,
     CalendarReadonlyComponent,
     MultiDatePickerComponent,
@@ -163,12 +167,17 @@ import { SignalrService } from "./services/signalr.service";
     DefaultPaymentSourceComponent,
     AddPaymentSourceComponent,
     ActivateSubscriptionComponent,
+    CalendarRecordDetailComponent,
+    CalendarRecordDetailHeaderComponent,
+    CalendarRecordUsersComponent,
+    CalendarRecordSelectUsersComponent,
+    CalendarFilterComponent,
+    CalendarRecordListComponent,
     DayViewComponent,
 
     //Auth
     LoginComponent,
     ChangePasswordComponent,
-    CalendarFilterComponent,
   ],
   entryComponents: [
     WeekViewPrintComponent,
@@ -189,7 +198,8 @@ import { SignalrService } from "./services/signalr.service";
     AddUserComponent,
     CalendarFilterComponent,
     AddPaymentSourceComponent,
-    ActivateSubscriptionComponent
+    ActivateSubscriptionComponent,
+    CalendarRecordSelectUsersComponent
   ],
   imports: [
     HttpClientModule,
@@ -203,6 +213,7 @@ import { SignalrService } from "./services/signalr.service";
     MatButtonToggleModule, MatSlideToggleModule, MatProgressSpinnerModule, MatProgressBarModule, MatDialogModule, MatSnackBarModule,
     MatToolbarModule, MatTabsModule, MatSidenavModule, MatTooltipModule, MatRippleModule, MatRadioModule,
     MatGridListModule, MatDatepickerModule, MatNativeDateModule, MatSliderModule, MatAutocompleteModule, MatChipsModule,
+    MatCheckboxModule,
     
     /** Covalent Modules */
     CovalentCommonModule, CovalentLayoutModule, CovalentMediaModule, CovalentExpansionPanelModule, CovalentStepsModule,
@@ -211,7 +222,9 @@ import { SignalrService } from "./services/signalr.service";
     RouterModule.forRoot([
       { path: '', redirectTo: 'calendar', pathMatch: 'full'},
       { path: 'calendar', component: CalendarComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] },
-      { path: 'calendar-readonly', component: CalendarReadonlyComponent },      
+      { path: 'calendar-readonly', component: CalendarReadonlyComponent },
+      { path: 'calendar-records', component: CalendarRecordListComponent, canActivate: [AuthGuardOrganizationAdmin, SubscriptionGuard]},
+      { path: 'calendar-records/:id', component: CalendarRecordDetailComponent},      
       { path: 'worker', component: WorkerComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] }, 
       { path: 'worker/:id', component: WorkerDetailComponent, canActivate: [AuthGuardEditor, SubscriptionGuard]},    
       { path: 'job', component: JobComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] }, 

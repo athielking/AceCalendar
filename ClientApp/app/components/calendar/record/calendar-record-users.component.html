@@ -1,0 +1,81 @@
+<mat-card>
+    
+        <td-message *ngIf="showErrorMessage" label="Error Getting Users" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>  
+    
+        <div *ngIf="!showErrorMessage"> 
+            
+            <mat-card-title>
+            
+                <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+    
+                    <span class="push-left-sm">
+                        <span class="mat-title" style="text-transform: capitalize">{{ userType }} Users</span>
+                    </span>
+                
+                </div>        
+            
+            </mat-card-title>
+
+            <mat-divider></mat-divider>
+    
+            <ng-template tdLoading="{{loadingServiceStr}}" tdLoadingType="circular" tdLoadingMode="indeterminate" tdLoadingStrategy="overlay" tdLoadingColor="accent">
+                
+            <!-- <div *tdLoading="loadingServiceStr; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';"> -->
+            
+                <mat-card-content>
+    
+                    <div *ngIf="(selectedUsers | async).length == 0" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
+                        <mat-icon matListAvatar class="text-super push-bottom">person</mat-icon>
+                        <h2>No Users</h2>
+                        <h3>You have not assigned any users</h3>
+                        <button mat-raised-button color="accent" class="text-upper" (click)="addCalendarUser()">Assign User</button>
+                    </div>
+    
+                    <mat-list *ngIf="(selectedUsers | async).length > 0" class="will-load">
+    
+                        <mat-list-item>
+                            <mat-icon matListAvatar>apps</mat-icon>
+        
+                            <h3 matLine>Username</h3>
+        
+                            <span flex></span>
+                                
+                            <span hide-xs>
+                                <button mat-icon-button disabled>
+                                </button>
+                            </span>
+            
+                        </mat-list-item>
+            
+                        <mat-divider></mat-divider>
+    
+                        <ng-template let-user let-last="last" ngFor [ngForOf]="(selectedUsers | async)">
+                            <mat-list-item>
+                                <mat-icon matListAvatar>person</mat-icon>
+                                <h3 matLine>{{ user.username }}</h3>
+                                <span style="text-align: right">{{ user.role }}</span>
+                                <p matLine>{{user.firstName}} {{user.lastName}}</p>
+                                <span flex></span>
+                                <span>
+                                    <button mat-menu-item (click)="onDeleteCalendarUser(user)">
+                                        <mat-icon>delete</mat-icon> Delete
+                                    </button>
+                                </span>
+                            </mat-list-item>
+                            <mat-divider *ngIf="!last" matInset></mat-divider>
+                        </ng-template>
+                    </mat-list>
+    
+                    <div *ngIf="(selectedUsers | async).length > 0" layout="row">
+                        <span flex></span>
+                        <a mat-fab color="accent" matTooltip="Assign User" matTooltipPosition="before" (click)="addCalendarUser()">
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </mat-card-content>                
+    
+            <!-- </div> -->
+            </ng-template>
+        </div> 
+    
+    </mat-card>
