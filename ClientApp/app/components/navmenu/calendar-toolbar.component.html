@@ -26,29 +26,33 @@
     </div>
 
     <div layout="row" style="justify-content: flex-end" flex>
-        <mat-form-field style="font-size: 14px; margin-top: 8px"> 
-            <mat-select [(ngModel)]="viewOption" placeholder="View" [compareWith]="viewOptionCompare" (selectionChange)="selectedViewChanged($event)">
-                <mat-option value=0>Month</mat-option>
-                <mat-option value=1>Week</mat-option>
-            </mat-select>
-        </mat-form-field>    
-   
-        <mat-form-field *ngIf="isWeekView" style="font-size: 14px; margin-left: 8px; margin-top: 8px"> 
-            <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
-                <mat-option value=0>Single Day</mat-option>
-                <mat-option value=1>All Days this week</mat-option>
-                <mat-option value=2>All Days this week when available</mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" [mat-menu-trigger-for]="settingsMenu">
-            <mat-icon>settings</mat-icon>
-        </button>
-    </div>
+        <div>
+            <mat-form-field style="font-size: 14px; margin-top: 8px"> 
+                <mat-select [(ngModel)]="viewOption" placeholder="View" [compareWith]="viewOptionCompare" (selectionChange)="selectedViewChanged($event)">
+                    <mat-option value=0>Month</mat-option>
+                    <mat-option value=1>Week</mat-option>
+                </mat-select>
+            </mat-form-field>    
     
-    <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
-        Clear Filter
-    </button>
+            <mat-form-field *ngIf="isWeekView" style="font-size: 14px; margin-left: 8px; margin-top: 8px"> 
+                <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
+                    <mat-option value=0>Single Day</mat-option>
+                    <mat-option value=1>All Days this week</mat-option>
+                    <mat-option value=2>All Days this week when available</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" [mat-menu-trigger-for]="settingsMenu">
+                <mat-icon>settings</mat-icon>
+            </button>
+
+            <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
+                Clear Filter
+            </button>
+        </div>
+    </div>
 
 </mat-toolbar>
 
