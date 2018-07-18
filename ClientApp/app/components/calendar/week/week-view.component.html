@@ -9,7 +9,7 @@
 <div *ngIf="!(calendarStore.hasError | async)">
     <mat-progress-bar *ngIf="isLoading && calendarSelected" mode="indeterminate"></mat-progress-bar>
     
-    <div class="week-grid" style="position: sticky; top: 72px; z-index: 999;" *ngIf="!showErrorMessage && calendarSelected">
+    <div class="week-grid week-header-days" *ngIf="!showErrorMessage && calendarSelected">
         <ac-week-cell 
             class="week-jobs"
             *ngFor="let dayView of weekData" 
