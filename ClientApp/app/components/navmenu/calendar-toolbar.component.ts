@@ -113,7 +113,39 @@ export class CalendarToolbarComponent implements OnInit{
     }
 
     public printClick(){
+        let printContents = document.getElementById("print-section").innerHTML;
+        let popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+        popupWin.document.open();
+        popupWin.document.write(`<html>
+            <head>
+              <title>Print tab</title>
+              <style>
+                h3 {
+                    margin-bottom:0px;
+                    margin-top:0px;
+                }
+                h4 {
+                    margin-bottom: 0px;
+                    margin-top: 0px;
+                }
+                .print-grid{
+                    display: grid;
+                    margin: 8px;
+                    grid-template-columns: repeat(7, 1fr);
+                    grid-template-rows: auto;
+                    grid-auto-rows: 1fr;
+                    grid-gap: 4px;
+                }
+                .column {
+                    display: flex;
+                    flex-direction: column;
+                }
+              </style>
+            </head>
+            <body onload="window.print(); window.close();" >${printContents}</body>
+          </html>`);
         
+        popupWin.document.close();
     }
 
     public displayOptionsClick(){
