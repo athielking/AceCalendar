@@ -1,23 +1,16 @@
-<div style="position: absolute; right: 0; margin-right: 30px;margin-top:4px; font-size: 14px; z-index: 9999;">
+<!-- <div style="position: absolute; right: 0; margin-right: 30px;margin-top:4px; font-size: 14px; z-index: 9999;">
     <button mat-icon-button color="primary" matTooltip="Filter Calendar" (click)="showFilter()">
         <mat-icon>filter_list</mat-icon>
     </button>
     <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
         Clear Filter
     </button>
-</div>
-<mat-tab-group (selectedTabChange)="onSelectedTabChange($event)" [(selectedIndex)]="selectedIndex" flex>
-           
-    <mat-tab label="Month View">
-        <ac-month-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
-        </ac-month-view>
-    </mat-tab>
-    
-    <mat-tab label="Week View">
-        <ac-week-view [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
-        </ac-week-view>
-    </mat-tab>
+</div> -->
+<ac-calendar-toolbar></ac-calendar-toolbar>
 
-</mat-tab-group>
+<ac-month-view *ngIf="selectedIndex == 0" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
+</ac-month-view>
 
+<ac-week-view *ngIf="selectedIndex == 1" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
+</ac-week-view>
 

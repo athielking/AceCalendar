@@ -4,39 +4,12 @@
     <h3>Please Select a calendar to work in.  If none are available talk to your Organization Administrator to be added to one</h3>
 </div>
 
-<mat-toolbar *ngIf="calendarSelected" layout-align="center">
-    
-    <button mat-icon-button [disabled]="isLoading" (click)="viewDateBack()">
-        <mat-icon>chevron_left</mat-icon>
-    </button>
-    
-    <span>{{ startOfWeek | date: 'MMMM'}} {{ startOfWeek | date: 'd'}} - {{ endOfWeek | date: 'MMMM' }} {{ endOfWeek | date: 'd' }}</span>
-    
-    <button mat-icon-button [disabled]="isLoading" (click)="viewDateForward()">
-        <mat-icon>chevron_right</mat-icon>
-    </button>
-
-    <div style="position: absolute; right: 0; margin-right: 30px;margin-top:8px; font-size: 14px"> 
-        <mat-form-field> 
-            <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
-                <mat-option value=0>Single Day</mat-option>
-                <mat-option value=1>All Days this week</mat-option>
-                <mat-option value=2>All Days this week when available</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <button mat-icon-button color="primary" [disabled]="isLoading" (click)="print()">
-            <mat-icon>print</mat-icon>
-        </button>           
-    </div>
-</mat-toolbar>
-
 <td-message *ngIf="(calendarStore.hasError | async)" label="Error Getting Week of Data" [sublabel]="calendarStore.errorMessage | async" color="warn" icon="error" class="error-message"></td-message>
     
 <div *ngIf="!(calendarStore.hasError | async)">
     <mat-progress-bar *ngIf="isLoading && calendarSelected" mode="indeterminate"></mat-progress-bar>
     
-    <div class="week-grid" *ngIf="!showErrorMessage && calendarSelected">
-    
+    <div class="week-grid" style="position: sticky; top: 72px; z-index: 999;" *ngIf="!showErrorMessage && calendarSelected">
         <ac-week-cell 
             class="week-jobs"
             *ngFor="let dayView of weekData" 
@@ -44,6 +17,9 @@
             (copyDayRequested)="onCopyDayRequested($event)"
             (deleteJobsFromDayRequest)="onDeleteJobsFromDayRequested($event)">         
         </ac-week-cell>
+    </div>
+
+    <div class="week-grid" *ngIf="!showErrorMessage && calendarSelected">
     
         <ac-job-list 
             *ngFor="let dayView of weekData" 

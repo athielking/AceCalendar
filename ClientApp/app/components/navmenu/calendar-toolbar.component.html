@@ -1,0 +1,73 @@
+<mat-toolbar layout-align="center" style="position: sticky; top: 0; z-index: 999;">
+    <div layout="row" flex>
+        <button mat-raised-button color="primary" matTooltip="Set Today as View Date" (click)="todayClick()">Today</button>
+
+        <input matInput style="width: 0; height: 0; padding: 0; margin: 0; border: none; visibility: hidden;" 
+            [matDatepicker]="picker" 
+            [value]="viewDate" 
+            (dateChange)="viewDateChange($event)">
+        <mat-datepicker #picker></mat-datepicker>
+        
+        <button mat-icon-button color="primary" matTooltip="Select View Date" (click)="picker.open()">
+            <mat-icon>event</mat-icon>
+        </button>
+    </div>
+
+    <div layout="row">
+        <button mat-icon-button [disabled]="disabled" matTooltip="{{ getTooltip(false) }}" (click)="viewDateBack()">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+            
+        <span style="margin-top: 4px">{{ viewDate | date: 'MMMM'}} {{ viewDate | date: 'yyyy'}}</span>
+            
+        <button mat-icon-button [disabled]="disabled" matTooltip="{{ getTooltip(true) }}"(click)="viewDateForward()">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+    </div>
+
+    <div layout="row" style="font-size: 14px; justify-content: flex-end" flex>
+        <mat-form-field style="margin-top: 8px"> 
+            <mat-select [(ngModel)]="viewOption" placeholder="View" [compareWith]="viewOptionCompare" (selectionChange)="selectedViewChanged($event)">
+                <mat-option value=0>Month</mat-option>
+                <mat-option value=1>Week</mat-option>
+            </mat-select>
+        </mat-form-field>    
+   
+        <mat-form-field *ngIf="isWeekView" style="margin-left: 8px; margin-top: 8px"> 
+            <mat-select [(ngModel)]="workerAddOption" placeholder="Add Workers to" [compareWith]="addWorkerOptionCompare" (selectionChange)="addWorkerOptionChange($event)">
+                <mat-option value=0>Single Day</mat-option>
+                <mat-option value=1>All Days this week</mat-option>
+                <mat-option value=2>All Days this week when available</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" [mat-menu-trigger-for]="settingsMenu">
+            <mat-icon>settings</mat-icon>
+        </button>
+
+        <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
+            Clear Filter
+        </button>
+    </div>
+
+</mat-toolbar>
+
+<mat-menu #settingsMenu="matMenu">
+
+    <button mat-menu-item (click)="filterClick()">
+        <mat-icon>filter_list</mat-icon><span>Filter</span>
+    </button>
+
+    <button *ngIf="isWeekView" mat-menu-item (click)="filterClick()">
+        <mat-icon>print</mat-icon><span>Print</span>
+    </button>
+
+    <button *ngIf="isWeekView" mat-menu-item>
+        Worker Add Options
+    </button>
+
+    <button *ngIf="isMonthView" mat-menu-item (click)="displayOptionsClick()">
+        Display Options
+    </button>
+
+</mat-menu>

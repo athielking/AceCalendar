@@ -1,31 +1,25 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit, ComponentFactoryResolver, ViewContainerRef } from '@angular/core'
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core'
 import { DatePipe } from '@angular/common'
 
 import { TdLoadingService, TdDialogService } from '@covalent/core'
 import {MatSelectChange} from '@angular/material';
-import { Observable } from 'rxjs/Rx';
-import * as isSameWeek from 'date-fns/is_same_week'
-import * as isSameDay from 'date-fns/is_same_day';
-import * as add_weeks from 'date-fns/add_weeks';
 import * as start_of_week from 'date-fns/start_of_week';
 import * as end_of_week from 'date-fns/end_of_week';
 
 import { AddWorkerOption } from '../../../models/shared/calendar-options';
-import { CalendarDay, DayView } from '../../calendar/common/models'
+import { DayView } from '../../calendar/common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { StorageService} from '../../../services/storage.service';
-import { WeekCellJobComponent, DeleteJobDayRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
+import { DeleteJobDayRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
 import { MatDialog } from '@angular/material';
 import { AddJobToWeekViewComponent } from '../../job/addJobToWeekViewComponent';
 import { StorageKeys } from '../common/calendar-tools';
-import { SelectTagComponent } from '../../tag/select-tag.component';
 import { JobStore } from '../../../stores/job.store';
 import { CopyDayRequest } from './week-cell.component';
-import { WeekViewPrintComponent } from './print/week-view-print.component';
 import { SelectJobTagComponent } from '../../tag/selectJobTag.component';
-import { TagFilter } from '../../../models/shared/filter.model';
+
 
 @Component({
     selector: 'ac-week-view',
@@ -35,7 +29,6 @@ import { TagFilter } from '../../../models/shared/filter.model';
 })
 export class WeekViewComponent implements OnInit, OnChanges {
     @Input() viewDate: Date;
-    @Output() changeViewDate: EventEmitter<Date> = new EventEmitter();
 
     public isLoading = false;
     public calendarSelected = false;
@@ -91,23 +84,16 @@ export class WeekViewComponent implements OnInit, OnChanges {
         this.storageService.watchStorage().subscribe( key => {
             if(key == StorageKeys.selectedCalendar)
                 this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
+
+            if(key == StorageKeys.viewDate){
+                this.viewDate = new Date(this.storageService.getItem(key));
+            }
         })
     }
 
-    public ngOnChanges( changes: SimpleChanges ){
-        if( changes.viewDate )
-        {
-            this.startOfWeek = start_of_week(this.viewDate);
-            this.endOfWeek = end_of_week(this.viewDate);
-        }
-    }
-
-    public viewDateForward(): void {
-        this.handleDateChanged( add_weeks(this.viewDate, 1))
-    }
-
-    public viewDateBack(): void {
-        this.handleDateChanged( add_weeks(this.viewDate, -1))
+    public ngOnChanges(changes: SimpleChanges){
+        if(changes.viewDate)
+            this.handleDateChanged(changes.viewDate.currentValue);
     }
 
     public print(){
@@ -277,8 +263,9 @@ export class WeekViewComponent implements OnInit, OnChanges {
         });
     }
 
-    private handleDateChanged(date: Date) {
-        this.changeViewDate.emit(date);
+    private handleDateChanged(date: Date){
+        this.startOfWeek = start_of_week(date);
+        this.endOfWeek = end_of_week(date);
         this.calendarStore.getDataForWeek(date);
     }
 }

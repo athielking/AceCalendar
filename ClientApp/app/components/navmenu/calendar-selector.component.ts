@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { StorageKeys } from '../calendar/common/calendar-tools';
 import { CalendarModel } from '../../models/calendar/calendar.model';
-import { CalendarStore } from '../../stores/calendar.store';
 
 @Component({
     selector: 'ac-calendar-selector',

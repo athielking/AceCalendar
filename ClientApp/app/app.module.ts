@@ -104,11 +104,13 @@ import { CalendarRecordDetailComponent } from "./components/calendar/record/cale
 import { CalendarRecordDetailHeaderComponent } from "./components/calendar/record/calendar-record-detail-header.component";
 import { CalendarRecordUsersComponent } from "./components/calendar/record/calendar-record-users.component";
 import { CalendarRecordSelectUsersComponent } from "./components/calendar/record/calendar-record-select-users.component";
+import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     CalendarSelectorComponent,
+    CalendarToolbarComponent,
     CalendarComponent,
     CalendarReadonlyComponent,
     MultiDatePickerComponent,

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild } from '@angular/core'
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild, SimpleChanges, OnChanges } from '@angular/core'
 import { TdLoadingService } from '@covalent/core'
 import { MatDialog } from '@angular/material'
 import * as startOfWeek from 'date-fns/start_of_week';
@@ -18,16 +18,16 @@ import { StorageKeys } from '../common/calendar-tools';
 	styleUrls: ['./month-view.component.scss',
 		'../common/calendar-card.scss']
 })
-export class MonthViewComponent implements OnInit {
+export class MonthViewComponent implements OnInit, OnChanges {
+	
 	@Input() viewDate: Date;
-	@Output() changeViewDate: EventEmitter<Date> = new EventEmitter<Date>();
 	@Output() changeSelectedView: EventEmitter<CalendarViews> = new EventEmitter<CalendarViews>();
 
 	@ViewChild(MonthViewDateComponent) monthViewDate: MonthViewDateComponent;
 
 	private isLoading: Boolean = false;
-    private header: CalendarDay[];
-    
+	private header: CalendarDay[];
+	
     public calendarSelected: boolean = false;
 	public showErrorMessage: boolean;
 	public errorMessage: string;
@@ -42,23 +42,23 @@ export class MonthViewComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
 		this.calendarStore.isMonthLoading.subscribe(result => {
 			this.isLoading = result;
         });
         
         this.storageService.watchStorage().subscribe( key => {
             if(key == StorageKeys.selectedCalendar)
-                this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
+				this.calendarSelected = this.storageService.hasItem(StorageKeys.selectedCalendar);
         })
 	}
 
-	public onChangeViewDate(date: Date) {
-		this.handleDateChanged(date);
-		this.changeViewDate.emit(date);
+	ngOnChanges(changes: SimpleChanges){
+		if(changes.viewDate)
+			this.handleDateChanged(changes.viewDate.currentValue);
 	}
 
 	public onChangeView(event: ViewChangeRequest) {
-        this.changeViewDate.emit(event.viewDate);
         this.handleDateChanged(event.viewDate);
 		this.changeSelectedView.emit(event.view);
 	}
