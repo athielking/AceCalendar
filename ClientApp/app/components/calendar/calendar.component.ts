@@ -34,8 +34,12 @@ export class CalendarComponent implements OnInit, OnDestroy {
         if(window.screen.width <= 576)
             this.isMobile = true;
 
-        if(localStorage.getItem(StorageKeys.viewDate))
-            this.viewDate = new Date(localStorage.getItem(StorageKeys.viewDate));
+    }
+
+    public ngOnInit(){
+
+        if(this.storageService.hasItem(StorageKeys.viewDate))
+            this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
         else
             this.viewDate = new Date();
 
@@ -44,18 +48,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         else
             this.selectedIndex = 1;
 
-        if(this.storageService.hasItem(StorageKeys.jobFilter))
-            this.jobFilter.fromJSON(this.storageService.getItem(StorageKeys.jobFilter));
-
-		if(this.storageService.hasItem(StorageKeys.workerFilter))
-            this.workerFilter.fromJSON(this.storageService.getItem(StorageKeys.workerFilter));
-        
-        this.filterEnabled = this.workerFilter.enabled || this.jobFilter.enabled;
-    }
-
-    public ngOnInit(){
         this.storageSub = this.storageService.watchStorage().subscribe( result => this.handleStorageChange(result));
-        this.storeViewDate();
     }
 
     public ngOnDestroy(){
@@ -75,25 +68,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
         this.storageService.setItem(StorageKeys.workerFilter, JSON.stringify(this.workerFilter));
     }
 
-    public onChangeViewDate( newDate: Date ){
-        this.viewDate = newDate;
-        this.storeViewDate();
-    }
-
     public onChangeSelectedView( newView: CalendarViews ){
         this.selectedIndex = newView;
-    }
-
-    public onSelectedTabChange(event: MatTabChangeEvent){
-        this.storeSelectedTab();
-    }
-
-    private storeViewDate(){
-        localStorage.setItem(StorageKeys.viewDate, this.viewDate.toDateString());
-    }
-
-    private storeSelectedTab(){
-        localStorage.setItem(StorageKeys.selectedTab, this.selectedIndex.toString());
     }
 
     private handleStorageChange(key: string){
@@ -105,5 +81,11 @@ export class CalendarComponent implements OnInit, OnDestroy {
             this.workerFilter.fromJSON(this.storageService.getItem(StorageKeys.workerFilter));
             
         this.filterEnabled = this.workerFilter.enabled || this.jobFilter.enabled;
+
+        if(key == StorageKeys.selectedTab)
+            this.selectedIndex = +this.storageService.getItem(key);
+        
+        if(key == StorageKeys.viewDate)
+            this.viewDate = new Date(this.storageService.getItem(key));
     }
 }

@@ -4,17 +4,6 @@
     <h3>Please Select a calendar to work in.  If none are available talk to your Organization Administrator to be added to one</h3>
 </div>
 
-<mat-toolbar *ngIf="calendarSelected" layout-align="center">
-    
-    <ac-month-view-date [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)"></ac-month-view-date> 
-
-    <div style="position: absolute; right: 0; margin-right: 30px">            
-        <button mat-icon-button color="primary" (click)="showDisplayOptions()" matTooltip="Display Options" matTooltipPosition="left">
-            <mat-icon>settings</mat-icon>
-        </button>
-    </div>
-</mat-toolbar>
-
 <td-message *ngIf="(calendarStore.hasError | async) && calendarSelected" label="Error Getting Month of Data" [sublabel]="(calendarStore.errorMessage | async)" color="warn" icon="error" class="error-message"></td-message>  
 
 <div *ngIf="!(calendarStore.hasError | async) && calendarSelected">

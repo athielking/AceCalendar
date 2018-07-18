@@ -1,0 +1,25 @@
+<h1 class="mat-dialog-title">Select View Date</h1>
+
+<form #viewDateForm="ngForm">
+
+    <div class="mat-dialog-content form-container">
+        
+        <ac-multi-datepicker 
+            [viewDate]="viewDate"
+            [disableChangingMonth]="true" 
+            [(selectedDays)]="timeOffDays">
+        </ac-multi-datepicker>
+
+    </div>  
+
+    <div class="mat-dialog-actions">
+        <span flex></span>
+        <button mat-button 
+            (click)="onCancelClick()">Cancel</button>
+        
+        <button mat-button 
+            [disabled]="!addTimeOffForm.form.valid" 
+            (click)="onOkClick()">Ok</button>
+    </div>  
+
+</form>

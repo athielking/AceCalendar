@@ -16,3 +16,12 @@
     grid-auto-rows: 1fr;
 }
 
+.week-header-days{
+    position: sticky; 
+    top: 64px; 
+    z-index: 999; 
+    margin-top: 0px; 
+    margin-left: 0px;
+    margin-right: 0px;
+    grid-column-gap: 0px;
+}
