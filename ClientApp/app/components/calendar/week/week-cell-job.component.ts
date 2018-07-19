@@ -1,16 +1,27 @@
-import { Component, Input, Output, Inject, Optional, OnInit, EventEmitter } from '@angular/core'
-import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
+import { Component, Input, Output, Inject, Optional, OnInit, EventEmitter, OnDestroy } from '@angular/core'
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { Subscription } from 'rxjs/Rx';
+
+import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
 import { JobNotesComponent } from '../../job/jobNotes.component';
-import {Tag} from '../../../models/tag/tag.model';
 import { WorkerMovedWithDateEvent } from '../../worker/worker-list.component';
+import { StorageService } from '../../../services/storage.service';
+import { StorageKeys } from '../common/calendar-tools';
 
 @Component({
     selector: 'ac-week-cell-job',
     templateUrl: './week-cell-job.component.html',
-    styleUrls: ['./week-cell-job.component.scss']
+    styleUrls: ['./week-cell-job.component.scss'],
+    animations: [
+        trigger('expandCollapse', [
+            state('expandCollapseState', style({height: '*'})),
+            transition('* => void', [style({height: '*'}), animate(200, style({height: '0'}))]),
+            transition('void => *', [style({height: '0'}), animate(200, style({height: "*"}))])
+        ])
+    ]
 })
-export class WeekCellJobComponent {
+export class WeekCellJobComponent implements OnInit, OnDestroy {
     @Input() calendarJob: CalendarJob;
     @Input() calendarDay: CalendarDay;
     @Input() isReadonly: boolean = false;
@@ -22,7 +33,11 @@ export class WeekCellJobComponent {
     @Output() addToAvailableRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     @Output() addToTimeOffRequested: EventEmitter<WorkerMovedWithDateEvent> = new EventEmitter();
     
+    public collapsed: boolean = false;
+    private storageSub: Subscription;
+
     constructor(private snackBar: MatSnackBar,
+                private storageService: StorageService,
                 @Optional() @Inject(MAT_DIALOG_DATA) data) {
 
         if(data){
@@ -33,6 +48,27 @@ export class WeekCellJobComponent {
             if(data.isReadonly)
                 this.isReadonly = data.isReadonly;
         }
+
+        this.collapsed = this.storageService.getItem(StorageKeys.collapseAll) == 'true';
+    }
+
+    ngOnInit(){
+        
+        if(!this.collapsed && this.storageService.hasItem(StorageKeys.collapsedJobs))
+        {
+            let collapsedJobs = this.storageService.getJsonItem(StorageKeys.collapsedJobs);
+            this.collapsed = collapsedJobs.findIndex( j => this.calendarJob.id == j) != -1;
+        }
+
+        this.storageSub = this.storageService.watchStorage().subscribe( key => {
+
+            if(key == StorageKeys.collapseAll)
+                this.collapsed = this.storageService.getItem(key) == 'true';
+        })
+    }
+
+    ngOnDestroy(){
+        this.storageSub.unsubscribe();
     }
 
     public onWorkerDropped(e: any) {
@@ -89,6 +125,22 @@ export class WeekCellJobComponent {
             worker: event.worker,
             date: this.calendarDay.date
         });
+    }
+
+    public toggleCollapse(){
+        this.collapsed = !this.collapsed;
+
+        let collapsedJobs = this.storageService.getJsonItem(StorageKeys.collapsedJobs);
+        if(!collapsedJobs)
+            collapsedJobs = [];
+        
+        let index = collapsedJobs.findIndex( j => j == this.calendarJob.id );
+        if( index == -1 && this.collapsed )
+            collapsedJobs.push(this.calendarJob.id);
+        else if( !this.collapsed && index != -1)
+            collapsedJobs.splice(index, 1);
+
+        this.storageService.setJsonItem(StorageKeys.collapsedJobs, collapsedJobs);
     }
 }
 

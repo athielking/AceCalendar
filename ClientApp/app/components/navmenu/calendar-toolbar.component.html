@@ -62,6 +62,15 @@
         <mat-icon>print</mat-icon><span>Print</span>
     </button>
 
+    
+    <button *ngIf="isWeekView && !allCollapsed" mat-menu-item (click)="toggleCollapseAll()">
+        <mat-icon>vertical_align_top</mat-icon><span>Collapse All</span>
+    </button>
+
+    <button *ngIf="isWeekView && allCollapsed" mat-menu-item (click)="toggleCollapseAll()">
+        <mat-icon>vertical_align_bottom</mat-icon><span>Expand All</span>
+    </button>
+
     <button *ngIf="isMonthView" mat-menu-item (click)="displayOptionsClick()">
         Display Options
     </button>

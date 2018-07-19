@@ -14,9 +14,19 @@ export class StorageService {
         this._storageSub.next(key);
     }
 
+    public setJsonItem(key: string, data: any){
+        this.setItem(key, JSON.stringify(data));
+        this._storageSub.next(key);
+    }
+
     public getItem(key: string)
     {
         return localStorage.getItem(key);
+    }
+
+    public getJsonItem(key: string)
+    {
+        return JSON.parse(this.getItem(key));
     }
 
     public hasItem(key: string): boolean{
