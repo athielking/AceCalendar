@@ -160,6 +160,14 @@ export class CalendarToolbarComponent implements OnInit{
             this.storageService.setJsonItem(StorageKeys.collapsedJobs, []);
     }
 
+    public toggleCollapseAll(){
+        this.allCollapsed = !this.allCollapsed;
+        this.storageService.setItem(StorageKeys.collapseAll, this.allCollapsed);
+
+        if(!this.allCollapsed)
+            this.storageService.setJsonItem(StorageKeys.collapsedJobs, []);
+    }
+
     public displayOptionsClick(){
         this.dialog.open(MonthDisplayOptionsComponent);
     }
