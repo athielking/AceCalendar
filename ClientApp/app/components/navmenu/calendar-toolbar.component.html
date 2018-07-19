@@ -41,8 +41,8 @@
             </mat-select>
         </mat-form-field>
 
-        <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" [mat-menu-trigger-for]="settingsMenu">
-            <mat-icon>settings</mat-icon>
+        <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" matToolTip="Tools" [mat-menu-trigger-for]="settingsMenu">
+            <mat-icon>build</mat-icon>
         </button>
 
         <button *ngIf="filterEnabled" mat-raised-button color="accent" (click)="clearFilter()">
@@ -62,8 +62,9 @@
         <mat-icon>print</mat-icon><span>Print</span>
     </button>
 
-    <button *ngIf="isWeekView" mat-menu-item>
-        Worker Add Options
+    
+    <button *ngIf="isWeekView" mat-menu-item (click)="filterClick()">
+        <mat-icon>print</mat-icon><span>Print</span>
     </button>
 
     <button *ngIf="isMonthView" mat-menu-item (click)="displayOptionsClick()">
