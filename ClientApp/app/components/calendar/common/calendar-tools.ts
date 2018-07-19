@@ -27,4 +27,6 @@ export enum StorageKeys{
     tokenName = 'jwt_token',
     tokenExpiration = 'jwt_token_expiration',
     loggedInUser = 'logged_in_user',
+    collapseAll = 'COLLAPSE_ALL_JOBS',
+    collapsedJobs = 'COLLAPSED_JOBS'
 }

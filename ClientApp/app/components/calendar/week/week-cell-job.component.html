@@ -2,7 +2,7 @@
 
     <div class="week-cell-job-header">
 
-        <div style="display: flex; flex-direction:column" flex>
+        <div class="week-cell-job-header-text" style="display: flex; flex-direction:column" flex>
             <div>{{calendarJob.name}}</div>
             <div>{{calendarJob.number}}</div>
             <div *ngIf="calendarJob.tags?.length > 0" class="week-cell-job-tags">
@@ -32,7 +32,7 @@
         </div>
     </div>
     
-    <div class="week-cell-job-workers">
+    <div class="week-cell-job-workers" *ngIf="!collapsed" >
         <ac-worker-card *ngFor="let worker of calendarJob.workers" 
             [worker]="worker"
             [showMoveToAvailable]="true"
@@ -41,6 +41,18 @@
             (addToTimeOffRequested)="onAddToTimeOffRequested($event)"
             [scope]="calendarDay.date.toString()">
         </ac-worker-card>
+    </div>
+
+    <div layout="row" style="justify-content: flex-end; max-height: 24px;">
+        <span *ngIf="collapsed">{{ calendarJob.workers.length }} - Workers</span>
+        <span flex></span>
+        <button style="margin-top: -8px" mat-icon-button matTooltip="Collapse" *ngIf="!collapsed" (click)="toggleCollapse()">
+            <mat-icon>keyboard_arrow_up</mat-icon>
+        </button>
+
+        <button style="margin-top: -8px" mat-icon-button matTooltip="Expand" *ngIf="collapsed" (click)="toggleCollapse()">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
     </div>
 
 </div>

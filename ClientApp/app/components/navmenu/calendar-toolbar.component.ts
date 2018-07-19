@@ -26,6 +26,7 @@ export class CalendarToolbarComponent implements OnInit{
     public viewOption: number = 0;
     public filterEnabled: boolean = false;
     public workerAddOption: AddWorkerOption;
+    public allCollapsed: boolean = false;
 
     public isWeekView: boolean = false;
     public isMonthView: boolean = false;
@@ -39,6 +40,8 @@ export class CalendarToolbarComponent implements OnInit{
 
     ngOnInit(){
         this.workerAddOption = +this.storageService.getItem(StorageKeys.addWorkerOption)
+        this.allCollapsed = this.storageService.getItem(StorageKeys.collapseAll) == 'true';
+
         this.storageService.watchStorage().subscribe(key => this.handleStorageChange(key));
 
         this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
@@ -114,6 +117,14 @@ export class CalendarToolbarComponent implements OnInit{
 
     public printClick(){
         
+    }
+
+    public toggleCollapseAll(){
+        this.allCollapsed = !this.allCollapsed;
+        this.storageService.setItem(StorageKeys.collapseAll, this.allCollapsed);
+
+        if(!this.allCollapsed)
+            this.storageService.setJsonItem(StorageKeys.collapsedJobs, []);
     }
 
     public displayOptionsClick(){
