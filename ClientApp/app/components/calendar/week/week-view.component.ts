@@ -88,6 +88,9 @@ export class WeekViewComponent implements OnInit, OnChanges {
             if(key == StorageKeys.viewDate){
                 this.viewDate = new Date(this.storageService.getItem(key));
             }
+
+            if(key == StorageKeys.addWorkerOption)
+                this.workerAddOption = +this.storageService.getItem(key);
         })
     }
 

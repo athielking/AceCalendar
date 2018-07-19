@@ -58,12 +58,7 @@
         <mat-icon>filter_list</mat-icon><span>Filter</span>
     </button>
 
-    <button *ngIf="isWeekView" mat-menu-item (click)="filterClick()">
-        <mat-icon>print</mat-icon><span>Print</span>
-    </button>
-
-    
-    <button *ngIf="isWeekView" mat-menu-item (click)="filterClick()">
+    <button *ngIf="isWeekView" mat-menu-item (click)="printClick()">
         <mat-icon>print</mat-icon><span>Print</span>
     </button>
 
