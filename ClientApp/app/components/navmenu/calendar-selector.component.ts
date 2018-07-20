@@ -35,7 +35,13 @@ export class CalendarSelectorComponent implements OnInit{
 
         this.storageService.watchStorage().subscribe( key => {
             if( key == StorageKeys.userCalendars ) {
-                this.calendars = JSON.parse(this.storageService.getItem(key));                 
+                this.calendars = JSON.parse(this.storageService.getItem(key));   
+                
+                if(!this.selectedCalendar && this.calendars.length > 0 )
+                {
+                    this.selectedCalendar = this.calendars[0];
+                    this.storageService.setItem(StorageKeys.selectedCalendar, this.selectedCalendar.id);
+                }
             }
             
             if( key == StorageKeys.selectedCalendar )

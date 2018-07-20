@@ -99,21 +99,33 @@ export class AuthService {
     }
 
     public isReadonly(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+        
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Readonly';
     }
 
     public isEditor(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User' ||  token[IdentityClaimTypes.Role] == 'Organization Admin';
     }
 
     public isAdmin(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin';
     }
 
     public isOrganizationAdmin(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+        
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Organization Admin' || token[IdentityClaimTypes.Role] == 'Admin';
     }

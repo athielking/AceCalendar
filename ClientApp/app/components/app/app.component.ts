@@ -73,6 +73,7 @@ export class AppComponent {
       () => {
         this.authorized = false;
         this.loggedInUser = "";
+        this.signalRService.disconnect();
       },
       () => {
         //alert with error?        
