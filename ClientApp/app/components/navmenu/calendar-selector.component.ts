@@ -16,17 +16,7 @@ export class CalendarSelectorComponent implements OnInit{
     }
 
     ngOnInit(){
-
-        this.storageService.watchStorage().subscribe( key => {
-            if( key == StorageKeys.userCalendars ) {
-                this.calendars = JSON.parse(this.storageService.getItem(key));
-                this.selectedCalendar = this.calendars.find( c => c.id == this.selectedCalendar.id );                 
-            }
-            
-            if( key == StorageKeys.selectedCalendar )
-                this.selectedCalendar = this.calendars.find( c => c.id == this.storageService.getItem(key))
-        })
-
+        
         if(this.storageService.hasItem(StorageKeys.userCalendars))
         {
             this.calendars = JSON.parse(this.storageService.getItem(StorageKeys.userCalendars))
@@ -42,6 +32,16 @@ export class CalendarSelectorComponent implements OnInit{
             if(this.selectedCalendar)
                 this.storageService.setItem(StorageKeys.selectedCalendar, this.selectedCalendar.id);
         }
+
+        this.storageService.watchStorage().subscribe( key => {
+            if( key == StorageKeys.userCalendars ) {
+                this.calendars = JSON.parse(this.storageService.getItem(key));                 
+            }
+            
+            if( key == StorageKeys.selectedCalendar )
+                this.selectedCalendar = this.calendars.find( c => c.id == this.storageService.getItem(key))
+        })
+
     }
 
     selectCalendar(calendar: CalendarModel){

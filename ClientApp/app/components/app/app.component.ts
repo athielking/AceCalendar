@@ -24,6 +24,8 @@ import { AuthService } from "../../services/auth.service";
 import { ChangePasswordComponent } from '../login/change-password.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SignalrService } from '../../services/signalr.service';
+import { StorageService } from '../../services/storage.service';
+import { StorageKeys } from '../calendar/common/calendar-tools';
 
 @Component({
   selector: 'app-root',
@@ -41,10 +43,12 @@ export class AppComponent {
     private authService: AuthService, 
     private dialog: MatDialog,
     private signalRService: SignalrService,
+    private storageService: StorageService,
     private _iconRegistry: MatIconRegistry,
     private _domSanitizer: DomSanitizer
   ) {
-    this.authorized = !this.authService.loginRequired();
+    this.authorized = !this.authService.loginRequired() && this.storageService.hasItem(StorageKeys.userCalendars);
+
     this.loggedInUser = this.authService.getLoggedInUser();
     
     this._iconRegistry.addSvgIconInNamespace('assets', 'AceLogoDark',
