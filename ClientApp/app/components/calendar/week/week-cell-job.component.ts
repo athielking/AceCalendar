@@ -8,6 +8,7 @@ import { JobNotesComponent } from '../../job/jobNotes.component';
 import { WorkerMovedWithDateEvent } from '../../worker/worker-list.component';
 import { StorageService } from '../../../services/storage.service';
 import { StorageKeys } from '../common/calendar-tools';
+import { JobCollapseService } from '../../../services/job-collapse.service';
 
 @Component({
     selector: 'ac-week-cell-job',
@@ -38,6 +39,7 @@ export class WeekCellJobComponent implements OnInit, OnDestroy {
 
     constructor(private snackBar: MatSnackBar,
                 private storageService: StorageService,
+                private jobCollapseService: JobCollapseService,
                 @Optional() @Inject(MAT_DIALOG_DATA) data) {
 
         if(data){
@@ -48,22 +50,14 @@ export class WeekCellJobComponent implements OnInit, OnDestroy {
             if(data.isReadonly)
                 this.isReadonly = data.isReadonly;
         }
-
-        this.collapsed = this.storageService.getItem(StorageKeys.collapseAll) == 'true';
     }
 
     ngOnInit(){
         
-        if(!this.collapsed && this.storageService.hasItem(StorageKeys.collapsedJobs))
-        {
-            let collapsedJobs = this.storageService.getJsonItem(StorageKeys.collapsedJobs);
-            this.collapsed = collapsedJobs.findIndex( j => this.calendarJob.id == j) != -1;
-        }
+        this.collapsed = this.jobCollapseService.isCollapsed(this.calendarDay.date, this.calendarJob.id);
 
-        this.storageSub = this.storageService.watchStorage().subscribe( key => {
-
-            if(key == StorageKeys.collapseAll)
-                this.collapsed = this.storageService.getItem(key) == 'true';
+        this.storageSub = this.jobCollapseService.collapsedJobs.subscribe( result => {
+            this.collapsed = this.jobCollapseService.isCollapsed(this.calendarDay.date, this.calendarJob.id);
         })
     }
 
@@ -128,19 +122,7 @@ export class WeekCellJobComponent implements OnInit, OnDestroy {
     }
 
     public toggleCollapse(){
-        this.collapsed = !this.collapsed;
-
-        let collapsedJobs = this.storageService.getJsonItem(StorageKeys.collapsedJobs);
-        if(!collapsedJobs)
-            collapsedJobs = [];
-        
-        let index = collapsedJobs.findIndex( j => j == this.calendarJob.id );
-        if( index == -1 && this.collapsed )
-            collapsedJobs.push(this.calendarJob.id);
-        else if( !this.collapsed && index != -1)
-            collapsedJobs.splice(index, 1);
-
-        this.storageService.setJsonItem(StorageKeys.collapsedJobs, collapsedJobs);
+        this.jobCollapseService.toggleCollapse(this.calendarDay.date, this.calendarJob.id);
     }
 }
 

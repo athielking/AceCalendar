@@ -105,6 +105,7 @@ import { CalendarRecordDetailHeaderComponent } from "./components/calendar/recor
 import { CalendarRecordUsersComponent } from "./components/calendar/record/calendar-record-users.component";
 import { CalendarRecordSelectUsersComponent } from "./components/calendar/record/calendar-record-select-users.component";
 import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.component";
+import { JobCollapseService } from "./services/job-collapse.service";
 
 @NgModule({
   declarations: [
@@ -252,6 +253,7 @@ import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.
     AuthGuardAdmin,
     SubscriptionGuard,
     SignalrService,
+    JobCollapseService,
     //Stores
     OrganizationStore,
     CalendarStore,

@@ -13,7 +13,7 @@ import * as start_of_month from 'date-fns/start_of_month';
 import { CalendarViews } from '../calendar/common/models';
 import { MonthDisplayOptionsComponent } from '../calendar/month/month-displayOptions.component';
 import { AddWorkerOption } from '../../models/shared/calendar-options';
-import { keyframes } from '../../../../node_modules/@angular/core/src/animation/dsl';
+import { JobCollapseService } from '../../services/job-collapse.service';
 
 @Component({
     selector: 'ac-calendar-toolbar',
@@ -36,14 +36,15 @@ export class CalendarToolbarComponent implements OnInit{
     private workerFilter: TagFilter = new TagFilter();
     
     constructor(private storageService: StorageService,
+                private jobCollapseService: JobCollapseService,
                 private dialog: MatDialog){
     }
 
     ngOnInit(){
         this.workerAddOption = +this.storageService.getItem(StorageKeys.addWorkerOption)
-        this.allCollapsed = this.storageService.getItem(StorageKeys.collapseAll) == 'true';
 
         this.storageService.watchStorage().subscribe(key => this.handleStorageChange(key));
+        this.jobCollapseService.collapseAll.subscribe( collapsed => this.allCollapsed = collapsed);
 
         this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
         this.viewOption = +this.storageService.getItem(StorageKeys.selectedTab);
@@ -153,11 +154,7 @@ export class CalendarToolbarComponent implements OnInit{
     }
 
     public toggleCollapseAll(){
-        this.allCollapsed = !this.allCollapsed;
-        this.storageService.setItem(StorageKeys.collapseAll, this.allCollapsed);
-
-        if(!this.allCollapsed)
-            this.storageService.setJsonItem(StorageKeys.collapsedJobs, []);
+        this.jobCollapseService.toggleCollapseAllJobs()
     }
 
     public displayOptionsClick(){
