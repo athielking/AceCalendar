@@ -5,6 +5,7 @@ import { TdLoadingService } from '@covalent/core';
 import { AppComponent } from "../app/app.component";
 
 import { LoginModel } from './loginModel';
+import { SignalrService } from '../../services/signalr.service';
 
 @Component({
     selector: 'login',
@@ -20,6 +21,7 @@ export class LoginComponent {
         private router: Router,
         private appComponent: AppComponent,
         private authService: AuthService,
+        private signalRService: SignalrService,
         private loadingService: TdLoadingService
     ) {}
 
@@ -39,6 +41,8 @@ export class LoginComponent {
                 this.appComponent.authorized = true;
                 this.appComponent.loggedInUser = this.authService.getLoggedInUser();
 
+                this.signalRService.connect();
+                
                 this.router.navigate(['calendar']);
             },
             () => {               

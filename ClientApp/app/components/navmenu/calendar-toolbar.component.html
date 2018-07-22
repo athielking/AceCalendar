@@ -1,4 +1,4 @@
-<mat-toolbar layout-align="center" style="position: sticky; top: 0; z-index: 999;">
+<mat-toolbar layout-align="center">
     <div layout="row" flex>
         <button mat-raised-button color="primary" matTooltip="Set Today as View Date" (click)="todayClick()">Today</button>
 
@@ -40,8 +40,10 @@
                 <mat-option value=2>All Days this week when available</mat-option>
             </mat-select>
         </mat-form-field>
+    </div>
 
-        <button style="margin-top: 8px" mat-icon-button color="primary" [disabled]="disabled" matToolTip="Tools" [mat-menu-trigger-for]="settingsMenu">
+    <div layout="row">
+        <button mat-icon-button color="primary" [disabled]="disabled" matToolTip="Tools" [mat-menu-trigger-for]="settingsMenu">
             <mat-icon>build</mat-icon>
         </button>
 

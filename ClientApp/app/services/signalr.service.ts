@@ -57,6 +57,20 @@ export class SignalrService {
         return this.connected;
     }
 
+    public disconnect(){
+        this.removeFromGroup(this.authService.getOrganizationId());
+        if(this.storageService.hasItem(StorageKeys.selectedCalendar))
+            this.removeFromGroup(this.storageService.getItem(StorageKeys.selectedCalendar));
+            
+        this.removeFromGroup(this.authService.getLoggedInUser());
+
+        this._hubConnection.stop();
+        this._hubConnection.off('AddedToGroup');
+        this._hubConnection.off('RemovedFromGroup');
+        this._hubConnection.off('DataUpdated');
+        this._hubConnection.off('UserDataUpdated');
+    }
+
     public addToGroup(groupId: string){
         let sub = this.connected.subscribe( result => {
             if(result)
@@ -64,14 +78,26 @@ export class SignalrService {
         }, null, ()=> {sub.unsubscribe()});
     }
 
+    public removeFromGroup(groupId: string){
+        let sub = this.connected.subscribe( result => {
+            if(result)
+                this._hubConnection.invoke("RemoveFromGroup", groupId).catch(err => console.error(err.message));
+        }, null, ()=> {sub.unsubscribe()});
+    }
+
     private registerHandlers(){
         this._hubConnection.on("AddedToGroup", (id: string) => this.addedToGroup(id));
+        this._hubConnection.on("RemovedFromGroup", (id: string) => this.removedFromGroup(id));
         this._hubConnection.on("DataUpdated", (data: any) => this.onDataUpdated(data));
         this._hubConnection.on("UserDataUpdated", (data: any) => this.onUserDataUpdated(data));
     }
 
     private addedToGroup(organizationId: string){
         console.log("SignalR -- Added to server group " + organizationId);
+    }
+
+    private removedFromGroup(groupId: string){
+        console.log("SignalR -- Removed from server group " + groupId);
     }
 
     private onDataUpdated(data: any) {
@@ -88,7 +114,7 @@ export class SignalrService {
         this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
 
         var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
-        if( calendars.findIndex( c => c.id == selected) == -1 )
+        if( selected && calendars.findIndex( c => c.id == selected) == -1 )
             this.storageService.removeItem(StorageKeys.selectedCalendar);
     }
 }

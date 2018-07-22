@@ -45,13 +45,14 @@ export class AuthService {
                     
                     var calendars = result['calendars'].map( item => {
                         return new CalendarModel(item.id, item.calendarName, item.OrganizationId, item.inactive == 'True');
-                    })
+                    });
+
                     this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
                     
                     var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
-                    if( calendars.length > 0 && calendars.findIndex( c => c.id == selected) == -1)
+                    if( !(selected && calendars.findIndex( c => c.id == selected) != -1) && calendars.length > 0 )
                         this.storageService.setItem(StorageKeys.selectedCalendar, calendars[0].id);
-
+                
                     onSuccess();               
                 },
                 error => {
@@ -98,21 +99,33 @@ export class AuthService {
     }
 
     public isReadonly(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+        
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Readonly';
     }
 
     public isEditor(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin' || token[IdentityClaimTypes.Role] == 'User' ||  token[IdentityClaimTypes.Role] == 'Organization Admin';
     }
 
     public isAdmin(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Admin';
     }
 
     public isOrganizationAdmin(){
+        if(!this.storageService.hasItem(StorageKeys.tokenName))
+            return false;
+        
         let token = this.jwtHelper.decode(this.getToken());
         return token[IdentityClaimTypes.Role] == 'Organization Admin' || token[IdentityClaimTypes.Role] == 'Admin';
     }

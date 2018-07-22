@@ -6,11 +6,20 @@
         Clear Filter
     </button>
 </div> -->
-<ac-calendar-toolbar></ac-calendar-toolbar>
+<div>
 
-<ac-month-view *ngIf="selectedIndex == 0" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
-</ac-month-view>
+    <div style="position: sticky; top: 0; z-index: 999;">
+        <ac-calendar-toolbar></ac-calendar-toolbar>
+    </div>
 
-<ac-week-view *ngIf="selectedIndex == 1" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
-</ac-week-view>
+    <div>
+        <ac-month-view *ngIf="selectedIndex == 0" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)" (changeSelectedView)="onChangeSelectedView($event)">
+        </ac-month-view>
+        
+        <ac-week-view *ngIf="selectedIndex == 1" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
+        </ac-week-view>
+    </div>
+
+</div>
+
 
