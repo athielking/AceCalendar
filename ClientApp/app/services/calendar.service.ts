@@ -52,7 +52,7 @@ export class CalendarService{
 
     public mapCalendarResponse( data: any ) : CalendarModel[]{
         return data.map( item => {
-            return new CalendarModel(item.id, item.calendarName, item.organizationId, item.inactive == 'True');
+            return new CalendarModel(item.id, item.calendarName, item.organizationId, item.inactive);
         });
     }
 
@@ -95,6 +95,14 @@ export class CalendarService{
 
     public addCalendar( calendar: CalendarModel ){
         return this.httpClient.post(this.api, calendar).shareReplay();
+    }
+
+    public inactivateCalendarRecord(organizationId: string, calendarId: string){
+        return this.httpClient.get(this.api + `/inactivateCalendarRecord/${organizationId}/${calendarId}`);
+    }
+
+    public activateCalendarRecord(organizationId: string, calendarId: string){
+        return this.httpClient.get(this.api + `/activateCalendarRecord/${organizationId}/${calendarId}`);
     }
 
     public editCalendar( calendarId: string, editCalendarModel: EditCalendarModel){

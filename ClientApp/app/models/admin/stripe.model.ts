@@ -110,3 +110,9 @@ export enum SubscriptionPaymentSource{
     DefaultSource = 0,
     NewSource = 1
 }
+
+export class SubscriptionLicenseDetails{
+    public calendars: number;
+    public editingUsers: number;
+    public readonlyUsers: number;
+}

@@ -134,6 +134,10 @@ export class OrganizationStore{
         return this.organizationService.organizationHadTrial(organizationId);
     }
 
+    public getSubscriptionLicenseDetails(organizationId: string){
+        return this.organizationService.getSubscriptionLicenseDetails(organizationId);
+    }
+
     public getOrganizations(){
         this.isLoading.next(true);
         this.hasError.next(false);

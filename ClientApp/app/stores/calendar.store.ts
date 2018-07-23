@@ -541,6 +541,42 @@ export class CalendarStore {
         return obs;
     }
 
+    public inactivateCalendarRecord(organizationId: string, calendarId: string) {
+        var obs = this.calendarService.inactivateCalendarRecord(organizationId, calendarId);
+        
+        obs.subscribe( response => { 
+            let calendars = this._calendars.getValue();
+            
+            calendars.forEach( calendar => {
+                if(calendar.id === calendarId)
+                    calendar.inactive = true;
+            });
+
+            this._calendars.next( calendars );
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public activateCalendarRecord(organizationId: string, calendarId: string,) {
+        var obs = this.calendarService.activateCalendarRecord(organizationId, calendarId);
+        
+        obs.subscribe( response => { 
+            let calendars = this._calendars.getValue();
+            
+            calendars.forEach( calendar => {
+                if(calendar.id === calendarId)
+                    calendar.inactive = false;
+            });
+
+            this._calendars.next( calendars );
+        }, error => {
+        });
+
+        return obs;
+    }
+
     public editCalendarRecord(calendarId: string, calendarName: string) {
         var editCalendarModel = new EditCalendarModel(calendarName);
 
