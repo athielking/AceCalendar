@@ -89,7 +89,14 @@ export class CalendarRecordListComponent implements OnInit {
 			if(!result)
 				return;
 			
-			this.calendarStore.addCalendarRecord(this.organizationId, ref.componentInstance.value);
+            var sub = this.calendarStore.addCalendarRecord(this.organizationId, ref.componentInstance.value)
+                .subscribe(result => {}, error => {
+                    
+                    this.dialogService.openAlert({message: error.error['errorMessage']});
+                    this.showErrorMessage = false;
+                    this.errorMessage = '';
+
+                }, () => {sub.unsubscribe();})
 		})
 	}
 

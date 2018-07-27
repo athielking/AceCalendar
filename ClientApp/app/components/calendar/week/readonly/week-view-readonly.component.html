@@ -4,20 +4,6 @@
     <h3>Please Select a calendar to work in.  If none are available talk to your Organization Administrator to be added to one</h3>
 </div>
 
-<mat-toolbar *ngIf="calendarSelected" layout-align="center">
-    
-    <button mat-icon-button (click)="viewDateBack()">
-        <mat-icon>chevron_left</mat-icon>
-    </button>
-    
-    <span>Week of {{ startOfWeek | date: 'fullDate'}}</span>
-    
-    <button mat-icon-button (click)="viewDateForward()">
-        <mat-icon>chevron_right</mat-icon>
-    </button>
-
-</mat-toolbar>
-
 <td-message *ngIf="(calendarStore.hasError | async) && calendarSelected" label="Error Getting Week of Data" [sublabel]="(calendarStore.errorMessage | async)" color="warn" icon="error" class="error-message"></td-message>
 
 <div *ngIf="!(calendarStore.hasError | async) && calendarSelected">
@@ -28,7 +14,8 @@
         <ac-week-cell 
             class="week-jobs"
             *ngFor="let dayView of weekData" 
-            [dayView]="dayView">         
+            [dayView]="dayView"
+            [isReadonly]='true'>         
         </ac-week-cell>
     
         <ac-job-list 

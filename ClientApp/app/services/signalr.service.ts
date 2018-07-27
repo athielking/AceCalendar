@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { StorageService } from './storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { DayView } from '../components/calendar/common/models';
+import { ValidateSubscription } from '../models/admin/validateSubscription.model';
 
 @Injectable()
 export class SignalrService {
@@ -18,9 +19,11 @@ export class SignalrService {
 
     private _connected: BehaviorSubject<boolean> = new BehaviorSubject(false);
     private _dataUpdated: BehaviorSubject<DayView[]> = new BehaviorSubject(null);
-
+    private _subscriptionValidation: BehaviorSubject<ValidateSubscription> = new BehaviorSubject(new ValidateSubscription(true, false, []));
+    
     public connected: Observable<boolean> = this._connected.asObservable();
     public dataUpdated: Observable<DayView[]> = this._dataUpdated.asObservable();
+    public subscriptionValidation: Observable<ValidateSubscription> = this._subscriptionValidation.asObservable();
 
     constructor(private calendarService: CalendarService,
                 private authService: AuthService,
@@ -69,6 +72,7 @@ export class SignalrService {
         this._hubConnection.off('RemovedFromGroup');
         this._hubConnection.off('DataUpdated');
         this._hubConnection.off('UserDataUpdated');
+        this._hubConnection.off('SubscriptionChecked');
     }
 
     public addToGroup(groupId: string){
@@ -90,6 +94,7 @@ export class SignalrService {
         this._hubConnection.on("RemovedFromGroup", (id: string) => this.removedFromGroup(id));
         this._hubConnection.on("DataUpdated", (data: any) => this.onDataUpdated(data));
         this._hubConnection.on("UserDataUpdated", (data: any) => this.onUserDataUpdated(data));
+        this._hubConnection.on("SubscriptionChecked", (data: any) => this.onSubscriptionChecked(data));
     }
 
     private addedToGroup(organizationId: string){
@@ -102,7 +107,7 @@ export class SignalrService {
 
     private onDataUpdated(data: any) {
 
-        console.log("SignalR -- Data Recieved server")
+        console.log("SignalR -- Data Recieved server: DataUpdated")
         let viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
         var dayViews = this.calendarService.mapDayViewResponse(viewDate, {data: data});
 
@@ -116,5 +121,10 @@ export class SignalrService {
         var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
         if( selected && calendars.findIndex( c => c.id == selected) == -1 )
             this.storageService.removeItem(StorageKeys.selectedCalendar);
+    }
+
+    private onSubscriptionChecked(data: any){
+        console.log("SignalR -- Data Recieved server: SubscriptionChecked")
+        this._subscriptionValidation.next(data);
     }
 }

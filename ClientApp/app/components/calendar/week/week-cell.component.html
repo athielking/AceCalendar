@@ -13,7 +13,7 @@
                 {{ dayView.calendarDay?.date | date:'d' }}
             </div>
 
-            <button mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>more_vert</mat-icon></button>
+            <button *ngIf="!isReadonly" mat-icon-button [mat-menu-trigger-for]="menu"><mat-icon>more_vert</mat-icon></button>
             
         </div>
 

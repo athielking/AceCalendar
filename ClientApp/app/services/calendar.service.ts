@@ -59,7 +59,7 @@ export class CalendarService{
     public getCalendar( id: string ){
         let httpStr = this.api + id;
         return this.httpClient.get(httpStr).map( response => {
-            return new CalendarModel( response['data'].id, response['data'].calendarName, response['data'].organizationId, response['data'].inactive == 'True');
+            return new CalendarModel( response['data'].id, response['data'].calendarName, response['data'].organizationId, response['data'].inactive );
         })
     }
 
