@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 import {
   TdLayoutComponent,
   TdLayoutNavComponent,
@@ -26,19 +27,22 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SignalrService } from '../../services/signalr.service';
 import { StorageService } from '../../services/storage.service';
 import { StorageKeys } from '../calendar/common/calendar-tools';
+import { OrganizationStore } from '../../stores/organization.store';
+import { ValidateSubscription } from '../../models/admin/validateSubscription.model';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public title = 'app';
   public authorized: boolean;
   public loggedInUser: string;
   public menuOpen: boolean = true;
   public isMobile: boolean;
-
+  public validation: Observable<ValidateSubscription>; 
+  
   constructor(
     private authService: AuthService, 
     private dialog: MatDialog,
@@ -56,8 +60,15 @@ export class AppComponent {
     
     if(window.screen.width <= 576)
       this.isMobile = true;
+    
+    this.validation = authService.licenseValidation.merge(signalRService.subscriptionValidation);
+  }
 
+  public ngOnInit(){
     this.signalRService.connect();
+
+    if(!this.authService.loginRequired)
+        this.authService.getSubscriptionValidation();
   }
 
   public toggleMenu(){

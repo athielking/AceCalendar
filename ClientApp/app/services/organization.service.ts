@@ -9,6 +9,7 @@ import { PaymentSource, BankAccount, Card, Subscription, BillingInformation, Pro
 import { OrganizationDetails } from '../models/admin/organizationDetails.model';
 import { SaveOrganizationRequest } from '../models/admin/saveOrganizationRequest.Model';
 import { UserGridModel } from '../models/admin/userGridModel';
+import { ValidateSubscription } from '../models/admin/validateSubscription.model';
 
 @Injectable()
 export class OrganizationService{

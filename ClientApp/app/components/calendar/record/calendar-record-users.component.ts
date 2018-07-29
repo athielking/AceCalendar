@@ -92,6 +92,7 @@ export class CalendarRecordUsersComponent implements OnInit {
         this.route.paramMap.subscribe( (params: ParamMap) => {
             this.calendarId = params.get('id');
             this.calendarStore.getCalendarUsers(this.calendarId);
+            this.calendarStore.getCalendarRecord(this.calendarId);
         });
     }
 

@@ -20,34 +20,26 @@
                                 <button mat-menu-item (click)="editCalendar()">
                                     <mat-icon>edit</mat-icon> Edit
                                 </button>
+                                <button mat-menu-item (click)="toggleActive()">
+                                    <span *ngIf="isActive">
+                                        <mat-icon>remove_circle_outline</mat-icon> Set Inactive
+                                    </span>
+                                    <span *ngIf="!isActive">
+                                        <mat-icon>add_circle_outline</mat-icon> Set Active
+                                    </span>
+                                </button>
                             </mat-menu>
                         </span>
                     </div>
                 </mat-card-title>
                 
- <!--               <mat-divider></mat-divider>
+                <mat-divider></mat-divider>
          
                 <mat-card-content>
                     <div class="mat-dialog-content form-container">
-    
-                        <mat-form-field>
-                            <input matInput #emailControl="ngModel" placeholder="Email" type="text" name="email" [(ngModel)]="email" disabled>    
-                        </mat-form-field>
-
-                        <mat-form-field>
-                            <input matInput #addressControl="ngModel" placeholder="Address" type="text" name="address" [(ngModel)]="addressLine1" disabled>    
-                        </mat-form-field>
-    
-                        <mat-form-field *ngIf="addressLine2">
-                            <input matInput #addressLine2Control="ngModel" placeholder="Address Line 2" type="text" name="addressLine2" [(ngModel)]="addressLine2" disabled>
-                        </mat-form-field>
-
-                        <mat-form-field>
-                            <input matInput #cityStateZipControl="ngModel" placeholder="City, State, Zip" type="text" name="cityStateZip" [(ngModel)]="cityStateZip" disabled>    
-                        </mat-form-field>
-
+                        <mat-checkbox [(ngModel)]="isActive" disabled>Calendar is Active</mat-checkbox>            
                     </div>           
-                </mat-card-content> -->
+                </mat-card-content>
             </div>
 
         </mat-card>

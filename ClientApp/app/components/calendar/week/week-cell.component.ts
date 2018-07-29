@@ -11,6 +11,8 @@ import * as dateTools from '../../../tools/dateTools';
 })
 export class WeekCellComponent implements OnInit {
     @Input() dayView: DayView;
+    @Input() isReadonly: boolean = false;
+
     @Output() copyDayRequested: EventEmitter<CopyDayRequest> = new EventEmitter();
     @Output() deleteJobsFromDayRequest: EventEmitter<Date> = new EventEmitter();
 
