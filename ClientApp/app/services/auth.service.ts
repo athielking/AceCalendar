@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Observable, BehaviorSubject} from 'rxjs/Rx';
 
 import { environment } from '../../environments/environment';
 import { LoginModel } from '../components/login/loginModel';
@@ -10,11 +11,23 @@ import { StorageService } from './storage.service';
 import { CalendarModel } from '../models/calendar/calendar.model';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 
+import { ValidateSubscription } from '../models/admin/validateSubscription.model';
+
 @Injectable()
 export class AuthService {
-     
-    private serviceUri: string;
     
+    private serviceUri: string;
+
+    private _licenseValidation: BehaviorSubject<ValidateSubscription> = new BehaviorSubject(new ValidateSubscription(true, false, []));
+    public licenseValidation: Observable<ValidateSubscription> = this._licenseValidation.asObservable();
+
+    public isSubscriptionActive : Observable<boolean> = this._licenseValidation.map( license => {
+        if(this.isAdmin())
+            return true;
+
+        return license.isValid;
+    });
+
     constructor(private httpClient: HttpClient,
                 private jwtHelper: JwtHelper,
                 private storageService: StorageService) {
@@ -135,9 +148,16 @@ export class AuthService {
         return token["OrganizationId"];
     }
 
-    public isSubscriptionActive(){
-        let token = this.jwtHelper.decode(this.getToken());
-        return token["SubscriptionActive"] == "True";
+    public getSubscriptionValidation(){
+        var obs = this.httpClient.get(this.serviceUri +`/validate/${this.getOrganizationId()}`)
+            .map( json => new ValidateSubscription(
+                    json['data'].isValid ,
+                    json['data'].allowCalendarEdit,
+                    json['data'].messages));
+        
+        var sub = obs.subscribe( result => {this._licenseValidation.next(result)}, error => {}, ()=>{sub.unsubscribe()});
+
+        return obs;
     }
 
     private clearToken(): void {

@@ -15,7 +15,9 @@
                 <div layout="row">
                     <a routerLink="/calendar"><img src="assets/Ace_Logo.png" style="vertical-align: middle"></a>
                 </div>
-                
+                <span flex></span>
+                <td-message *ngIf="!(validation | async).isValid" [label]="(validation | async).messages[0]" color="warn" icon="error" style="background-color: rgba(255,255,255,.5)"></td-message>
+                <td-message *ngIf="(validation | async).isValid && (validation | async).messages.length > 0" [label]="(validation | async).messages[0]" color="primary" icon="info" style="background-color: rgba(0,0,0,0)"></td-message>
                 <span flex></span>
                 <button mat-button [matMenuTriggerFor]="logoutMenu"><mat-icon>account_circle</mat-icon><span> {{loggedInUser}}</span></button>
                 <mat-menu #logoutMenu="matMenu">
@@ -37,15 +39,15 @@
 
                     <a mat-list-item routerLink="/calendar">
                         <mat-icon matListIcon>today</mat-icon>Calendar</a>
-                    <a *ngIf="authService.isSubscriptionActive() || authService.isAdmin()" mat-list-item routerLink="/worker">
+                    <a *ngIf="(authService.isSubscriptionActive | async)" mat-list-item routerLink="/worker">
                         <mat-icon matListIcon>people</mat-icon>Workers</a>
-                    <a *ngIf="authService.isSubscriptionActive() || authService.isAdmin()" mat-list-item routerLink="/tag">
+                    <a *ngIf="(authService.isSubscriptionActive | async)" mat-list-item routerLink="/tag">
                         <mat-icon matListIcon>label_outline</mat-icon>Tags</a>
                     <a *ngIf="authService.isAdmin()" mat-list-item routerLink="/organization">
                         <mat-icon matListIcon>public</mat-icon>Organizations</a>
                     <a *ngIf="authService.isOrganizationAdmin()" mat-list-item [routerLink]="getOrganizationRoute()">
                         <mat-icon matListIcon>public</mat-icon>My Organization</a>
-                    <a *ngIf="authService.isSubscriptionActive() || authService.isOrganizationAdmin()" 
+                    <a *ngIf="(authService.isSubscriptionActive | async) || authService.isOrganizationAdmin()" 
                         mat-list-item routerLink="/calendar-records">
                         <mat-icon matListIcon>event_available</mat-icon>Organization Calendars
                     </a>

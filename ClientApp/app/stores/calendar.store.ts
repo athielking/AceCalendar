@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs/Rx';
-import { List } from 'immutable';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import * as dateFns from 'date-fns';
-
-import * as calendarTools from '../components/calendar/common/calendar-tools'
 import * as dateTools from '../tools/dateTools';
-import { Guid } from '../tools/guid';
+
 import { AddWorkerOption } from '../models/shared/calendar-options';
-import { environment } from '../../environments/environment';
 import { CalendarService } from '../services/calendar.service';
 import { CalendarDay, CalendarJob, DayView, Worker, MoveWorkerRequestModel, AddJobModel, SaveTagsRequestModel } from '../components/calendar/common/models';
 import { Tag } from '../models/tag/tag.model';
-import { isSameDay, subDays } from 'date-fns';
 import { JobService } from '../services/job.service';
 import { StorageService } from '../services/storage.service';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 import { TagFilter } from '../models/shared/filter.model';
 import { SignalrService } from '../services/signalr.service';
 import { CalendarModel, CalendarUser, EditCalendarModel } from '../models/calendar/calendar.model';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ValidateSubscription } from '../models/admin/validateSubscription.model';
 
 @Injectable()
 export class CalendarStore {
@@ -55,6 +51,7 @@ export class CalendarStore {
     private workerFilter: TagFilter = new TagFilter();
     
     constructor(
+        private router: Router,
         private calendarService: CalendarService,
         private jobService: JobService,
         private storageService: StorageService,
@@ -82,10 +79,6 @@ export class CalendarStore {
 
             return data;
         });
-
-        // this.dayData = this._dayViews.combineLatest( this._viewDate, (dayViews, viewDate) => {
-        //     return dayViews.find( dayView => dateTools.equal(dayView.calendarDay.date, viewDate));
-        // });
 
         this.monthData = this._dayViews.combineLatest( this._viewDate, (dayViews, viewDate) => {
 
@@ -354,7 +347,7 @@ export class CalendarStore {
         }
 
         this._isCacheLoading.next(true);
-        this.calendarService.getRangeData( loadStart, loadEnd, lastViewDate ).subscribe( result => {
+        var sub = this.calendarService.getRangeData( loadStart, loadEnd, lastViewDate ).subscribe( result => {
 
             let newCache: DayView[] = [];
             dayViews.concat(result).sort( (a, b) => { 
@@ -375,7 +368,7 @@ export class CalendarStore {
 
             this._dayViews.next(newCache);
             this._isCacheLoading.next(false);
-        }, error => this.handleError(error));
+        }, error => this.handleError(error), () => {sub.unsubscribe();});
     }
 
     public moveWorkerToJob(viewDate: Date, worker: Worker, date: Date, toJob: CalendarJob, workerAddOption: AddWorkerOption){
@@ -541,8 +534,44 @@ export class CalendarStore {
         return obs;
     }
 
-    public editCalendarRecord(calendarId: string, calendarName: string) {
-        var editCalendarModel = new EditCalendarModel(calendarName);
+    public inactivateCalendarRecord(organizationId: string, calendarId: string) {
+        var obs = this.calendarService.inactivateCalendarRecord(organizationId, calendarId);
+        
+        obs.subscribe( response => { 
+            let calendars = this._calendars.getValue();
+            
+            calendars.forEach( calendar => {
+                if(calendar.id === calendarId)
+                    calendar.inactive = true;
+            });
+
+            this._calendars.next( calendars );
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public activateCalendarRecord(organizationId: string, calendarId: string,) {
+        var obs = this.calendarService.activateCalendarRecord(organizationId, calendarId);
+        
+        obs.subscribe( response => { 
+            let calendars = this._calendars.getValue();
+            
+            calendars.forEach( calendar => {
+                if(calendar.id === calendarId)
+                    calendar.inactive = false;
+            });
+
+            this._calendars.next( calendars );
+        }, error => {
+        });
+
+        return obs;
+    }
+
+    public editCalendarRecord(calendarId: string, calendarName: string, isActive: boolean) {
+        var editCalendarModel = new EditCalendarModel(calendarName, isActive);
 
         var obs = this.calendarService.editCalendar(calendarId, editCalendarModel);
 
@@ -550,7 +579,8 @@ export class CalendarStore {
             var calendar = this._calendar.getValue();
 
             calendar.calendarName = editCalendarModel.calendarName;
-            
+            calendar.inactive = !editCalendarModel.isActive;
+
             this._calendar.next( calendar );
         }, error => this.handleError(error), () => sub.unsubscribe())
 

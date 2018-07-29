@@ -1,22 +1,31 @@
 <mat-toolbar class="mat-toolbar mat-toolbar-single-row">
-        <span flex>Manage Organization Calendars</span>
-    </mat-toolbar>
+    <span flex>Manage Organization Calendars</span>
+</mat-toolbar>
     
-    <mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
-        
+<td-message *ngIf="showErrorMessage" label="Error Getting Calendars" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>
+
+<mat-card *ngIf="!showErrorMessage && showSubscriptionInformation" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
+    <td-message *ngIf="activeCalendars <= calendarLicenses" color="light-blue" icon="info" sublabel="{{activeCalendars}} of {{calendarLicenses}} Calendar(s) Currently Active"></td-message>
+    <td-message *ngIf="activeCalendars > calendarLicenses" color="warn" icon="error" sublabel="{{activeCalendars}} of {{calendarLicenses}} Calendar(s) Currently Active"></td-message>    
+</mat-card>
+
+<mat-card class="push-bottom-xxl" tdMediaToggle="gt-xs" [mediaClasses]="['push']">
+
+    <div *ngIf="!showErrorMessage">
+
         <div *tdLoading="'showCalendarsLoading'; mode:'indeterminate'; type:'circle'; strategy:'overlay'; color:'accent';">
         
             <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
-    
+
                 <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
                     <span class="mat-title">Calendars</span>
                 </span>
                 
                 <td-search-box #searchBox backIcon="arrow_back" [(ngModel)]="currentFilter" class="push-right-sm" placeholder="Search here" (searchDebounce)="filterCalendars($event)" flex>
                 </td-search-box>
-    
+
             </div>
-    
+
             <mat-divider></mat-divider>
             
             <div *ngIf="!hasCalendars" layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
@@ -25,26 +34,24 @@
                 <h3>You have not created any calendars</h3>
                 <button mat-raised-button color="accent" class="text-upper" (click)="addCalendar()">Create Calendar</button>
             </div>
-    
+
             <div *ngIf="hasCalendars && !hasFilteredCalendars"layout="column" layout-align="center center" class="tc-grey-500 mat-typography pad-lg">
                 <mat-icon matListAvatar class="text-super push-bottom">today</mat-icon>
                 <h2>No Calendars</h2>
                 <h3>There are no calendars with your applied filters</h3>
                 <button mat-raised-button color="accent" class="text-upper" (click)="removeFilter()">Remove Filters</button>
             </div>
-    
+
             <mat-list *ngIf="hasFilteredCalendars" class="will-load">
-    
+
                 <mat-list-item>
-                        <mat-icon matListAvatar>apps</mat-icon>
-                        <h3 matLine>Name</h3>
-                        <span flex></span>
+                    <mat-icon matListAvatar>apps</mat-icon>
+                    <h3 matLine>Name</h3>
+                    <span flex></span>
                 </mat-list-item>
-    
-                <mat-divider></mat-divider>
-    
-                <td-message *ngIf="showErrorMessage" label="Error Getting Calendars" sublabel="{{errorMessage}}" color="warn" icon="error" class="error-message"></td-message>            
-    
+
+                <mat-divider></mat-divider>                       
+
                 <ng-template let-calendar let-last="last" ngFor [ngForOf]="(filteredCalendars | async)">
                     
                     <mat-list-item>
@@ -53,6 +60,9 @@
                         
                         <h3 matLine>{{calendar.calendarName}}</h3>
                         
+                        <p *ngIf="calendar.inactive" matLine> Inactive </p>
+                        <p *ngIf="!calendar.inactive" matLine> Active </p>
+
                         <span flex></span>
                         
                         <span>
@@ -63,10 +73,15 @@
                                 <button mat-menu-item [routerLink]="['/calendar-records', calendar.id]">
                                     <mat-icon>public</mat-icon> View
                                 </button>
-                               
-                                <button mat-menu-item (click)="deleteCalendar(calendar.id)">
-                                    <mat-icon>delete</mat-icon> Delete
+                                
+                                <button *ngIf="calendar.inactive" mat-menu-item (click)="activateCalendar(calendar.id)">
+                                    <mat-icon>add_circle_outline</mat-icon> Activate
                                 </button>
+
+                                <button *ngIf="!calendar.inactive" mat-menu-item (click)="inactivateCalendar(calendar.id)">
+                                    <mat-icon>remove_circle_outline</mat-icon> Inactivate
+                                </button>
+
                             </mat-menu>
                         </span>
                     
@@ -79,10 +94,11 @@
             </mat-list>
         
         </div>
-    
-    </mat-card>
-    
-    <a mat-fab color="accent" matTooltip="Add new calendar" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
-        (click)="addCalendar()">
-        <mat-icon>add</mat-icon>
-    </a>
+    </div>
+
+</mat-card>
+
+<a mat-fab color="accent" matTooltip="Add new calendar" matTooltipPosition="before" class="mat-fab-bottom-right z-3 fixed fab-pad"
+    (click)="addCalendar()">
+    <mat-icon>add</mat-icon>
+</a>

@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { StorageService } from '../../../services/storage.service';
 import { AuthService } from '../../../services/auth.service';
+import { OrganizationStore } from '../../../stores/organization.store';
 
 @Component({
   selector: 'ac-calendar-record',
@@ -23,19 +24,36 @@ export class CalendarRecordListComponent implements OnInit {
 	public showErrorMessage: boolean;
 	public errorMessage: string;
 	
-	constructor(private calendarStore: CalendarStore,
-				private loadingService: TdLoadingService,
-				private dialogService: TdDialogService,
-				private authService: AuthService) { }
+	public activeCalendars: number = 0;
+	public calendarLicenses: number = 0;
+	public showSubscriptionInformation: boolean;
+
+	constructor(
+		private calendarStore: CalendarStore,
+		private loadingService: TdLoadingService,
+		private dialogService: TdDialogService,
+		private authService: AuthService,
+		private organizationStore: OrganizationStore
+	) { 		
+	}
 
   	ngOnInit() {
 
 		this.organizationId = this.authService.getOrganizationId();
-		
+				
+		this.organizationStore.getSubscriptionLicenseDetails(this.organizationId).subscribe( subscriptionLicenseDetailsViewModel => {
+			this.calendarLicenses = subscriptionLicenseDetailsViewModel.calendars;
+			this.showSubscriptionInformation = true;
+		}, error => {
+			this.showErrorMessage = true;
+			this.errorMessage = "Unable to get subscription license details."
+		});           
+
 		this.calendarStore.calendars.subscribe( result => {
 			this.calendars = result;
 			this.hasCalendars = this.calendars.length > 0;
 			this.filterCalendars();
+			this.activeCalendars = result.filter(calendar => calendar.inactive === false).length;
 		});
 
 		this.filteredCalendars.subscribe( records => {
@@ -80,33 +98,76 @@ export class CalendarRecordListComponent implements OnInit {
 	}
 	
 	public addCalendar(){
-		var ref = this.dialogService.openPrompt({
-			message: "Calendar Name",
-			title: "Add Calendar"
-		});
-
-		ref.beforeClose().subscribe( result => {
-			if(!result)
-				return;
-			
-			this.calendarStore.addCalendarRecord(this.organizationId, ref.componentInstance.value);
-		})
+		if(this.activeCalendars >= this.calendarLicenses) {
+			this.dialogService.openAlert({
+				message: "You have reached the maximum allowed calendars for your subscription. To add an additional calendar, please inactivate an existing calendar or upgrade your subscription.",
+				title: 'Unable to Add Calendar'
+			});
+		}
+		else {
+			var ref = this.dialogService.openPrompt({
+				message: "Calendar Name",
+				title: "Add Calendar"
+			});
+	
+			ref.beforeClose().subscribe( result => {
+				if(!result)
+					return;
+				
+				this.calendarStore.addCalendarRecord(this.organizationId, ref.componentInstance.value);
+			})
+		}
+	}
+	
+	public activateCalendar(calendarId: string) {
+		if(this.activeCalendars >= this.calendarLicenses) {
+			this.dialogService.openAlert({
+				message: "You have reached the maximum allowed calendars for your subscription. To add an additional calendar, please inactivate an existing calendar or upgrade your subscription.",
+				title: 'Unable to Add Calendar'
+			});
+		}
+		else {
+			this.dialogService.openConfirm({
+				message: 'Are you sure you wish to activate this calendar?',
+				title: 'Confirm Activate'
+			  }).afterClosed().subscribe((accept: boolean) => {
+				if (accept) {
+					this.toggleShowLoading(true);
+	
+					this.calendarStore.activateCalendarRecord(this.organizationId, calendarId)
+						.subscribe(result => {
+							this.toggleShowLoading(false);                        
+						}, error => {
+							this.toggleShowLoading(false);
+							this.dialogService.openAlert({
+								message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+								title: 'Unable to Activate Calendar'
+							});
+						});
+				}
+			});
+		}
 	}
 
-	public editCalendar(calendar: CalendarModel){}
-	public deleteCalendar(id: string){
-        
-        var ref = this.dialogService.openConfirm({
-            message: "Are you sure you wish to delete this calendar?",
-            title: "Confirm Delete"
-        });
+	public inactivateCalendar(calendarId: string) {
+		this.dialogService.openConfirm({
+            message: 'Are you sure you wish to inactivate this calendar?',
+            title: 'Confirm Inactivate'
+          }).afterClosed().subscribe((accept: boolean) => {
+            if (accept) {
+                this.toggleShowLoading(true);
 
-        ref.beforeClose().subscribe( result => {
-            if(!result)
-                return;
-
-            this.calendarStore.deleteCalendarRecord(id);
-        });
-
-    }
+                this.calendarStore.inactivateCalendarRecord(this.organizationId, calendarId)
+                    .subscribe(result => {
+                        this.toggleShowLoading(false);                        
+                    }, error => {
+                        this.toggleShowLoading(false);
+                        this.dialogService.openAlert({
+                            message: error.error['errorMessage'] ? error.error['errorMessage'] : error.message,
+                            title: 'Unable to Inactivate Calendar'
+                        });
+                    });
+            }
+          });
+	}
 }
