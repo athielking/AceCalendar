@@ -14,6 +14,7 @@ export class CalendarRecordDetailHeaderComponent implements OnInit{
     private calendarId: string;
     
     public calendarName: string = '';
+    public isActive: boolean = true;
 
     public showErrorMessage: boolean;
     public errorMessage: string;
@@ -41,6 +42,7 @@ export class CalendarRecordDetailHeaderComponent implements OnInit{
                 return;
                 
             this.calendarName = calendar.calendarName;
+            this.isActive = !calendar.inactive;
               
             this.toggleShowLoading(false);           
         });
@@ -62,8 +64,20 @@ export class CalendarRecordDetailHeaderComponent implements OnInit{
 			if(!result)
 				return;
 			
-			this.calendarStore.editCalendarRecord(this.calendarId, ref.componentInstance.value);
+			this.calendarStore.editCalendarRecord(this.calendarId, ref.componentInstance.value, this.isActive);
         })
+    }
+
+    public toggleActive(){
+        this.toggleShowLoading(true);
+        var sub = this.calendarStore.editCalendarRecord(this.calendarId, this.calendarName, !this.isActive).subscribe( result => {}, 
+        error => {
+            this.dialogService.openAlert({message: error.error['errorMessage'] });
+            this.showErrorMessage = false;
+            this.errorMessage = '';
+            this.toggleShowLoading(false);
+        }, 
+        ()=> {sub.unsubscribe();})
     }
 
     private toggleShowLoading(show:boolean) {

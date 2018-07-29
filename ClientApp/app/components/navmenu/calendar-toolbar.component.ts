@@ -23,7 +23,8 @@ export class CalendarToolbarComponent implements OnInit{
 
     @Input() viewDate: Date;
     @Input() disabled: boolean = false;
-
+    @Input() readonly: boolean = false;
+    
     public viewOption: number = 0;
     public filterEnabled: boolean = false;
     public workerAddOption: AddWorkerOption;

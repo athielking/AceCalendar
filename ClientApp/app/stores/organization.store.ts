@@ -14,14 +14,14 @@ import { AddUserModel, EditUserModel } from '../models/admin/user.model';
 @Injectable()
 export class OrganizationStore{
     private _organizations : BehaviorSubject<Organization[]> = new BehaviorSubject([]);
-    // private _organization: BehaviorSubject<Organization> = new BehaviorSubject(new Organization());
+
     private _productPlans: BehaviorSubject<ProductPlan[]> = new BehaviorSubject([]);
-    
     private _organizationDetails: BehaviorSubject<OrganizationDetails> = new BehaviorSubject(new OrganizationDetails());
     private _defaultPaymentSource: BehaviorSubject<DefaultPaymentSourceInformation> = new BehaviorSubject(new DefaultPaymentSourceInformation());
     private _subscriptionDetails: BehaviorSubject<SubscriptionDetails> = new BehaviorSubject(new SubscriptionDetails());
     private _organizationUserData: BehaviorSubject<UserGridModel[]> = new BehaviorSubject([]);
     private _defaultPaymentSourceUpdated: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    
 
     public errorMessage: string;
 
@@ -36,8 +36,8 @@ export class OrganizationStore{
     public readonly defaultPaymentSource: Observable<DefaultPaymentSourceInformation> = this._defaultPaymentSource.asObservable();
     public readonly subscriptionDetails: Observable<SubscriptionDetails> = this._subscriptionDetails.asObservable();
     public readonly organizationUsersData: Observable<UserGridModel[]> = this._organizationUserData.asObservable();
-
     public readonly defaultPaymentSourceUpdated : Observable<boolean> = this._defaultPaymentSourceUpdated.asObservable();
+    
 
     constructor(
         private organizationService: OrganizationService,
@@ -132,6 +132,10 @@ export class OrganizationStore{
 
     public organizationHadTrial(organizationId: string){
         return this.organizationService.organizationHadTrial(organizationId);
+    }
+
+    public getSubscriptionLicenseDetails(organizationId: string){
+        return this.organizationService.getSubscriptionLicenseDetails(organizationId);
     }
 
     public getOrganizations(){

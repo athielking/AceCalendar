@@ -5,10 +5,11 @@ import { List } from 'immutable';
 
 import { environment } from '../../environments/environment';
 import { Organization } from '../models/admin/organization.model';
-import { PaymentSource, BankAccount, Card, Subscription, BillingInformation, ProductPlan, SetProductPlanRequest, DefaultPaymentSourceInformation, SubscriptionDetails } from '../models/admin/stripe.model';
+import { PaymentSource, BankAccount, Card, Subscription, BillingInformation, ProductPlan, SetProductPlanRequest, DefaultPaymentSourceInformation, SubscriptionDetails, SubscriptionLicenseDetails } from '../models/admin/stripe.model';
 import { OrganizationDetails } from '../models/admin/organizationDetails.model';
 import { SaveOrganizationRequest } from '../models/admin/saveOrganizationRequest.Model';
 import { UserGridModel } from '../models/admin/userGridModel';
+import { ValidateSubscription } from '../models/admin/validateSubscription.model';
 
 @Injectable()
 export class OrganizationService{
@@ -60,6 +61,10 @@ export class OrganizationService{
 
     public organizationHadTrial(organizationId: string){
         return this.httpClient.get(this.serviceUri + `/organizationHadTrial/${organizationId}`).map( json => (<boolean>json['data']) );
+    }
+
+    public getSubscriptionLicenseDetails(organizationId: string){
+        return this.httpClient.get(this.serviceUri + `/getSubscriptionLicenseDetails/${organizationId}`).map( json => (<SubscriptionLicenseDetails>json['data']) );
     }
 
     public updateDefaultPaymentSource(organizationId: string, token: any){

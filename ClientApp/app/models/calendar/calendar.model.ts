@@ -12,6 +12,7 @@ export class CalendarUser {
 }
 
 export class EditCalendarModel {
-    constructor( public calendarName: string){
+    constructor( public calendarName: string,
+                 public isActive: boolean){
     }
 }
