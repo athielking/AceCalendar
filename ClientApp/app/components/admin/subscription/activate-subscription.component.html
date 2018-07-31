@@ -19,11 +19,16 @@
 	<form #subscriptionForm="ngForm" style="width: 350px">
 		<div class="mat-dialog-content form-container">
             
-            <mat-radio-group class="subscription-radio-group" name="subscription-group" [(ngModel)]="selectedPlanId" required>
-                <mat-radio-button style="margin-bottom: 20px; margin-top: 20px;" class="subscription-radio" *ngFor="let productPlan of productPlans" [value]="productPlan.id">
-                    <strong>{{productPlan.name}}</strong> - {{productPlan.amount / 100 | currency}} every {{productPlan.billingScheme}}
-                </mat-radio-button>
-            </mat-radio-group>
+            <div style="margin-bottom: 20px;">
+           
+                <mat-radio-group class="subscription-radio-group" name="subscription-group" [(ngModel)]="selectedPlanId" required>
+                    <mat-radio-button style="margin-top: 20px;" class="subscription-radio" *ngFor="let productPlan of productPlans" [value]="productPlan.id">
+                        <div><strong>{{productPlan.name}}</strong> - {{productPlan.amount / 100 | currency}} every {{productPlan.billingScheme}}</div>
+                        <p style="margin-bottom: 2px; margin-top: 2px;" class="md-caption">Calendars: {{productPlan.calendars}}, Users: {{productPlan.users}}</p>
+                    </mat-radio-button>
+                </mat-radio-group>
+            
+            </div>
 
             <mat-form-field *ngIf="defaultPaymentSource"> 
                 <mat-select [compareWith]="comparePaymentSources" [(ngModel)]="subscriptionPaymentSource" placeholder="Payment Method" name="subscriptionPaymentSource">

@@ -39,6 +39,9 @@
                             <h3 *ngIf="subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isActive" style="margin-bottom: 0px">Days Left of Subscription: {{subscriptionDetails.daysLeft}}</h3>
                             <h3 *ngIf="subscriptionDetails.cancelAtPeriodEnd && subscriptionDetails.isActive" style="margin-bottom: 0px">End of Subscription: {{subscriptionDetails.currentPeriodEnd | date: 'MM/dd/yyyy'}}</h3>
 
+                            <h3 style="margin-bottom: 0px">Calendars: {{subscriptionDetails.calendars}}</h3>
+                            <h3 style="margin-bottom: 0px">Users: {{subscriptionDetails.users}}</h3>
+                            
                             <h3 *ngIf="!subscriptionDetails.cancelAtPeriodEnd" style="margin-bottom: 0px">Next Bill: {{subscriptionDetails.currentPeriodEnd | date: 'MM/dd/yyyy'}}</h3>
 
                             <h3 *ngIf="!subscriptionDetails.cancelAtPeriodEnd" style="margin-bottom: 0px">Payment Method: <span *ngIf="subscriptionDetails.hasDefaultPaymentMethod">{{subscriptionDetails.defaultPaymentMethod}}</span><span *ngIf="!subscriptionDetails.hasDefaultPaymentMethod" class="tc-red-600">None</span></h3>                            

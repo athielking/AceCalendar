@@ -81,6 +81,8 @@ export class ProductPlan {
     public name: string;
     public amount: number;
     public billingScheme: string;
+    public calendars: number;
+    public users: number;
 }
 
 export class SetProductPlanRequest{
@@ -104,6 +106,8 @@ export class SubscriptionDetails{
     public currentPeriodEnd: Date;
     public hasDefaultPaymentMethod: boolean;
     public defaultPaymentMethod: string;
+    public calendars: number;
+    public users: number;
 }
 
 export enum SubscriptionPaymentSource{
