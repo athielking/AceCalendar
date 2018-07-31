@@ -1,4 +1,10 @@
 
+
+<div *ngIf="isMobile">
+    <ac-week-view-phone>
+    </ac-week-view-phone>
+</div>
+
 <div *ngIf="!isMobile">
     <div style="position: sticky; top: 0; z-index: 999;">
         <ac-calendar-toolbar [readonly]='true'></ac-calendar-toolbar>
@@ -10,5 +16,4 @@
     </div>
 <div>
 
-<ac-week-view-phone *ngIf="isMobile" [viewDate]="viewDate" (changeViewDate)="onChangeViewDate($event)">
-</ac-week-view-phone>
+    

@@ -11,8 +11,8 @@ import { StorageService } from '../../services/storage.service';
     templateUrl: './calendar-readonly.component.html'
 })
 export class CalendarReadonlyComponent implements OnInit, OnDestroy {
-    @ViewChild(WeekViewReadonlyComponent) weekViewReadonly: WeekViewReadonlyComponent;
-    @ViewChild(WeekViewPhoneComponent) weekViewPhone: WeekViewPhoneComponent;
+     @ViewChild(WeekViewReadonlyComponent) weekViewReadonly: WeekViewReadonlyComponent;
+     @ViewChild(WeekViewPhoneComponent) weekViewPhone: WeekViewPhoneComponent;
 
     public viewDate : Date;
     
@@ -22,11 +22,12 @@ export class CalendarReadonlyComponent implements OnInit, OnDestroy {
 
     constructor(private storageService: StorageService)
     {
-        if(window.screen.width <= 576)
-            this.isMobile = true;
     }
 
     public ngOnInit(){
+
+        if(window.screen.width <= 576)
+            this.isMobile = true;
 
         if(this.storageService.hasItem(StorageKeys.viewDate))
             this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
