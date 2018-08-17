@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatMenuTrigger, MatDialog } from '@angular/material';
 import { TdNotificationCountComponent } from '@covalent/core'
 
-import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../../calendar/common/models'
+import { DayView, CalendarDay, CalendarJob, Worker, CalendarViews } from '../common/models'
 import { StorageKeys } from '../common/calendar-tools';
 import { StorageService } from '../../../services/storage.service';
 import { ViewChangeRequest } from '../../../events/calendar.events';

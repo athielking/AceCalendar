@@ -4,7 +4,7 @@ import * as isSameMonth from 'date-fns/is_same_month';
 import * as startOfDay from 'date-fns/start_of_day';
 
 import {AddWorkerOption}  from '../../../models/shared/calendar-options';
-import * as calendarTools from '../../../components/calendar/common/calendar-tools';
+import * as calendarTools from './calendar-tools';
 import {Tag, ITaggedEntity} from '../../../models/tag/tag.model';
 import {Guid} from '../../../tools/guid';
 import { TagFilter } from '../../../models/shared/filter.model';

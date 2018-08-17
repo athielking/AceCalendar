@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
-import { TdLoadingService } from '@covalent/core';
+import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { AppComponent } from "../app/app.component";
 
 import { LoginModel } from './loginModel';
 import { SignalrService } from '../../services/signalr.service';
+import { ForgotPasswordComponent } from './forgot-password.component';
 
 @Component({
     selector: 'login',
@@ -22,7 +23,8 @@ export class LoginComponent {
         private appComponent: AppComponent,
         private authService: AuthService,
         private signalRService: SignalrService,
-        private loadingService: TdLoadingService
+        private loadingService: TdLoadingService,
+        private dialogService: TdDialogService
     ) {}
 
     public login(): void {
@@ -50,6 +52,10 @@ export class LoginComponent {
                 this.toggleShowLoading( false );
             }
         );
+    }
+
+    public forgotPassword(){
+        this.dialogService.open(ForgotPasswordComponent, {});
     }
 
     private toggleShowLoading(show:boolean): void {

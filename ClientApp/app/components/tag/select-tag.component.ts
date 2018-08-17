@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, OnDestroy} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA, MatSelectChange} from '@angular/material';
 import {TdDialogService,TdLoadingService} from '@covalent/core';
-import {Subscription} from 'rxjs/rx';
+import {Subscription} from 'rxjs/Rx';
 
 import {Tag, TagIconList} from '../../models/tag/tag.model';
 import {TagStore} from '../../stores/tag.store';

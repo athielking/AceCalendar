@@ -7,7 +7,7 @@ import * as start_of_week from 'date-fns/start_of_week';
 import * as end_of_week from 'date-fns/end_of_week';
 
 import { AddWorkerOption } from '../../../models/shared/calendar-options';
-import { DayView } from '../../calendar/common/models'
+import { DayView } from '../common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { StorageService} from '../../../services/storage.service';
 import { DeleteJobDayRequestedEvent, EditJobRequestedEvent, DayJobTagRequestedEvent } from './week-cell-job.component';
