@@ -4,8 +4,8 @@ import { TdLoadingService, TdDialogService } from '@covalent/core';
 import { MatDialog, MatSelectChange } from '@angular/material';
 import * as add_days from 'date-fns/add_days';
 
-import { DayView, Worker} from '../../../calendar/common/models'
-import { StorageKeys } from '../../../calendar/common/calendar-tools'
+import { DayView, Worker} from '../../common/models'
+import { StorageKeys } from '../../common/calendar-tools'
 import { CalendarStore } from '../../../../stores/calendar.store'
 import { WorkerStore } from '../../../../stores/worker.store'
 import { StorageService } from '../../../../services/storage.service';

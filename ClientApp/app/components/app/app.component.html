@@ -1,4 +1,6 @@
-<div *ngIf="authorized;then application else login"></div>
+
+<div *ngIf="!resetPassword && !authorized; then login else application"></div>
+
 
 <ng-template #login><login></login></ng-template>
 

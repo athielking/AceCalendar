@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material'
 import * as startOfWeek from 'date-fns/start_of_week';
 import * as addDays from 'date-fns/add_days';
 
-import { CalendarDay, CalendarViews } from '../../calendar/common/models'
+import { CalendarDay, CalendarViews } from '../common/models'
 import { MonthDisplayOptionsComponent } from './month-displayOptions.component';
 import { CalendarStore } from '../../../stores/calendar.store';
 import { StorageService } from '../../../services/storage.service';

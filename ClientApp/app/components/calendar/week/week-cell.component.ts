@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core'
 import * as dateFns from 'date-fns';
 
-import { DayView } from '../../calendar/common/models'
+import { DayView } from '../common/models'
 import * as dateTools from '../../../tools/dateTools';
 
 @Component({

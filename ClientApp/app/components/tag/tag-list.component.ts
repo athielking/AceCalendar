@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material';
 
 import { TagStore } from '../../stores/tag.store';
 import { Tag, TagType } from '../../models/tag/tag.model';
-import { AddTagComponent } from '../../components/tag/add-tag.component';
+import { AddTagComponent } from './add-tag.component';
 import { StorageService } from '../../services/storage.service';
 import { StorageKeys } from '../calendar/common/calendar-tools';
 

@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 
-import {DayView, Worker, CalendarJob} from '../../components/calendar/common/models';
+import {DayView, Worker, CalendarJob} from '../calendar/common/models';
 
 @Component({
     selector: 'ac-add-worker-to',

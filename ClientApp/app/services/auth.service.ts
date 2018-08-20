@@ -12,6 +12,7 @@ import { CalendarModel } from '../models/calendar/calendar.model';
 import { StorageKeys } from '../components/calendar/common/calendar-tools';
 
 import { ValidateSubscription } from '../models/admin/validateSubscription.model';
+import { ResetPasswordModel } from '../models/auth/resetPasswordModel';
 
 @Injectable()
 export class AuthService {
@@ -52,19 +53,7 @@ export class AuthService {
         this.httpClient.post( url, loginModel )
             .subscribe( 
                 result => {
-                    this.setToken( result["token"] );
-                    this.setTokenExpiration( result["expiration"] );
-                    this.setLoggedInUser( result["user"]);
-                    
-                    var calendars = result['calendars'].map( item => {
-                        return new CalendarModel(item.id, item.calendarName, item.OrganizationId, item.inactive == 'True');
-                    });
-
-                    this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
-                    
-                    var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
-                    if( !(selected && calendars.findIndex( c => c.id == selected) != -1) && calendars.length > 0 )
-                        this.storageService.setItem(StorageKeys.selectedCalendar, calendars[0].id);
+                   this.handleJwtResponse(result);
                 
                     onSuccess();               
                 },
@@ -86,6 +75,25 @@ export class AuthService {
         });
 
         return obs.shareReplay();
+    }
+
+    public resetPassword( model: ResetPasswordModel ){
+        let url = this.serviceUri + '/resetPassword';
+
+        let obs = this.httpClient.post(url, model).shareReplay();
+
+        var sub = obs.subscribe( result => {
+           this.handleJwtResponse(result);
+        }, error => {}, () => {sub.unsubscribe()});
+
+        return obs;
+    }
+
+    public requestPasswordReset(userName: string, email: string){
+        let url = this.serviceUri + `/resetPassword?userName=${userName}&email=${email}`;
+        let obs = this.httpClient.get(url);
+
+        return obs;
     }
 
     public logout(
@@ -194,5 +202,21 @@ export class AuthService {
 
     private setLoggedInUser(token: string): void {
         this.storageService.setItem(StorageKeys.loggedInUser, token);
-    }  
+    }
+    
+    private handleJwtResponse(result: any){
+        this.setToken( result["token"] );
+        this.setTokenExpiration( result["expiration"] );
+        this.setLoggedInUser( result["user"]);
+        
+        var calendars = result['calendars'].map( item => {
+            return new CalendarModel(item.id, item.calendarName, item.OrganizationId, item.inactive == 'True');
+        });
+
+        this.storageService.setItem(StorageKeys.userCalendars, JSON.stringify(calendars));
+        
+        var selected = this.storageService.getItem(StorageKeys.selectedCalendar);
+        if( !(selected && calendars.findIndex( c => c.id == selected) != -1) && calendars.length > 0 )
+            this.storageService.setItem(StorageKeys.selectedCalendar, calendars[0].id);
+    }
 }

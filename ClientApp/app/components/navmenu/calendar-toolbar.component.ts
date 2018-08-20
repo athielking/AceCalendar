@@ -13,7 +13,7 @@ import * as start_of_month from 'date-fns/start_of_month';
 import { CalendarViews } from '../calendar/common/models';
 import { MonthDisplayOptionsComponent } from '../calendar/month/month-displayOptions.component';
 import { AddWorkerOption } from '../../models/shared/calendar-options';
-import { keyframes } from '../../../../node_modules/@angular/core/src/animation/dsl';
+import { keyframes } from '@angular/core/src/animation/dsl';
 
 @Component({
     selector: 'ac-calendar-toolbar',

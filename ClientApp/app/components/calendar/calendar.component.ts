@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core'
-import { MonthViewComponent } from '../calendar/month/month-view.component'
+import { MonthViewComponent } from './month/month-view.component'
 import { StorageKeys } from './common/calendar-tools';
 import { MatTabChangeEvent, MatDialog } from '@angular/material';
 import { WeekViewComponent } from './week/week-view.component';
-import { CalendarViews } from '../calendar/common/models';
+import { CalendarViews } from './common/models';
 import { AuthService } from '../../services/auth.service';
 import { CalendarFilterComponent } from './common/calendar-filter.component';
 import { StorageService } from '../../services/storage.service';

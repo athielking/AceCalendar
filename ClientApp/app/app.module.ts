@@ -105,6 +105,8 @@ import { CalendarRecordDetailHeaderComponent } from "./components/calendar/recor
 import { CalendarRecordUsersComponent } from "./components/calendar/record/calendar-record-users.component";
 import { CalendarRecordSelectUsersComponent } from "./components/calendar/record/calendar-record-select-users.component";
 import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.component";
+import { ResetPasswordComponent } from "./components/login/reset-password.component";
+import { ForgotPasswordComponent } from "./components/login/forgot-password.component";
 
 @NgModule({
   declarations: [
@@ -180,6 +182,8 @@ import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.
     //Auth
     LoginComponent,
     ChangePasswordComponent,
+    ResetPasswordComponent,
+    ForgotPasswordComponent
   ],
   entryComponents: [
     WeekViewPrintComponent,
@@ -201,7 +205,8 @@ import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.
     CalendarFilterComponent,
     AddPaymentSourceComponent,
     ActivateSubscriptionComponent,
-    CalendarRecordSelectUsersComponent
+    CalendarRecordSelectUsersComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     HttpClientModule,
@@ -233,6 +238,7 @@ import { CalendarToolbarComponent } from "./components/navmenu/calendar-toolbar.
       { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] },
       { path: 'organization', component: OrganizationListComponent, canActivate: [AuthGuardAdmin] },
       { path: 'organization/:id', component: OrganizationDetailComponent, canActivate: [AuthGuardOrganizationAdmin] },
+      { path: 'reset/:code', component: ResetPasswordComponent},
       { path: "**", redirectTo: 'calendar' }
     ])
   ],

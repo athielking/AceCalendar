@@ -3,11 +3,11 @@ import {MatDialogRef, MAT_DIALOG_DATA, MatDialog} from '@angular/material';
 import { TdLoadingService, TdDialogService } from '@covalent/core'
 
 import { AddWorkerOption } from '../../../models/shared/calendar-options';
-import { CalendarDay, DayView } from '../../calendar/common/models'
+import { CalendarDay, DayView } from '../common/models'
 import { CalendarStore } from '../../../stores/calendar.store'
 import { WorkerListAdded } from '../../../events/worker.events';
 import { WorkerAddedToJobEvent } from '../../job/job-list.component';
-import { WorkerAddedJobEvent, EditJobRequestedEvent, DeleteJobDayRequestedEvent } from '../../calendar/week/week-cell-job.component';
+import { WorkerAddedJobEvent, EditJobRequestedEvent, DeleteJobDayRequestedEvent } from '../week/week-cell-job.component';
 import { AddJobToDayViewComponent } from '../../job/addJobToDayViewComponent';
 import { Subscription } from 'rxjs';
 

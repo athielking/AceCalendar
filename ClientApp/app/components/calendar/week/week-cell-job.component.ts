@@ -1,5 +1,5 @@
 import { Component, Input, Output, Inject, Optional, OnInit, EventEmitter } from '@angular/core'
-import { CalendarJob, Worker, CalendarDay } from '../../calendar/common/models'
+import { CalendarJob, Worker, CalendarDay } from '../common/models'
 import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { JobNotesComponent } from '../../job/jobNotes.component';
 import {Tag} from '../../../models/tag/tag.model';

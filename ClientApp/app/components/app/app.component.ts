@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
 import {
   TdLayoutComponent,
   TdLayoutNavComponent,
@@ -38,6 +40,7 @@ export class AppComponent implements OnInit {
 
   public title = 'app';
   public authorized: boolean;
+  public resetPassword: boolean;
   public loggedInUser: string;
   public menuOpen: boolean = true;
   public isMobile: boolean;
@@ -48,12 +51,11 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private signalRService: SignalrService,
     private storageService: StorageService,
+    private router: Router,
+    private route: ActivatedRoute,
     private _iconRegistry: MatIconRegistry,
     private _domSanitizer: DomSanitizer
   ) {
-    this.authorized = !this.authService.loginRequired() && this.storageService.hasItem(StorageKeys.userCalendars);
-
-    this.loggedInUser = this.authService.getLoggedInUser();
     
     this._iconRegistry.addSvgIconInNamespace('assets', 'AceLogoDark',
     this._domSanitizer.bypassSecurityTrustResourceUrl('assets/AceLogoDark.svg'));
@@ -69,6 +71,10 @@ export class AppComponent implements OnInit {
 
     if(!this.authService.loginRequired)
         this.authService.getSubscriptionValidation();
+
+    this.resetPassword = location.pathname.indexOf('/reset') > -1;
+    this.authorized = !this.authService.loginRequired() && this.storageService.hasItem(StorageKeys.userCalendars);
+    this.loggedInUser = this.authService.getLoggedInUser();
   }
 
   public toggleMenu(){
