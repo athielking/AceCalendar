@@ -238,7 +238,7 @@ import { ForgotPasswordComponent } from "./components/login/forgot-password.comp
       { path: 'tag', component: TagListComponent, canActivate: [AuthGuardEditor, SubscriptionGuard] },
       { path: 'organization', component: OrganizationListComponent, canActivate: [AuthGuardAdmin] },
       { path: 'organization/:id', component: OrganizationDetailComponent, canActivate: [AuthGuardOrganizationAdmin] },
-      { path: 'reset/:code', component: ResetPasswordComponent},
+      { path: 'reset', component: ResetPasswordComponent},
       { path: "**", redirectTo: 'calendar' }
     ])
   ],
