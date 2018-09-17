@@ -32,9 +32,11 @@
                         </div>
                     </mat-card-content>
                     <mat-divider></mat-divider>
-                    <mat-card-actions layout="row">
-                        <button flex mat-raised-button (click)="forgotPassword()">Forgot Password</button>
-                        <button flex mat-raised-button color="accent" [disabled]="!loginForm.form.valid" (click)="login()">Sign In</button>
+                    <mat-card-actions layout="row" style="display: flex">
+                        
+                        <button mat-raised-button color="accent" [disabled]="!loginForm.form.valid" (click)="login()">Sign In</button>
+                        <span flex></span>
+                        <button mat-raised-button (click)="forgotPassword()">Forgot Password</button>
                     </mat-card-actions>
                 </form>   
             </div>    
