@@ -11,7 +11,7 @@
             <div *tdLoading="'showLoading'; mode:'indeterminate'; type:'linear'; strategy:'overlay'; color:'accent';">
                 <form #loginForm="ngForm">            
                     <mat-card-content>
-                        <td-message *ngIf="showErrorMessage" label="Error Logging In" sublabel="Please Check Your Credentials and Try Again" color="warn" icon="error" class="error-message"></td-message>                
+                        <td-message *ngIf="showErrorMessage" label="Error Logging In" [sublabel]="errorMessage" color="warn" icon="error" class="error-message"></td-message>                
                         <div layout="row">
                             <mat-form-field flex> 
                             <input matInput #userElement #userControl="ngModel" type="text" maxlength="30" name="username" [(ngModel)]="username" required>

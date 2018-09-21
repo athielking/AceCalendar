@@ -17,6 +17,7 @@ export class LoginComponent {
     public password: string;
 
     public showErrorMessage: boolean;
+    public errorMessage: string;
 
     constructor(
         private router: Router,
@@ -47,8 +48,9 @@ export class LoginComponent {
                 
                 this.router.navigate(['calendar']);
             },
-            () => {               
+            (error) => {               
                 this.showErrorMessage = true;
+                this.errorMessage = error.error['errorMessage'];
                 this.toggleShowLoading( false );
             }
         );

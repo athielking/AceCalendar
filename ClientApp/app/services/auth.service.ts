@@ -45,7 +45,7 @@ export class AuthService {
     public login(
         loginModel: LoginModel, 
         onSuccess: () => any,
-        onFailure: () => any
+        onFailure: (error: any) => any
     ) {
 
         let url = this.serviceUri+`/login`;
@@ -58,7 +58,7 @@ export class AuthService {
                     onSuccess();               
                 },
                 error => {
-                    onFailure();
+                    onFailure(error);
                 }
             );
     }
