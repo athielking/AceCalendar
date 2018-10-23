@@ -378,7 +378,7 @@ export class CalendarStore {
         let end = dateFns.endOfWeek(viewDate);
         
         let dayViews = this._dayViews.getValue();
-        let filtered = dayViews.filter( dv => dateTools.inRange(dv.calendarDay.date, start, end) );
+        let filtered = dayViews.filter( dv => { return dateTools.inRange(dv.calendarDay.date, start, end) && !dv.workerIsOff(worker.id); });
 
         if( workerAddOption == AddWorkerOption.SingleDay)
             filtered = filtered.filter( dv => dateTools.equal(date, dv.calendarDay.date ));
