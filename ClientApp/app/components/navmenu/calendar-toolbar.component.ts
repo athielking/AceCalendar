@@ -43,8 +43,13 @@ export class CalendarToolbarComponent implements OnInit{
         this.workerAddOption = +this.storageService.getItem(StorageKeys.addWorkerOption)
         this.storageService.watchStorage().subscribe(key => this.handleStorageChange(key));
 
-        this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
-        this.viewOption = +this.storageService.getItem(StorageKeys.selectedTab);
+        this.viewDate = new Date();
+        if(this.storageService.hasItem(StorageKeys.viewDate))
+            this.viewDate = new Date(this.storageService.getItem(StorageKeys.viewDate));
+
+        this.viewOption = CalendarViews.WeekView;
+        if(this.storageService.hasItem(StorageKeys.selectedTab))
+            this.viewOption = +this.storageService.getItem(StorageKeys.selectedTab);
 
         this.isWeekView = this.viewOption == CalendarViews.WeekView;
         this.isMonthView = this.viewOption == CalendarViews.MonthView;
