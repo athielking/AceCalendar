@@ -24,11 +24,7 @@ export class JobNotesComponent {
     ){ 
         this.job = <CalendarJob>data.model;
         this.allowEdit = data.allowEdit;
-
-        window.setTimeout(()=>{
-            if(!this.editing)
-                this.snacBarRef.closeWithAction();
-        }, 5000);
+        
     }
 
     toggleEdit() : void{
