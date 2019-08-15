@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  webServiceUrl: `https://acecalendarapi.azurewebsites.net`
+  webServiceUrl: `https://acecalendarapi2.azurewebsites.net`
 };
